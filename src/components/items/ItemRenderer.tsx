@@ -3,6 +3,7 @@ import { NumericItem } from './NumericItem'
 import { JournalEntryItem } from './JournalEntryItem'
 import { SpotErrorItem } from './SpotErrorItem'
 import { TAccountItem } from './TAccountItem'
+import { StatementBuildItem } from './StatementBuildItem'
 import type { ItemProps } from './shared'
 
 /** Dispatch to the renderer for the item's interaction type. */
@@ -19,5 +20,7 @@ export function ItemRenderer(props: ItemProps) {
       return <SpotErrorItem {...props} />
     case 't_account':
       return <TAccountItem {...props} />
+    case 'statement_build':
+      return <StatementBuildItem {...props} />
   }
 }

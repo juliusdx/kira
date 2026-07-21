@@ -48,6 +48,10 @@ export const UI = {
     en: 'Tap each entry, then choose its side.',
     ms: 'Ketik setiap catatan, kemudian pilih sebelahnya.',
   },
+  sortEachLine: {
+    en: 'Sort each line, then work out the figure.',
+    ms: 'Asingkan setiap baris, kemudian kira angkanya.',
+  },
   yourAnswer: { en: 'Your answer', ms: 'Jawapan anda' },
   correctAnswer: { en: 'Correct answer', ms: 'Jawapan betul' },
   // self-explanation

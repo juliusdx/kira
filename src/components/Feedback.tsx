@@ -29,7 +29,9 @@ export function Feedback({
   const iconTone = correct ? 'text-emerald-600' : 'text-rose-600'
 
   return (
-    <div className="animate-rise safe-bottom sticky bottom-0 grid gap-3 pt-3">
+    // Opaque, full-bleed backdrop: this panel sticks over long items (T-account,
+    // statement build), so content must not show through it.
+    <div className="animate-rise safe-bottom sticky bottom-0 -mx-4 grid gap-3 bg-slate-50 px-4 pt-3 dark:bg-slate-950">
       <div className={`rounded-2xl px-4 py-3 ring-1 ${tone}`}>
         <div className="flex items-center gap-2 text-base font-bold">
           <span className={iconTone}>

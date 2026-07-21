@@ -14,11 +14,18 @@ export interface TAccountResponse {
   balance: number
 }
 
+export interface StatementResponse {
+  /** line index -> section key the learner assigned it to */
+  sections: Record<number, string>
+  total: number
+}
+
 export type Response =
   | string // classify | debit_credit  (chosen canonical option)
   | number // numeric
   | JournalResponse // journal_entry | spot_error
   | TAccountResponse // t_account
+  | StatementResponse // statement_build
 
 function lineEq(a: JournalLine, b: JournalLine): boolean {
   return a.account === b.account && a.amount === b.amount
@@ -76,7 +83,29 @@ export function grade(item: Item, response: Response): boolean {
       // ... and the closing balance matches
       return sidesOk && response.balance === item.answer.balance
     }
+
+    case 'statement_build': {
+      if (!isStatementResponse(response)) return false
+      const { lines } = item.data
+      // every line in its correct section ...
+      const sectionsOk = lines.every((l, i) => response.sections[i] === l.section)
+      // ... and the computed figure matches
+      return sectionsOk && response.total === item.answer.total
+    }
   }
+}
+
+/** Running total per section — used for the live statement preview. */
+export function sectionTotals(
+  lines: { amount: number }[],
+  sections: Record<number, string>,
+): Record<string, number> {
+  const totals: Record<string, number> = {}
+  lines.forEach((l, i) => {
+    const key = sections[i]
+    if (key) totals[key] = (totals[key] ?? 0) + l.amount
+  })
+  return totals
 }
 
 function isJournalResponse(r: Response): r is JournalResponse {
@@ -84,4 +113,7 @@ function isJournalResponse(r: Response): r is JournalResponse {
 }
 function isTAccountResponse(r: Response): r is TAccountResponse {
   return typeof r === 'object' && r !== null && 'sides' in r && 'balance' in r
+}
+function isStatementResponse(r: Response): r is StatementResponse {
+  return typeof r === 'object' && r !== null && 'sections' in r && 'total' in r
 }

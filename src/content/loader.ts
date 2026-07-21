@@ -10,14 +10,10 @@ import type {
 // Julius's authored bank lives at the project root as the single source of
 // truth. The loader imports it directly so porting Stage 3–4 is a file edit.
 import rawSeed from '../../seed_content.json'
-import { PLACEHOLDER_TACCOUNT } from './placeholder_taccount'
 
 const bundle = rawSeed as unknown as ContentBundle
 
-// Merge in placeholder T-account content (see placeholder_taccount.ts).
-const TOPICS: Topic[] = [...bundle.topics, PLACEHOLDER_TACCOUNT].sort(
-  (a, b) => a.order - b.order,
-)
+const TOPICS: Topic[] = [...bundle.topics].sort((a, b) => a.order - b.order)
 
 export const CONTENT: ContentBundle = { meta: bundle.meta, topics: TOPICS }
 
@@ -115,6 +111,14 @@ export const ACCOUNT_GLOSSARY_MS: Record<string, string> = {
   Printer: 'Pencetak',
   'Trade Payables': 'Pemiutang Perdagangan',
   'Trade Receivables': 'Penghutang Perdagangan',
+  Bank: 'Bank',
+  Purchases: 'Belian',
+  Rent: 'Sewa',
+  Drawings: 'Ambilan',
+  Premises: 'Premis',
+  'Motor Vehicles': 'Kenderaan Bermotor',
+  'Bank Overdraft': 'Overdraf Bank',
+  'Bank Loan': 'Pinjaman Bank',
 }
 
 export function accountMs(account: string): string {

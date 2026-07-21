@@ -168,6 +168,7 @@ export function itemTypeLabel(item: Item, locale: Locale): string {
     journal_entry: { en: 'Journal entry', ms: 'Catatan jurnal' },
     t_account: { en: 'T-account', ms: 'Akaun T' },
     spot_error: { en: 'Spot the error', ms: 'Kesan kesilapan' },
+    statement_build: { en: 'Build the statement', ms: 'Bina penyata' },
   }
   return labels[item.type][locale]
 }

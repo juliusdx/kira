@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { grade, isBalanced, tAccountBalance } from './grade'
+import { grade, isBalanced, sectionTotals, tAccountBalance } from './grade'
 import type {
   ChoiceItem,
   JournalEntryItem,
   NumericItem,
   SpotErrorItem,
+  StatementBuildItem,
   TAccountItem,
 } from '../content/types'
 
@@ -81,6 +82,45 @@ describe('isBalanced', () => {
     expect(isBalanced({ debit: { account: 'A', amount: 100 }, credit: { account: 'B', amount: 100 } })).toBe(true)
     expect(isBalanced({ debit: { account: 'A', amount: 100 }, credit: { account: 'B', amount: 90 } })).toBe(false)
     expect(isBalanced({ debit: { account: 'A', amount: 0 }, credit: { account: 'B', amount: 0 } })).toBe(false)
+  })
+})
+
+const sb: StatementBuildItem = {
+  id: 's', type: 'statement_build', difficulty: 3, skill_tags: [],
+  prompt: { en: '', ms: '' }, explanation: { en: '', ms: '' },
+  data: {
+    statement: { en: 'Income Statement', ms: '' },
+    sections: [
+      { key: 'income', label: { en: 'Income', ms: 'Pendapatan' } },
+      { key: 'expense', label: { en: 'Expense', ms: 'Belanja' } },
+    ],
+    lines: [
+      { label: { en: 'Service income', ms: '' }, amount: 50000, section: 'income' },
+      { label: { en: 'Rent', ms: '' }, amount: 6000, section: 'expense' },
+      { label: { en: 'Commission received', ms: '' }, amount: 1000, section: 'income' },
+    ],
+    totalLabel: { en: 'Net profit', ms: 'Untung bersih' },
+  },
+  answer: { total: 45000 }, // (50,000 + 1,000) - 6,000
+}
+
+describe('grade — statement_build', () => {
+  it('needs every line in the right section AND the right figure', () => {
+    expect(grade(sb, { sections: { 0: 'income', 1: 'expense', 2: 'income' }, total: 45000 })).toBe(true)
+    // a line in the wrong section
+    expect(grade(sb, { sections: { 0: 'expense', 1: 'expense', 2: 'income' }, total: 45000 })).toBe(false)
+    // right sections, wrong arithmetic
+    expect(grade(sb, { sections: { 0: 'income', 1: 'expense', 2: 'income' }, total: 44000 })).toBe(false)
+    // unassigned line
+    expect(grade(sb, { sections: { 0: 'income', 1: 'expense' }, total: 45000 })).toBe(false)
+  })
+
+  it('sectionTotals sums per section and ignores unassigned lines', () => {
+    expect(sectionTotals(sb.data.lines, { 0: 'income', 1: 'expense', 2: 'income' })).toEqual({
+      income: 51000,
+      expense: 6000,
+    })
+    expect(sectionTotals(sb.data.lines, { 0: 'income' })).toEqual({ income: 50000 })
   })
 })
 

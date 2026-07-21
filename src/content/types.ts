@@ -16,6 +16,7 @@ export type ItemType =
   | 'journal_entry' // pick accounts + amounts; must balance
   | 't_account' // assign entries to Dr/Cr; compute closing balance
   | 'spot_error' // find and correct a wrong entry
+  | 'statement_build' // sort lines into statement sections; compute the figure
 
 export interface BaseItem {
   id: string
@@ -83,12 +84,40 @@ export interface TAccountItem extends BaseItem {
   answer: { balance: number; side: 'debit' | 'credit' }
 }
 
+/** One column/section of a financial statement (e.g. Income vs Expense). */
+export interface StatementSection {
+  key: string
+  label: LocalizedText
+}
+
+export interface StatementLine {
+  label: LocalizedText
+  amount: number
+  section: string // the correct section key (hidden from the learner)
+}
+
+/**
+ * Statement build (Spec §3, type 7): sort trial-balance lines into the
+ * sections of a statement, then compute the resulting figure.
+ */
+export interface StatementBuildItem extends BaseItem {
+  type: 'statement_build'
+  data: {
+    statement: LocalizedText // e.g. "Income Statement"
+    sections: StatementSection[]
+    lines: StatementLine[]
+    totalLabel: LocalizedText // e.g. "Net profit"
+  }
+  answer: { total: number }
+}
+
 export type Item =
   | ChoiceItem
   | NumericItem
   | JournalEntryItem
   | SpotErrorItem
   | TAccountItem
+  | StatementBuildItem
 
 export interface WorkedExample {
   prompt: LocalizedText

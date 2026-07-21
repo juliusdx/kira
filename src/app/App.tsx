@@ -8,6 +8,8 @@ import {
   resetAllProgress,
 } from '../db/data'
 import { buildQueue, type BuiltQueue } from '../session/buildQueue'
+import { syncNow, watchConnectivity } from '../sync/sync'
+import { SYNC_ENABLED } from '../sync/client'
 import { computeProgress } from './progress'
 import { useKira } from './KiraContext'
 import { Home } from '../components/Home'
@@ -36,6 +38,16 @@ export function App() {
     void reload()
   }, [reload])
 
+  // Pull anything this device missed, then keep syncing when we come back
+  // online. No-op unless Supabase credentials are configured.
+  useEffect(() => {
+    if (!SYNC_ENABLED) return
+    void syncNow().then((r) => {
+      if (r.pulledReviews) void reload()
+    })
+    return watchConnectivity()
+  }, [reload])
+
   const startSession = useCallback(() => {
     if (!reviewMap) return
     const built = buildQueue(ALL_ENTRIES, reviewMap, Date.now())
@@ -51,6 +63,8 @@ export function App() {
       setResult(r)
       setSession(null)
       setScreen('complete')
+      // Push this session's work; failure is non-fatal (retried next launch).
+      if (SYNC_ENABLED) void syncNow()
     },
     [reload],
   )

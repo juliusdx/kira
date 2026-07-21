@@ -5,3 +5,8 @@ dist-ssr
 *.local
 .vite
 coverage
+
+# local env (never commit real credentials)
+.env
+.env.local
+.env.*.local

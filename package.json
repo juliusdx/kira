@@ -17,6 +17,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
     "dexie": "^4.4.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

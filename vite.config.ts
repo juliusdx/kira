@@ -36,11 +36,25 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json,woff2}'],
+        // The Supabase client is lazy-loaded and only ever needed when cloud
+        // sync is configured AND the device is online — so keep it out of the
+        // offline precache instead of making every learner download it.
+        globIgnores: ['**/supabase-*.js'],
         cleanupOutdatedCaches: true,
       },
       devOptions: { enabled: false },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Deterministic name so the PWA precache can exclude it.
+        manualChunks(id) {
+          if (id.includes('@supabase')) return 'supabase'
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

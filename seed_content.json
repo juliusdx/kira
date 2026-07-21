@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "version": 1,
+    "currency": "RM",
+    "locales": ["en", "ms"],
+    "note": "Seed content for Kira bookkeeping app. Items conform to the schema in Bookkeeping_App_Build_Spec.md §3. Stage 1-2 included; Stage 3-4 to be ported next."
+  },
+  "topics": [
+    {
+      "id": "t1-equation",
+      "order": 1,
+      "title": { "en": "The Accounting Equation", "ms": "Persamaan Perakaunan" },
+      "lessons": [
+        {
+          "id": "l1-classify",
+          "order": 1,
+          "title": { "en": "Assets, Liabilities & Equity", "ms": "Aset, Liabiliti & Ekuiti" },
+          "worked_example": {
+            "prompt": {
+              "en": "Every item a business has is an Asset (what it owns), a Liability (what it owes), or Equity (the owner's stake). Assets = Liabilities + Equity.",
+              "ms": "Setiap item perniagaan ialah Aset (apa yang dimiliki), Liabiliti (apa yang dihutang), atau Ekuiti (bahagian pemilik). Aset = Liabiliti + Ekuiti."
+            }
+          },
+          "items": [
+            { "id": "clf-001", "type": "classify", "difficulty": 1, "skill_tags": ["equation"], "prompt": { "en": "Cash in the business bank account", "ms": "Tunai dalam akaun bank perniagaan" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Asset", "explanation": { "en": "Cash is something the business owns, so it's an asset.", "ms": "Tunai ialah sesuatu yang dimiliki perniagaan, jadi ia aset." } },
+            { "id": "clf-002", "type": "classify", "difficulty": 1, "skill_tags": ["equation"], "prompt": { "en": "A van the business owns", "ms": "Van yang dimiliki perniagaan" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Asset", "explanation": { "en": "Owned and used by the business — an asset.", "ms": "Dimiliki dan digunakan oleh perniagaan — aset." } },
+            { "id": "clf-003", "type": "classify", "difficulty": 1, "skill_tags": ["equation"], "prompt": { "en": "Money the business owes to a supplier", "ms": "Wang yang dihutang perniagaan kepada pembekal" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Liability", "explanation": { "en": "An amount owed to someone else is a liability.", "ms": "Amaun yang dihutang kepada orang lain ialah liabiliti." } },
+            { "id": "clf-004", "type": "classify", "difficulty": 1, "skill_tags": ["equation"], "prompt": { "en": "A bank loan the business took out", "ms": "Pinjaman bank yang diambil perniagaan" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Liability", "explanation": { "en": "A loan must be repaid — it's a liability.", "ms": "Pinjaman mesti dibayar balik — ia liabiliti." } },
+            { "id": "clf-005", "type": "classify", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Money the owner put into the business", "ms": "Wang yang dimasukkan pemilik ke dalam perniagaan" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Equity", "explanation": { "en": "The owner's contribution is capital, which is equity.", "ms": "Sumbangan pemilik ialah modal, iaitu ekuiti." } },
+            { "id": "clf-006", "type": "classify", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Inventory (goods for sale) in the shop", "ms": "Inventori (barang untuk dijual) di dalam kedai" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Asset", "explanation": { "en": "Goods held for sale are an asset until sold.", "ms": "Barang yang disimpan untuk dijual ialah aset sehingga terjual." } },
+            { "id": "clf-007", "type": "classify", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Wages owed to staff but not yet paid", "ms": "Gaji terhutang kepada pekerja tetapi belum dibayar" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Liability", "explanation": { "en": "An unpaid obligation is a liability.", "ms": "Tanggungan yang belum dibayar ialah liabiliti." } },
+            { "id": "clf-008", "type": "classify", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Amounts customers owe the business", "ms": "Amaun yang dihutang pelanggan kepada perniagaan" }, "data": { "options": ["Asset", "Liability", "Equity"], "options_ms": ["Aset", "Liabiliti", "Ekuiti"] }, "answer": "Asset", "explanation": { "en": "Trade receivables are money owed TO you — an asset.", "ms": "Penghutang perdagangan ialah wang yang dihutang KEPADA anda — aset." } }
+          ]
+        },
+        {
+          "id": "l2-solve-equation",
+          "order": 2,
+          "title": { "en": "Solving the Equation", "ms": "Menyelesaikan Persamaan" },
+          "items": [
+            { "id": "eqn-001", "type": "numeric", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Assets RM50,000, Liabilities RM20,000. What is Equity?", "ms": "Aset RM50,000, Liabiliti RM20,000. Berapakah Ekuiti?" }, "data": { "unit": "RM" }, "answer": 30000, "explanation": { "en": "Equity = Assets − Liabilities = 50,000 − 20,000 = 30,000.", "ms": "Ekuiti = Aset − Liabiliti = 50,000 − 20,000 = 30,000." } },
+            { "id": "eqn-002", "type": "numeric", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Equity RM30,000, Liabilities RM15,000. What are total Assets?", "ms": "Ekuiti RM30,000, Liabiliti RM15,000. Berapakah jumlah Aset?" }, "data": { "unit": "RM" }, "answer": 45000, "explanation": { "en": "Assets = Equity + Liabilities = 30,000 + 15,000 = 45,000.", "ms": "Aset = Ekuiti + Liabiliti = 30,000 + 15,000 = 45,000." } },
+            { "id": "eqn-003", "type": "numeric", "difficulty": 2, "skill_tags": ["equation"], "prompt": { "en": "Assets RM80,000, Equity RM55,000. What are the Liabilities?", "ms": "Aset RM80,000, Ekuiti RM55,000. Berapakah Liabiliti?" }, "data": { "unit": "RM" }, "answer": 25000, "explanation": { "en": "Liabilities = Assets − Equity = 80,000 − 55,000 = 25,000.", "ms": "Liabiliti = Aset − Ekuiti = 80,000 − 55,000 = 25,000." } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t2-debit-credit",
+      "order": 2,
+      "title": { "en": "Debits & Credits", "ms": "Debit & Kredit" },
+      "lessons": [
+        {
+          "id": "l3-direction",
+          "order": 1,
+          "title": { "en": "Which Side?", "ms": "Sebelah Mana?" },
+          "worked_example": {
+            "prompt": {
+              "en": "DEAD: Debits increase Expenses, Assets, Drawings. Everything else (Liabilities, Equity, Income) increases with a Credit.",
+              "ms": "DEAD: Debit menambah Expenses (Belanja), Assets (Aset), Drawings (Ambilan). Selebihnya (Liabiliti, Ekuiti, Pendapatan) bertambah dengan Kredit."
+            }
+          },
+          "items": [
+            { "id": "dc-001", "type": "debit_credit", "difficulty": 2, "skill_tags": ["debit-credit"], "prompt": { "en": "The business buys a printer with cash. The Printer account is...", "ms": "Perniagaan membeli pencetak dengan tunai. Akaun Pencetak ialah..." }, "data": { "options": ["Debit", "Credit"], "options_ms": ["Debit", "Kredit"] }, "answer": "Debit", "explanation": { "en": "The printer is an asset increasing, so it's debited.", "ms": "Pencetak ialah aset yang bertambah, jadi ia didebitkan." } },
+            { "id": "dc-002", "type": "debit_credit", "difficulty": 2, "skill_tags": ["debit-credit"], "prompt": { "en": "The business receives cash for a sale. The Sales account is...", "ms": "Perniagaan menerima tunai untuk jualan. Akaun Jualan ialah..." }, "data": { "options": ["Debit", "Credit"], "options_ms": ["Debit", "Kredit"] }, "answer": "Credit", "explanation": { "en": "Sales is income; income increases with a credit.", "ms": "Jualan ialah pendapatan; pendapatan bertambah dengan kredit." } },
+            { "id": "dc-003", "type": "debit_credit", "difficulty": 2, "skill_tags": ["debit-credit"], "prompt": { "en": "The business pays the electricity bill in cash. The Electricity account is...", "ms": "Perniagaan membayar bil elektrik dengan tunai. Akaun Elektrik ialah..." }, "data": { "options": ["Debit", "Credit"], "options_ms": ["Debit", "Kredit"] }, "answer": "Debit", "explanation": { "en": "Electricity is an expense; expenses increase with a debit.", "ms": "Elektrik ialah belanja; belanja bertambah dengan debit." } },
+            { "id": "dc-004", "type": "debit_credit", "difficulty": 2, "skill_tags": ["debit-credit"], "prompt": { "en": "The owner invests cash. The Capital account is...", "ms": "Pemilik memasukkan tunai. Akaun Modal ialah..." }, "data": { "options": ["Debit", "Credit"], "options_ms": ["Debit", "Kredit"] }, "answer": "Credit", "explanation": { "en": "Capital is equity; equity increases with a credit.", "ms": "Modal ialah ekuiti; ekuiti bertambah dengan kredit." } },
+            { "id": "dc-005", "type": "debit_credit", "difficulty": 3, "skill_tags": ["debit-credit"], "prompt": { "en": "The business pays a supplier the money it owed. The Trade Payables account is...", "ms": "Perniagaan membayar pembekal wang yang dihutang. Akaun Pemiutang Perdagangan ialah..." }, "data": { "options": ["Debit", "Credit"], "options_ms": ["Debit", "Kredit"] }, "answer": "Debit", "explanation": { "en": "Paying off a liability reduces it, so it's debited.", "ms": "Membayar liabiliti mengurangkannya, jadi ia didebitkan." } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t3-journal",
+      "order": 3,
+      "title": { "en": "Journal Entries", "ms": "Catatan Jurnal" },
+      "lessons": [
+        {
+          "id": "l4-full-entries",
+          "order": 1,
+          "title": { "en": "Full Double-Entry", "ms": "Catatan Bergu Penuh" },
+          "worked_example": {
+            "prompt": {
+              "en": "Every entry has an equal debit and credit. Owner deposits RM20,000: Dr Cash 20,000 / Cr Capital 20,000.",
+              "ms": "Setiap catatan mempunyai debit dan kredit yang sama. Pemilik deposit RM20,000: Dt Tunai 20,000 / Kt Modal 20,000."
+            }
+          },
+          "items": [
+            { "id": "je-001", "type": "journal_entry", "difficulty": 2, "skill_tags": ["double-entry"], "prompt": { "en": "The business buys a van for RM12,000, paying cash.", "ms": "Perniagaan membeli van RM12,000, membayar tunai." }, "data": { "accounts": ["Cash", "Van", "Capital", "Sales"], "accounts_ms": ["Tunai", "Van", "Modal", "Jualan"] }, "answer": { "debit": { "account": "Van", "amount": 12000 }, "credit": { "account": "Cash", "amount": 12000 } }, "explanation": { "en": "Van (asset) up = debit; Cash (asset) down = credit.", "ms": "Van (aset) naik = debit; Tunai (aset) turun = kredit." } },
+            { "id": "je-002", "type": "journal_entry", "difficulty": 3, "skill_tags": ["double-entry", "credit-purchase"], "prompt": { "en": "The business buys inventory worth RM3,000 on credit from Lim Trading.", "ms": "Perniagaan membeli inventori RM3,000 secara kredit daripada Lim Trading." }, "data": { "accounts": ["Inventory", "Cash", "Trade Payables", "Sales"], "accounts_ms": ["Inventori", "Tunai", "Pemiutang Perdagangan", "Jualan"] }, "answer": { "debit": { "account": "Inventory", "amount": 3000 }, "credit": { "account": "Trade Payables", "amount": 3000 } }, "explanation": { "en": "Bought on credit: inventory up = debit; a payable is created = credit.", "ms": "Dibeli secara kredit: inventori naik = debit; pemiutang terhasil = kredit." } },
+            { "id": "je-003", "type": "journal_entry", "difficulty": 2, "skill_tags": ["double-entry"], "prompt": { "en": "The business sells goods for RM1,500 cash.", "ms": "Perniagaan menjual barang RM1,500 tunai." }, "data": { "accounts": ["Cash", "Sales", "Inventory", "Capital"], "accounts_ms": ["Tunai", "Jualan", "Inventori", "Modal"] }, "answer": { "debit": { "account": "Cash", "amount": 1500 }, "credit": { "account": "Sales", "amount": 1500 } }, "explanation": { "en": "Cash up = debit; Sales (income) = credit.", "ms": "Tunai naik = debit; Jualan (pendapatan) = kredit." } },
+            { "id": "je-004", "type": "journal_entry", "difficulty": 3, "skill_tags": ["double-entry", "receivable"], "prompt": { "en": "A customer buys goods on credit for RM2,200.", "ms": "Pelanggan membeli barang secara kredit RM2,200." }, "data": { "accounts": ["Trade Receivables", "Cash", "Sales", "Trade Payables"], "accounts_ms": ["Penghutang Perdagangan", "Tunai", "Jualan", "Pemiutang Perdagangan"] }, "answer": { "debit": { "account": "Trade Receivables", "amount": 2200 }, "credit": { "account": "Sales", "amount": 2200 } }, "explanation": { "en": "Sold on credit: a receivable is created = debit; Sales = credit.", "ms": "Dijual secara kredit: penghutang terhasil = debit; Jualan = kredit." } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t4-errors",
+      "order": 4,
+      "title": { "en": "Spot the Error", "ms": "Kesan Kesilapan" },
+      "lessons": [
+        {
+          "id": "l5-spot-error",
+          "order": 1,
+          "title": { "en": "Find the Mistake", "ms": "Cari Kesilapan" },
+          "items": [
+            { "id": "err-001", "type": "spot_error", "difficulty": 3, "skill_tags": ["debit-credit"], "prompt": { "en": "Paid wages RM900 cash, recorded as: Dr Cash 900 / Cr Wages 900. Fix it.", "ms": "Bayar gaji RM900 tunai, direkod sebagai: Dt Tunai 900 / Kt Gaji 900. Betulkan." }, "data": { "given": { "debit": { "account": "Cash", "amount": 900 }, "credit": { "account": "Wages", "amount": 900 } } }, "answer": { "debit": { "account": "Wages", "amount": 900 }, "credit": { "account": "Cash", "amount": 900 } }, "explanation": { "en": "Reversed. Wages (expense) up = debit; Cash out = credit.", "ms": "Terbalik. Gaji (belanja) naik = debit; Tunai keluar = kredit." } },
+            { "id": "err-002", "type": "spot_error", "difficulty": 3, "skill_tags": ["classification"], "prompt": { "en": "Owner invested RM10,000 cash, recorded as: Dr Cash 10,000 / Cr Sales 10,000. Fix it.", "ms": "Pemilik masuk RM10,000 tunai, direkod sebagai: Dt Tunai 10,000 / Kt Jualan 10,000. Betulkan." }, "data": { "given": { "debit": { "account": "Cash", "amount": 10000 }, "credit": { "account": "Sales", "amount": 10000 } } }, "answer": { "debit": { "account": "Cash", "amount": 10000 }, "credit": { "account": "Capital", "amount": 10000 } }, "explanation": { "en": "Wrong account. Owner's money is Capital, not a Sale.", "ms": "Akaun salah. Wang pemilik ialah Modal, bukan Jualan." } },
+            { "id": "err-003", "type": "spot_error", "difficulty": 3, "skill_tags": ["debit-credit"], "prompt": { "en": "Cash sale RM1,200, recorded as: Dr Sales 1,200 / Cr Cash 1,200. Fix it.", "ms": "Jualan tunai RM1,200, direkod sebagai: Dt Jualan 1,200 / Kt Tunai 1,200. Betulkan." }, "data": { "given": { "debit": { "account": "Sales", "amount": 1200 }, "credit": { "account": "Cash", "amount": 1200 } } }, "answer": { "debit": { "account": "Cash", "amount": 1200 }, "credit": { "account": "Sales", "amount": 1200 } }, "explanation": { "en": "Reversed. Cash in = debit; Sales (income) = credit.", "ms": "Terbalik. Tunai masuk = debit; Jualan (pendapatan) = kredit." } }
+          ]
+        }
+      ]
+    }
+  ]
+}

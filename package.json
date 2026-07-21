@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --exclude '**/*.integration.test.ts'",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "icons": "node scripts/gen-icons.mjs"
+    "icons": "node scripts/gen-icons.mjs",
+    "test:integration": "vitest run integration"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",

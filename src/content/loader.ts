@@ -119,6 +119,17 @@ export const ACCOUNT_GLOSSARY_MS: Record<string, string> = {
   'Motor Vehicles': 'Kenderaan Bermotor',
   'Bank Overdraft': 'Overdraf Bank',
   'Bank Loan': 'Pinjaman Bank',
+  // Stage 5 — year-end adjustments
+  'Rent Expense': 'Belanja Sewa',
+  'Accrued Rent': 'Sewa Terakru',
+  'Prepaid Rent': 'Sewa Prabayar',
+  'Insurance Expense': 'Belanja Insurans',
+  'Prepaid Insurance': 'Insurans Prabayar',
+  'Accrued Insurance': 'Insurans Terakru',
+  'Depreciation Expense': 'Belanja Susut Nilai',
+  'Accumulated Depreciation': 'Susut Nilai Terkumpul',
+  'Bad Debts': 'Hutang Lapuk',
+  'Provision for Doubtful Debts': 'Peruntukan Hutang Ragu',
 }
 
 export function accountMs(account: string): string {

@@ -13,6 +13,13 @@ import { FOCUS, ProgressBar, TypeBadge } from './ui'
 
 type Phase = 'worked' | 'answering' | 'reflect' | 'feedback'
 
+/**
+ * Skills where a miss earns a self-explanation prompt before the answer is
+ * revealed (Spec §2: "debit/credit direction, provision-before-vs-after-
+ * writeoff"). Matched against an item's skill_tags.
+ */
+const ERROR_PRONE_TAGS = ['debit-credit', 'provision']
+
 export interface SessionResult {
   answered: number
   correct: number
@@ -95,7 +102,7 @@ export function SessionScreen({
       const errorProne =
         item.type === 'debit_credit' ||
         item.type === 'spot_error' ||
-        item.skill_tags.includes('debit-credit')
+        item.skill_tags.some((tag) => ERROR_PRONE_TAGS.includes(tag))
       setPhase(!correct && errorProne ? 'reflect' : 'feedback')
     },
     [phase, item, entry, queue],

@@ -5,6 +5,7 @@ import {
   confirmEmailLink,
   confirmEmailSignIn,
   getIdentity,
+  refreshIdentity,
   signOut,
   startEmailLink,
   startEmailSignIn,
@@ -31,6 +32,7 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
   const [code, setCode] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<FriendlyAuthError | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     setIdentity(await getIdentity())
@@ -71,6 +73,27 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
     await refresh()
     onChanged()
   }, [code, email, mode, refresh, onChanged])
+
+  /**
+   * The user confirmed by clicking the link instead of typing a code. Pull a
+   * fresh session and see whether the email actually landed on the account.
+   */
+  const checkLink = useCallback(async () => {
+    setBusy(true)
+    setError(null)
+    const id = await refreshIdentity()
+    setBusy(false)
+    if (!id?.email) {
+      setNotice(t('notConfirmedYet'))
+      return
+    }
+    setIdentity(id)
+    setMode('idle')
+    setStep('email')
+    setCode('')
+    setNotice(null)
+    onChanged()
+  }, [onChanged, t])
 
   const reset = () => {
     setMode('idle')
@@ -168,6 +191,7 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 {t('codeSentTo')} <span className="font-medium break-all">{email}</span>
               </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{t('codeOrLink')}</p>
               <label className="text-sm font-medium" htmlFor="acct-code">
                 {t('codeLabel')}
               </label>
@@ -183,7 +207,22 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
               <Button disabled={busy || code.length < 6} onClick={() => void verify()}>
                 {busy ? t('loading') : t('verify')}
               </Button>
+              {/* Supabase's default template sends a link and no code, so
+                  offer the click-the-link path as a first-class route. */}
+              <Button
+                variant="secondary"
+                disabled={busy}
+                onClick={() => void checkLink()}
+              >
+                {busy ? t('loading') : t('iClickedLink')}
+              </Button>
             </div>
+          )}
+
+          {notice && (
+            <p className="mt-3 text-sm font-medium text-amber-600 dark:text-amber-400">
+              {notice}
+            </p>
           )}
 
           {error && (

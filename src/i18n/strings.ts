@@ -81,7 +81,16 @@ export const UI = {
   emailLabel: { en: 'Email', ms: 'E-mel' },
   sendCode: { en: 'Send code', ms: 'Hantar kod' },
   codeLabel: { en: 'six-digit code', ms: 'kod enam digit' },
-  codeSentTo: { en: 'We sent a code to', ms: 'Kami hantar kod ke' },
+  codeSentTo: { en: 'We sent an email to', ms: 'Kami hantar e-mel ke' },
+  codeOrLink: {
+    en: 'Enter the code from the email — or just click the link in it, then tap below.',
+    ms: 'Masukkan kod dari e-mel — atau klik pautan di dalamnya, kemudian ketik di bawah.',
+  },
+  iClickedLink: { en: "I clicked the link — check now", ms: 'Saya klik pautan — semak sekarang' },
+  notConfirmedYet: {
+    en: 'Not confirmed yet. Open the email and click the link, then try again.',
+    ms: 'Belum disahkan. Buka e-mel dan klik pautan, kemudian cuba lagi.',
+  },
   verify: { en: 'Verify', ms: 'Sahkan' },
   signIn: { en: 'Sign in', ms: 'Log masuk' },
   signInBody: {

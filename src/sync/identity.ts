@@ -129,6 +129,24 @@ export async function confirmEmailSignIn(
   }
 }
 
+/**
+ * Re-read the identity from the server after the user confirmed by clicking
+ * the link in the email rather than typing a code.
+ *
+ * Supabase's default "Change Email Address" template sends a
+ * {{ .ConfirmationURL }} link and no {{ .Token }}, so there may be no code to
+ * type. Clicking the link applies the change server-side, but this device's
+ * JWT still carries the old claims until the session is refreshed.
+ */
+export async function refreshIdentity(): Promise<Identity | null> {
+  const pending = getSupabase()
+  if (!pending) return null
+  const supabase = await pending
+  // pulls a new JWT reflecting the confirmed email
+  await supabase.auth.refreshSession()
+  return getIdentity()
+}
+
 /** Sign out on this device. Progress stays in IndexedDB; sync just pauses. */
 export async function signOut(): Promise<void> {
   if (!SYNC_ENABLED) return

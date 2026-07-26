@@ -20,11 +20,18 @@ describe('friendlyAuthError', () => {
     expect(friendlyAuthError('Token has expired or is invalid').key).toBe('errBadCode')
   })
 
-  it('maps rate limiting', () => {
-    expect(friendlyAuthError('email rate limit exceeded').key).toBe('errRateLimited')
+  it('distinguishes the per-request cooldown from the hourly email quota', () => {
+    // seconds — telling the user "wait an hour" here would be wrong
     expect(
       friendlyAuthError('For security purposes, you can only request this after 51 seconds').key,
-    ).toBe('errRateLimited')
+    ).toBe('errCooldown')
+    // up to an hour — telling the user "wait a minute" here is what misled us
+    expect(friendlyAuthError('email rate limit exceeded').key).toBe('errEmailQuota')
+    expect(friendlyAuthError('over_email_send_rate_limit').key).toBe('errEmailQuota')
+  })
+
+  it('still catches other rate limits generically', () => {
+    expect(friendlyAuthError('request rate limit reached').key).toBe('errRateLimited')
   })
 
   it('maps an invalid address', () => {

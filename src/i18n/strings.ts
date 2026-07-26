@@ -161,9 +161,17 @@ export const UI = {
     en: 'That code is wrong or has expired. Request a new one.',
     ms: 'Kod itu salah atau telah tamat tempoh. Minta kod baharu.',
   },
+  errCooldown: {
+    en: 'Just sent one — wait about a minute before asking again.',
+    ms: 'Baru dihantar — tunggu kira-kira seminit sebelum minta lagi.',
+  },
+  errEmailQuota: {
+    en: "This project's hourly email limit is used up. Try again later, or set up custom SMTP.",
+    ms: 'Had e-mel sejam projek ini telah habis. Cuba lagi kemudian, atau sediakan SMTP tersendiri.',
+  },
   errRateLimited: {
-    en: 'Too many attempts. Wait a minute and try again.',
-    ms: 'Terlalu banyak percubaan. Tunggu seminit dan cuba lagi.',
+    en: 'Too many attempts. Wait a while and try again.',
+    ms: 'Terlalu banyak percubaan. Tunggu sebentar dan cuba lagi.',
   },
   errBadEmail: {
     en: 'That email address is not valid.',

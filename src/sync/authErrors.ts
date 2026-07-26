@@ -26,7 +26,15 @@ export function friendlyAuthError(raw: string): FriendlyAuthError {
   if (m.includes('token has expired') || m.includes('invalid token') || m.includes('otp_expired')) {
     return { key: 'errBadCode' }
   }
-  if (m.includes('rate limit') || m.includes('you can only request this after')) {
+  // Two distinct limits, with very different waits — do not conflate them.
+  // A per-request cooldown is seconds; the shared-mailer quota is hourly.
+  if (m.includes('you can only request this after')) {
+    return { key: 'errCooldown' }
+  }
+  if (m.includes('email rate limit') || m.includes('over_email_send_rate_limit')) {
+    return { key: 'errEmailQuota' }
+  }
+  if (m.includes('rate limit')) {
     return { key: 'errRateLimited' }
   }
   if (m.includes('email_address_invalid') || m.includes('is invalid')) {

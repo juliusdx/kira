@@ -154,33 +154,46 @@ export async function getClassRoster(
 
   const { data: members, error: mErr } = await supabase
     .from('class_members')
-    .select('user_id, joined_at, profiles ( display_name )')
+    .select('user_id, joined_at')
     .eq('class_id', classId)
   if (mErr) throw new Error(mErr.message)
   if (!members?.length) return []
 
-  const ids = members.map((m) => (m as { user_id: string }).user_id)
+  const ids = (members as { user_id: string }[]).map((m) => m.user_id)
 
-  const [{ data: reviews, error: rErr }, { data: attempts, error: aErr }] =
-    await Promise.all([
-      supabase
-        .from('review_state')
-        .select('user_id, item_id, box, due_at, updated_at')
-        .in('user_id', ids),
-      supabase
-        .from('attempts')
-        .select('user_id, item_id, correct, created_at')
-        .in('user_id', ids),
-    ])
+  // profiles is fetched separately rather than embedded: class_members.user_id
+  // and profiles.id both reference auth.users, with no FK between the two
+  // tables, so PostgREST cannot infer a relationship to embed.
+  const [
+    { data: profiles, error: pErr },
+    { data: reviews, error: rErr },
+    { data: attempts, error: aErr },
+  ] = await Promise.all([
+    supabase.from('profiles').select('id, display_name').in('id', ids),
+    supabase
+      .from('review_state')
+      .select('user_id, item_id, box, due_at, updated_at')
+      .in('user_id', ids),
+    supabase
+      .from('attempts')
+      .select('user_id, item_id, correct, created_at')
+      .in('user_id', ids),
+  ])
+  if (pErr) throw new Error(pErr.message)
   if (rErr) throw new Error(rErr.message)
   if (aErr) throw new Error(aErr.message)
 
+  const nameById = new Map(
+    ((profiles ?? []) as { id: string; display_name: string | null }[]).map(
+      (p) => [p.id, p.display_name],
+    ),
+  )
+
   return rollUp(
-    members as unknown as {
-      user_id: string
-      joined_at: string
-      profiles: { display_name: string | null } | null
-    }[],
+    (members as { user_id: string; joined_at: string }[]).map((m) => ({
+      ...m,
+      profiles: { display_name: nameById.get(m.user_id) ?? null },
+    })),
     (reviews ?? []) as RemoteReview[],
     (attempts ?? []) as RemoteAttempt[],
     now,

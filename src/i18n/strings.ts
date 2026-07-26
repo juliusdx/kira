@@ -112,6 +112,10 @@ export const UI = {
   },
   shareCode: { en: 'Share this code', ms: 'Kongsi kod ini' },
   copied: { en: 'Copied', ms: 'Disalin' },
+  copyFailed: {
+    en: "Couldn't copy — select the code above and copy it manually.",
+    ms: 'Gagal menyalin — pilih kod di atas dan salin secara manual.',
+  },
   newCode: { en: 'New code', ms: 'Kod baharu' },
   rotateConfirm: {
     en: 'Issue a new join code? The old one stops working; learners already in the class stay.',

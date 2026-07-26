@@ -13,6 +13,7 @@ import {
   type LearnerSummary,
 } from '../sync/classes'
 import { getIdentity } from '../sync/identity'
+import { copyText } from '../lib/clipboard'
 
 // Teacher dashboard + learner join flow. All reads are RLS-gated server-side:
 // a teacher only ever receives rows for learners who joined their class.
@@ -200,7 +201,7 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
   const { t } = useKira()
   const [rows, setRows] = useState<LearnerSummary[] | null>(null)
   const [code, setCode] = useState(cls.join_code)
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
@@ -227,20 +228,23 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
 
       <Card>
         <p className="text-sm text-slate-500 dark:text-slate-400">{t('shareCode')}</p>
-        <p className="mt-1 font-mono text-lg font-bold tracking-widest">
+        {/* select-all so a tap selects the whole code when copying fails */}
+        <p className="mt-1 font-mono text-lg font-bold tracking-widest select-all">
           {formatCode(code)}
         </p>
         <div className="mt-3 flex gap-2">
           <Button
             variant="secondary"
             className="flex-1"
-            onClick={() => {
-              void navigator.clipboard?.writeText(formatCode(code))
-              setCopied(true)
-              setTimeout(() => setCopied(false), 1500)
+            onClick={async () => {
+              // Only claim success if the clipboard actually took it —
+              // otherwise the user pastes whatever was already there.
+              const ok = await copyText(formatCode(code))
+              setCopied(ok ? 'yes' : 'failed')
+              if (ok) setTimeout(() => setCopied('no'), 1500)
             }}
           >
-            {copied ? t('copied') : t('shareCode')}
+            {copied === 'yes' ? t('copied') : t('shareCode')}
           </Button>
           <Button
             variant="ghost"
@@ -256,6 +260,11 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
             {t('newCode')}
           </Button>
         </div>
+        {copied === 'failed' && (
+          <p className="mt-2 text-sm font-medium text-amber-600 dark:text-amber-400">
+            {t('copyFailed')}
+          </p>
+        )}
       </Card>
 
       {error && (

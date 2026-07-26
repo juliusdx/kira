@@ -71,6 +71,66 @@ export const UI = {
     ms: 'Set semula semua kemajuan pada peranti ini? Tidak boleh dibatalkan.',
   },
   offlineReady: { en: 'Offline-ready', ms: 'Sedia luar talian' },
+  // account / identity
+  account: { en: 'Account', ms: 'Akaun' },
+  saveProgress: { en: 'Save my progress', ms: 'Simpan kemajuan saya' },
+  saveProgressBody: {
+    en: 'Add an email so your progress is kept if you change device or clear your browser.',
+    ms: 'Tambah e-mel supaya kemajuan anda kekal jika anda tukar peranti atau kosongkan pelayar.',
+  },
+  emailLabel: { en: 'Email', ms: 'E-mel' },
+  sendCode: { en: 'Send code', ms: 'Hantar kod' },
+  codeLabel: { en: 'six-digit code', ms: 'kod enam digit' },
+  codeSentTo: { en: 'We sent a code to', ms: 'Kami hantar kod ke' },
+  verify: { en: 'Verify', ms: 'Sahkan' },
+  signIn: { en: 'Sign in', ms: 'Log masuk' },
+  signInBody: {
+    en: 'Already added an email? Sign in to restore your progress.',
+    ms: 'Sudah tambah e-mel? Log masuk untuk pulihkan kemajuan anda.',
+  },
+  signOut: { en: 'Sign out', ms: 'Log keluar' },
+  savedAs: { en: 'Progress saved to', ms: 'Kemajuan disimpan ke' },
+  notSaved: {
+    en: 'Progress is on this device only',
+    ms: 'Kemajuan hanya pada peranti ini',
+  },
+  // classes
+  myClasses: { en: 'My classes', ms: 'Kelas saya' },
+  joinClass: { en: 'Join a class', ms: 'Sertai kelas' },
+  joinCode: { en: 'Join code', ms: 'Kod sertai' },
+  enterJoinCode: { en: 'Enter the code from your teacher', ms: 'Masukkan kod daripada guru anda' },
+  join: { en: 'Join', ms: 'Sertai' },
+  joined: { en: 'Joined', ms: 'Telah sertai' },
+  teacherView: { en: 'Teacher', ms: 'Guru' },
+  newClass: { en: 'New class', ms: 'Kelas baharu' },
+  className: { en: 'Class name', ms: 'Nama kelas' },
+  create: { en: 'Create', ms: 'Cipta' },
+  learners: { en: 'Learners', ms: 'Pelajar' },
+  noLearners: {
+    en: 'No one has joined yet. Share the join code.',
+    ms: 'Belum ada yang sertai. Kongsi kod sertai.',
+  },
+  shareCode: { en: 'Share this code', ms: 'Kongsi kod ini' },
+  copied: { en: 'Copied', ms: 'Disalin' },
+  newCode: { en: 'New code', ms: 'Kod baharu' },
+  rotateConfirm: {
+    en: 'Issue a new join code? The old one stops working; learners already in the class stay.',
+    ms: 'Keluarkan kod baharu? Kod lama berhenti berfungsi; pelajar sedia ada kekal.',
+  },
+  lastActive: { en: 'Last active', ms: 'Aktif kali akhir' },
+  never: { en: 'Never', ms: 'Tidak pernah' },
+  weakest: { en: 'Needs work', ms: 'Perlu latihan' },
+  remove: { en: 'Remove', ms: 'Buang' },
+  removeConfirm: {
+    en: 'Remove this learner from the class? Their progress is not deleted.',
+    ms: 'Buang pelajar ini dari kelas? Kemajuan mereka tidak dipadam.',
+  },
+  needAccountForClass: {
+    en: 'Add an email first so your class is not lost.',
+    ms: 'Tambah e-mel dahulu supaya kelas anda tidak hilang.',
+  },
+  back: { en: 'Back', ms: 'Kembali' },
+  loading: { en: 'Loading…', ms: 'Memuatkan…' },
 } as const
 
 export type UIKey = keyof typeof UI

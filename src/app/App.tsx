@@ -16,8 +16,10 @@ import { Home } from '../components/Home'
 import { Progress } from '../components/Progress'
 import { SessionScreen, type SessionResult } from '../components/SessionScreen'
 import { SessionComplete } from '../components/SessionComplete'
+import { Account } from '../components/Account'
+import { Classes } from '../components/Classes'
 
-type Screen = 'home' | 'session' | 'complete' | 'progress'
+type Screen = 'home' | 'session' | 'complete' | 'progress' | 'account' | 'classes'
 
 export function App() {
   const { ready } = useKira()
@@ -131,8 +133,23 @@ export function App() {
           summary={summary}
           onBack={() => setScreen('home')}
           onReset={doReset}
+          onOpenAccount={SYNC_ENABLED ? () => setScreen('account') : undefined}
+          onOpenClasses={SYNC_ENABLED ? () => setScreen('classes') : undefined}
         />
       )}
+
+      {screen === 'account' && (
+        <Account
+          onBack={() => setScreen('progress')}
+          // signing in as a different account changes whose data we hold:
+          // pull it down and re-render from the merged result.
+          onChanged={() => {
+            void syncNow().then(reload)
+          }}
+        />
+      )}
+
+      {screen === 'classes' && <Classes onBack={() => setScreen('progress')} />}
     </div>
   )
 }

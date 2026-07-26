@@ -7,10 +7,15 @@ export function Progress({
   summary,
   onBack,
   onReset,
+  onOpenAccount,
+  onOpenClasses,
 }: {
   summary: ProgressSummary
   onBack: () => void
   onReset: () => void
+  /** omitted when cloud sync is not configured */
+  onOpenAccount?: () => void
+  onOpenClasses?: () => void
 }) {
   const { locale, t } = useKira()
 
@@ -70,6 +75,21 @@ export function Progress({
             </Card>
           ))}
         </div>
+
+        {(onOpenAccount || onOpenClasses) && (
+          <div className="flex gap-2 pt-2">
+            {onOpenAccount && (
+              <Button variant="secondary" className="flex-1" onClick={onOpenAccount}>
+                {t('account')}
+              </Button>
+            )}
+            {onOpenClasses && (
+              <Button variant="secondary" className="flex-1" onClick={onOpenClasses}>
+                {t('myClasses')}
+              </Button>
+            )}
+          </div>
+        )}
 
         <div className="pt-2">
           <Button

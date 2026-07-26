@@ -131,6 +131,13 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
         ) : (
           <p className="text-sm text-slate-500 dark:text-slate-400">{t('notSaved')}</p>
         )}
+        {/* Anonymous identities are per-origin and per-browser-profile, so
+            "why doesn't this device show my email?" is otherwise unanswerable. */}
+        {identity && (
+          <p className="mt-2 font-mono text-xs text-slate-400 dark:text-slate-500">
+            id {identity.userId.slice(0, 8)}
+          </p>
+        )}
       </Card>
 
       {!identity?.email && mode === 'idle' && (

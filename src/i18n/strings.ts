@@ -135,6 +135,31 @@ export const UI = {
   },
   back: { en: 'Back', ms: 'Kembali' },
   loading: { en: 'Loading…', ms: 'Memuatkan…' },
+  // auth errors, mapped from raw Supabase messages
+  errNoAccount: {
+    en: 'No account uses that email yet.',
+    ms: 'Belum ada akaun menggunakan e-mel itu.',
+  },
+  errNoAccountFix: {
+    en: 'Save my progress with this email instead',
+    ms: 'Simpan kemajuan saya dengan e-mel ini',
+  },
+  errEmailTaken: {
+    en: 'That email already belongs to another account. Sign in with it instead.',
+    ms: 'E-mel itu milik akaun lain. Log masuk dengannya sebaliknya.',
+  },
+  errBadCode: {
+    en: 'That code is wrong or has expired. Request a new one.',
+    ms: 'Kod itu salah atau telah tamat tempoh. Minta kod baharu.',
+  },
+  errRateLimited: {
+    en: 'Too many attempts. Wait a minute and try again.',
+    ms: 'Terlalu banyak percubaan. Tunggu seminit dan cuba lagi.',
+  },
+  errBadEmail: {
+    en: 'That email address is not valid.',
+    ms: 'Alamat e-mel itu tidak sah.',
+  },
 } as const
 
 export type UIKey = keyof typeof UI

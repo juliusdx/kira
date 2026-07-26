@@ -10,6 +10,7 @@ import {
   startEmailSignIn,
   type Identity,
 } from '../sync/identity'
+import { friendlyAuthError, type FriendlyAuthError } from '../sync/authErrors'
 
 // Account screen: turn an anonymous device-bound learner into a durable
 // account, or sign back in on a new device. Linking keeps the SAME user id, so
@@ -29,7 +30,7 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<FriendlyAuthError | null>(null)
 
   const refresh = useCallback(async () => {
     setIdentity(await getIdentity())
@@ -46,7 +47,7 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
       mode === 'linking' ? await startEmailLink(email) : await startEmailSignIn(email)
     setBusy(false)
     if (!res.ok) {
-      setError(res.error ?? 'error')
+      setError(friendlyAuthError(res.error ?? ''))
       return
     }
     setStep('code')
@@ -61,7 +62,7 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
         : await confirmEmailSignIn(email, code)
     setBusy(false)
     if (!res.ok) {
-      setError(res.error ?? 'error')
+      setError(friendlyAuthError(res.error ?? ''))
       return
     }
     setMode('idle')
@@ -186,7 +187,29 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
           )}
 
           {error && (
-            <p className="mt-3 text-sm font-medium text-rose-600 dark:text-rose-400">{error}</p>
+            <div className="mt-3">
+              <p className="text-sm font-medium text-rose-600 dark:text-rose-400">
+                {t(error.key)}
+                {/* keep the raw text visible when unmapped, so real bugs show */}
+                {error.raw && (
+                  <span className="mt-1 block font-normal opacity-70">{error.raw}</span>
+                )}
+              </p>
+              {/* wrong flow: one tap moves them to the one that works */}
+              {error.suggestLink && (
+                <Button
+                  variant="secondary"
+                  className="mt-3 w-full"
+                  onClick={() => {
+                    setMode('linking')
+                    setStep('email')
+                    setError(null)
+                  }}
+                >
+                  {t('errNoAccountFix')}
+                </Button>
+              )}
+            </div>
           )}
 
           <Button variant="ghost" className="mt-2 w-full" onClick={reset}>

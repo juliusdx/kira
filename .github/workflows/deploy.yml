@@ -33,6 +33,9 @@ jobs:
           # If either is unset the build simply ships without cloud sync.
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          # VAPID *public* key only — it is meant to be in the client bundle.
+          # The private key lives solely in the Edge Function's secrets.
+          VITE_VAPID_PUBLIC_KEY: ${{ vars.VITE_VAPID_PUBLIC_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

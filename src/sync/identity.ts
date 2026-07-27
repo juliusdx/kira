@@ -26,6 +26,30 @@ function message(e: unknown): string {
   return e instanceof Error ? e.message : String(e)
 }
 
+/**
+ * Where an emailed confirmation link should land.
+ *
+ * Supabase's Site URL was observed dropping the path — a Site URL of
+ * https://juliusdx.github.io/kira/ redirected to the bare origin, which is a
+ * 404 for a GitHub Pages *project* site. Passing the target explicitly
+ * overrides that fallback.
+ *
+ * Resolved against the current page, NOT the origin: vite is configured with
+ * `base: './'` so BASE_URL is './', and './' against an origin collapses to
+ * the root — which is precisely the 404 we are fixing.
+ */
+export function resolveAppUrl(base: string, href: string): string {
+  const u = new URL(base, href)
+  u.hash = ''
+  u.search = ''
+  return u.toString()
+}
+
+function appUrl(): string | undefined {
+  if (typeof window === 'undefined') return undefined
+  return resolveAppUrl(import.meta.env.BASE_URL, window.location.href)
+}
+
 /** Current identity, or null when sync is disabled / not signed in. */
 export async function getIdentity(): Promise<Identity | null> {
   const pending = getSupabase()
@@ -51,7 +75,10 @@ export async function startEmailLink(email: string): Promise<AuthResult> {
   if (!pending) return { ok: false, error: 'sync-disabled' }
   try {
     const supabase = await pending
-    const { error } = await supabase.auth.updateUser({ email: email.trim() })
+    const { error } = await supabase.auth.updateUser(
+      { email: email.trim() },
+      { emailRedirectTo: appUrl() },
+    )
     if (error) return { ok: false, error: error.message }
     return { ok: true }
   } catch (e) {
@@ -96,7 +123,7 @@ export async function startEmailSignIn(email: string): Promise<AuthResult> {
     const supabase = await pending
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { shouldCreateUser: false },
+      options: { shouldCreateUser: false, emailRedirectTo: appUrl() },
     })
     if (error) return { ok: false, error: error.message }
     return { ok: true }

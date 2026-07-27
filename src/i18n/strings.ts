@@ -168,6 +168,15 @@ export const UI = {
     en: 'Notifications are blocked for this site. Allow them in your browser settings to use reminders.',
     ms: 'Pemberitahuan disekat untuk tapak ini. Benarkan dalam tetapan pelayar untuk menggunakan peringatan.',
   },
+  testNotification: { en: 'Send a test notification', ms: 'Hantar pemberitahuan ujian' },
+  testSent: {
+    en: 'Sent. If nothing appeared, notifications are blocked at the system level.',
+    ms: 'Dihantar. Jika tiada apa-apa muncul, pemberitahuan disekat pada peringkat sistem.',
+  },
+  testFailed: {
+    en: 'Could not show a notification on this device.',
+    ms: 'Tidak dapat memaparkan pemberitahuan pada peranti ini.',
+  },
   // gamification
   badges: { en: 'Badges', ms: 'Lencana' },
   badgeEarned: { en: 'New badge earned!', ms: 'Lencana baharu diperoleh!' },

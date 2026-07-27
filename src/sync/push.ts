@@ -137,6 +137,74 @@ export async function disablePush(): Promise<PushState> {
   return 'off'
 }
 
+export interface PushDiagnostics {
+  permission: NotificationPermission
+  hasServiceWorker: boolean
+  /** the SW is registered AND controlling this page */
+  swActive: boolean
+  hasSubscription: boolean
+  /** true when the running SW has our push handler — the usual failure */
+  pushHandlerPresent: boolean
+  endpointHost: string | null
+  p256dhLength: number
+  authLength: number
+}
+
+/**
+ * Everything needed to tell WHY a push did not appear, without a phone in
+ * hand. The common cause is a service worker that registered before
+ * push-sw.js existed: the push arrives, nothing handles it, and it is dropped
+ * with no error anywhere.
+ */
+export async function pushDiagnostics(): Promise<PushDiagnostics> {
+  const reg = await navigator.serviceWorker?.getRegistration()
+  const sub = await reg?.pushManager.getSubscription()
+  const json = sub?.toJSON() as { keys?: Record<string, string> } | undefined
+
+  let pushHandlerPresent = false
+  try {
+    // If the SW imported push-sw.js, that file is in the cache/network and
+    // its text contains our listener. Fetching it proves it is reachable at
+    // the scope the SW would have resolved.
+    const res = await fetch(new URL('push-sw.js', window.location.href), {
+      cache: 'no-store',
+    })
+    pushHandlerPresent = res.ok && (await res.text()).includes("addEventListener('push'")
+  } catch {
+    pushHandlerPresent = false
+  }
+
+  return {
+    permission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
+    hasServiceWorker: Boolean(reg),
+    swActive: Boolean(reg?.active) && Boolean(navigator.serviceWorker?.controller),
+    hasSubscription: Boolean(sub),
+    pushHandlerPresent,
+    endpointHost: sub ? new URL(sub.endpoint).host : null,
+    p256dhLength: json?.keys?.p256dh?.length ?? 0,
+    authLength: json?.keys?.auth?.length ?? 0,
+  }
+}
+
+/**
+ * Show a notification locally, bypassing push entirely. If this works but a
+ * real reminder does not, the fault is in delivery (subscription keys, the
+ * sender, the push service). If this also fails, it is permission or the OS.
+ */
+export async function testNotification(): Promise<boolean> {
+  if (typeof Notification === 'undefined') return false
+  if (Notification.permission !== 'granted') return false
+  const reg = await navigator.serviceWorker?.ready
+  if (!reg) return false
+  await reg.showNotification('Kira', {
+    body: 'Test notification — reminders are working on this device.',
+    icon: './pwa-192x192.png',
+    badge: './pwa-192x192.png',
+    tag: 'kira-test',
+  })
+  return true
+}
+
 /** Change the reminder hour for this device's existing subscription. */
 export async function setReminderHour(hour: number): Promise<void> {
   const reg = await navigator.serviceWorker?.getRegistration()

@@ -6,7 +6,10 @@ import {
   enablePush,
   getPushState,
   PUSH_CONFIGURED,
+  pushDiagnostics,
   setReminderHour,
+  testNotification,
+  type PushDiagnostics,
   type PushState,
 } from '../sync/push'
 
@@ -20,6 +23,8 @@ export function Reminders() {
   const [state, setState] = useState<PushState | null>(null)
   const [hour, setHour] = useState(19)
   const [busy, setBusy] = useState(false)
+  const [tested, setTested] = useState<'no' | 'ok' | 'failed'>('no')
+  const [diag, setDiag] = useState<PushDiagnostics | null>(null)
 
   const refresh = useCallback(async () => {
     setState(await getPushState())
@@ -94,9 +99,48 @@ export function Reminders() {
           </Button>
 
           {state === 'on' && (
-            <p className="mt-2 text-center text-xs text-emerald-600 dark:text-emerald-400">
-              {t('remindersActive')}
-            </p>
+            <>
+              <p className="mt-2 text-center text-xs text-emerald-600 dark:text-emerald-400">
+                {t('remindersActive')}
+              </p>
+
+              {/* Separates "notifications cannot display" from "push did not
+                  arrive" — without this the two look identical on a phone. */}
+              <Button
+                variant="ghost"
+                className="mt-2 w-full"
+                onClick={async () => {
+                  const ok = await testNotification()
+                  setDiag(await pushDiagnostics())
+                  setTested(ok ? 'ok' : 'failed')
+                }}
+              >
+                {t('testNotification')}
+              </Button>
+
+              {tested === 'failed' && (
+                <p className="mt-1 text-center text-xs text-rose-600 dark:text-rose-400">
+                  {t('testFailed')}
+                </p>
+              )}
+              {tested === 'ok' && (
+                <p className="mt-1 text-center text-xs text-slate-500">
+                  {t('testSent')}
+                </p>
+              )}
+
+              {diag && (
+                <pre className="mt-3 overflow-x-auto rounded-xl bg-slate-100 p-3 text-[11px] leading-relaxed text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                  {`permission   ${diag.permission}
+sw active    ${diag.swActive}
+subscription ${diag.hasSubscription}
+push handler ${diag.pushHandlerPresent}
+endpoint     ${diag.endpointHost ?? '—'}
+p256dh len   ${diag.p256dhLength}
+auth len     ${diag.authLength}`}
+                </pre>
+              )}
+            </>
           )}
         </>
       )}

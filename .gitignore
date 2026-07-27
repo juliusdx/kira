@@ -12,3 +12,5 @@ coverage
 .env.*.local
 .vapid.local
 .cron.local
+.cron_setup.ready.sql
+.service.local

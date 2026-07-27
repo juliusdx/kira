@@ -94,8 +94,12 @@ export const UI = {
   verify: { en: 'Verify', ms: 'Sahkan' },
   signIn: { en: 'Sign in', ms: 'Log masuk' },
   signInBody: {
-    en: 'Already added an email? Sign in to restore your progress.',
-    ms: 'Sudah tambah e-mel? Log masuk untuk pulihkan kemajuan anda.',
+    en: 'Already added an email? Sign in to restore that account. This device shows that account only.',
+    ms: 'Sudah tambah e-mel? Log masuk untuk pulihkan akaun itu. Peranti ini akan papar akaun itu sahaja.',
+  },
+  signInReplaceWarn: {
+    en: 'This device has practice saved to a different account. Signing in replaces it with the account you sign into. Continue?',
+    ms: 'Peranti ini ada latihan pada akaun lain. Log masuk akan menggantikannya dengan akaun yang anda log masuk. Teruskan?',
   },
   signOut: { en: 'Sign out', ms: 'Log keluar' },
   savedAs: { en: 'Progress saved to', ms: 'Kemajuan disimpan ke' },

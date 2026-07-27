@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterAll } from 'vitest'
 import { db } from '../db/db'
 import { getMeta, setMeta } from '../db/data'
 import { syncNow } from './sync'
-import { ensureSession } from './client'
+import { ensureSession, getSupabase } from './client'
 
 // Exercises the real sync ORCHESTRATION — push, pull, merge, IndexedDB write —
 // against a live Supabase project, using fake-indexeddb for Dexie.
@@ -100,6 +100,44 @@ describe.skipIf(!configured)('syncNow — round trip against live Supabase', () 
     const local = await db.reviewState.get(ITEM)
     expect(local!.box, 'newer local answer must survive the pull').toBe(5)
     expect(local!.streak).toBe(9)
+  })
+
+  it('ADOPTS a different account instead of merging this device into it', async () => {
+    const supabase = await getSupabase()!
+
+    // --- learner A practises on this device, and it reaches the cloud ------
+    await db.reviewState.put({
+      itemId: ITEM,
+      box: 5,
+      dueAt: T,
+      streak: 4,
+      lastResult: true,
+      updatedAt: T,
+    })
+    const first = await syncNow()
+    expect(first.ok, first.error).toBe(true)
+    const userA = (await supabase.auth.getUser()).data.user!.id
+
+    // --- learner B signs in on the same device ----------------------------
+    await supabase.auth.signOut()
+    await supabase.auth.signInAnonymously()
+    const userB = (await supabase.auth.getUser()).data.user!.id
+    expect(userB).not.toBe(userA)
+
+    const second = await syncNow()
+    expect(second.ok, second.error).toBe(true)
+    expect(second.switchedAccount, 'must notice the account changed').toBe(true)
+
+    // B starts clean — A's practice is NOT inherited
+    expect(await db.reviewState.get(ITEM)).toBeUndefined()
+    expect(await db.reviewState.count()).toBe(0)
+
+    // ...and critically, A's row was never written into B's account
+    const { data } = await supabase
+      .from('review_state')
+      .select('item_id')
+      .eq('user_id', userB)
+    expect(data ?? [], "B's cloud account must stay empty").toHaveLength(0)
   })
 
   it('records a lastSyncedAt watermark so the next run is incremental', async () => {

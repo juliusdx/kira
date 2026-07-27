@@ -1,5 +1,5 @@
 import { db } from '../db/db'
-import { getMeta, setMeta } from '../db/data'
+import { getMeta, resetAllProgress, setMeta } from '../db/data'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { ensureSession, getSupabase, SYNC_ENABLED } from './client'
 import {
@@ -21,6 +21,8 @@ import {
 
 const LAST_SYNC_KEY = 'sync.lastSyncedAt'
 const LAST_ATTEMPT_KEY = 'sync.lastAttemptAt'
+/** which account the rows currently in IndexedDB belong to */
+const OWNER_KEY = 'sync.ownerId'
 
 export interface SyncResult {
   ok: boolean
@@ -28,6 +30,8 @@ export interface SyncResult {
   pushedReviews?: number
   pushedAttempts?: number
   pulledReviews?: number
+  /** the signed-in account changed, so local progress was replaced */
+  switchedAccount?: boolean
   error?: string
 }
 
@@ -46,6 +50,18 @@ export async function syncNow(): Promise<SyncResult> {
     const userId = await ensureSession()
     if (!userId) return { ok: false, skipped: 'no-session' }
 
+    // If the signed-in account is not the one this device's rows belong to,
+    // ADOPT the new account rather than merging into it — otherwise a shared
+    // device folds one learner's practice into the next learner's account.
+    // Checked here rather than in the sign-in screen so it also covers the
+    // magic-link path, where supabase-js adopts the session on page load and
+    // the UI never runs.
+    const owner = await getMeta<string | null>(OWNER_KEY, null)
+    const switchedAccount = Boolean(owner && owner !== userId)
+    if (switchedAccount) await clearLocalForAccountSwitch()
+    await setMeta(OWNER_KEY, userId)
+
+    // read AFTER a possible switch — clearing rewinds these to 0
     const lastSyncedAt = await getMeta<number>(LAST_SYNC_KEY, 0)
     const lastAttemptAt = await getMeta<number>(LAST_ATTEMPT_KEY, 0)
     const startedAt = Date.now()
@@ -57,7 +73,13 @@ export async function syncNow(): Promise<SyncResult> {
     await setMeta(LAST_SYNC_KEY, startedAt)
     await setMeta(LAST_ATTEMPT_KEY, startedAt)
 
-    return { ok: true, pushedReviews, pushedAttempts, pulledReviews }
+    return {
+      ok: true,
+      pushedReviews,
+      pushedAttempts,
+      pulledReviews,
+      ...(switchedAccount ? { switchedAccount } : {}),
+    }
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e)
     console.warn('[kira] sync failed', message)
@@ -128,6 +150,27 @@ async function pullReviews(
   const changed = mergeReviewRows(localMap, incoming)
   if (changed.length) await db.reviewState.bulkPut(changed)
   return changed.length
+}
+
+/**
+ * Wipe this device's progress and rewind the sync watermarks.
+ *
+ * Used when SIGNING IN, where the local rows belong to the previous (usually
+ * anonymous) user and must not be attributed to the account being signed into
+ * — otherwise a shared classroom tablet would fold one learner's practice into
+ * the next learner's account.
+ *
+ * Rewinding the watermarks matters as much as the delete: the subsequent pull
+ * asks for rows newer than the last sync, so leaving it in place would fetch
+ * only recent changes and silently restore a partial history.
+ *
+ * NOT used when LINKING an email, where the user id is unchanged and the local
+ * rows genuinely belong to the account being created.
+ */
+export async function clearLocalForAccountSwitch(): Promise<void> {
+  await resetAllProgress() // review state, attempts, streak — keeps locale
+  await setMeta(LAST_SYNC_KEY, 0)
+  await setMeta(LAST_ATTEMPT_KEY, 0)
 }
 
 /**

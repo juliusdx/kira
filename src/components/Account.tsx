@@ -12,6 +12,8 @@ import {
   type Identity,
 } from '../sync/identity'
 import { friendlyAuthError, type FriendlyAuthError } from '../sync/authErrors'
+import { syncNow } from '../sync/sync'
+import { db } from '../db/db'
 
 // Account screen: turn an anonymous device-bound learner into a durable
 // account, or sign back in on a new device. Linking keeps the SAME user id, so
@@ -58,15 +60,27 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
   const verify = useCallback(async () => {
     setBusy(true)
     setError(null)
+
+    // Flush anything unsynced while we are still the CURRENT user, so their
+    // work lands in their own account rather than being wiped below.
+    if (mode === 'signingIn') await syncNow()
+
     const res =
       mode === 'linking'
         ? await confirmEmailLink(email, code)
         : await confirmEmailSignIn(email, code)
-    setBusy(false)
     if (!res.ok) {
+      setBusy(false)
       setError(friendlyAuthError(res.error ?? ''))
       return
     }
+
+    // syncNow detects the account changed and adopts it — wiping this
+    // device's rows rather than merging them in. Linking keeps local data,
+    // because the user id is unchanged.
+    await syncNow()
+
+    setBusy(false)
     setMode('idle')
     setStep('email')
     setCode('')
@@ -160,7 +174,12 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
             <Button
               variant="secondary"
               className="mt-4 w-full"
-              onClick={() => setMode('signingIn')}
+              onClick={async () => {
+                // Only warn when there is actually something to lose.
+                const local = await db.reviewState.count()
+                if (local > 0 && !window.confirm(t('signInReplaceWarn'))) return
+                setMode('signingIn')
+              }}
             >
               {t('signIn')}
             </Button>

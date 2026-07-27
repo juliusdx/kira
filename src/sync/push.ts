@@ -137,6 +137,39 @@ export async function disablePush(): Promise<PushState> {
   return 'off'
 }
 
+/**
+ * Re-point this device's push subscription at the account that is now signed
+ * in.
+ *
+ * Signing in changes auth.uid(), but the existing push_subscriptions row still
+ * carries the PREVIOUS user id — and RLS (auth.uid() = user_id) makes that row
+ * unreachable to the new identity, so it can be neither updated nor deleted
+ * from the client. Left alone, the sender would keep counting the old
+ * account's due reviews: reminders that look fine and are quietly about the
+ * wrong person.
+ *
+ * The fix is to abandon the subscription and make a new one, which lands under
+ * the new user. The orphan gets a 410 from the push service on its next send
+ * and is pruned automatically.
+ *
+ * No permission prompt: permission is already granted, so this is silent.
+ */
+export async function resubscribeForCurrentUser(sendHour = 19): Promise<PushState> {
+  if (!PUSH_CONFIGURED) return 'unsupported'
+  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return 'unsupported'
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') {
+    // nothing subscribed on this device, so nothing to re-point
+    return getPushState()
+  }
+
+  const reg = await navigator.serviceWorker.getRegistration()
+  const existing = await reg?.pushManager.getSubscription()
+  if (!existing) return getPushState()
+
+  await existing.unsubscribe()
+  return enablePush(sendHour)
+}
+
 export interface PushDiagnostics {
   permission: NotificationPermission
   hasServiceWorker: boolean

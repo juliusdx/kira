@@ -13,6 +13,7 @@ import {
 } from '../sync/identity'
 import { friendlyAuthError, type FriendlyAuthError } from '../sync/authErrors'
 import { syncNow } from '../sync/sync'
+import { resubscribeForCurrentUser } from '../sync/push'
 import { db } from '../db/db'
 
 // Account screen: turn an anonymous device-bound learner into a durable
@@ -79,6 +80,11 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
     // device's rows rather than merging them in. Linking keeps local data,
     // because the user id is unchanged.
     await syncNow()
+
+    // The push subscription still carries the PREVIOUS user id and RLS makes
+    // it unreachable, so re-subscribe under the account we just adopted.
+    // Otherwise reminders keep counting the old account's due reviews.
+    if (mode === 'signingIn') await resubscribeForCurrentUser()
 
     setBusy(false)
     setMode('idle')

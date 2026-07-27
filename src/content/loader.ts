@@ -130,6 +130,19 @@ export const ACCOUNT_GLOSSARY_MS: Record<string, string> = {
   'Accumulated Depreciation': 'Susut Nilai Terkumpul',
   'Bad Debts': 'Hutang Lapuk',
   'Provision for Doubtful Debts': 'Peruntukan Hutang Ragu',
+  // Stage 6 — control, checking and the specialised final accounts
+  Suspense: 'Penyelesaian',
+  'Sales Ledger Control': 'Kawalan Lejar Jualan',
+  'Purchases Ledger Control': 'Kawalan Lejar Belian',
+  'Returns Inwards': 'Pulangan Masuk',
+  'Returns Outwards': 'Pulangan Keluar',
+  'Discount Allowed': 'Diskaun Diberi',
+  'Discount Received': 'Diskaun Diterima',
+  Subscriptions: 'Yuran',
+  'Accumulated Fund': 'Kumpulan Wang Terkumpul',
+  'Current Account': 'Akaun Semasa',
+  'Capital Account': 'Akaun Modal',
+  'Office Equipment': 'Peralatan Pejabat',
 }
 
 export function accountMs(account: string): string {

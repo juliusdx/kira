@@ -80,7 +80,9 @@ export const UI = {
   },
   emailLabel: { en: 'Email', ms: 'E-mel' },
   sendCode: { en: 'Send code', ms: 'Hantar kod' },
-  codeLabel: { en: 'six-digit code', ms: 'kod enam digit' },
+  // NOT "six-digit": Supabase's OTP length is a project setting (this project
+  // issues 8), so the copy must not promise a specific length.
+  codeLabel: { en: 'Code from the email', ms: 'Kod dari e-mel' },
   codeSentTo: { en: 'We sent an email to', ms: 'Kami hantar e-mel ke' },
   codeOrLink: {
     en: 'Enter the code from the email — or just click the link in it, then tap below.',

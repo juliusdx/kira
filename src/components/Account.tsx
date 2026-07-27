@@ -226,11 +226,12 @@ export function Account({ onBack, onChanged }: { onBack: () => void; onChanged: 
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                // strip whitespace so a code pasted as "7784 8142" still works
+                onChange={(e) => setCode(e.target.value.replace(/\s+/g, ''))}
                 className={`${input} ${FOCUS} tracking-[0.3em] tabular-nums`}
-                placeholder="000000"
+                placeholder="••••••"
               />
-              <Button disabled={busy || code.length < 6} onClick={() => void verify()}>
+              <Button disabled={busy || code.trim().length < 6} onClick={() => void verify()}>
                 {busy ? t('loading') : t('verify')}
               </Button>
               {/* Supabase's default template sends a link and no code, so

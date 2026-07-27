@@ -85,6 +85,51 @@ export async function joinClass(code: string): Promise<string> {
   return data as string
 }
 
+export interface LeaderRow {
+  userId: string
+  displayName: string
+  score: number
+}
+
+/**
+ * Class ranking over the last `days`. Served by a SECURITY DEFINER function so
+ * classmates see ranks WITHOUT gaining read access to each other's answers —
+ * the underlying tables stay locked down.
+ */
+export async function getLeaderboard(
+  classId: string,
+  days = 7,
+): Promise<LeaderRow[]> {
+  const pending = getSupabase()
+  if (!pending) return []
+  const supabase = await pending
+  const since = new Date(Date.now() - days * 86_400_000).toISOString()
+  const { data, error } = await supabase.rpc('class_leaderboard', {
+    p_class_id: classId,
+    p_since: since,
+  })
+  if (error) throw new Error(error.message)
+  return (
+    (data ?? []) as { user_id: string; display_name: string; score: number }[]
+  ).map((r) => ({
+    userId: r.user_id,
+    displayName: r.display_name,
+    score: Number(r.score),
+  }))
+}
+
+/** Set your own display name (max 24 chars, trimmed server-side). */
+export async function setDisplayName(name: string): Promise<string | null> {
+  const pending = getSupabase()
+  if (!pending) throw new Error('sync disabled')
+  const supabase = await pending
+  const { data, error } = await supabase.rpc('set_display_name', {
+    p_name: name,
+  })
+  if (error) throw new Error(error.message)
+  return (data as string | null) ?? null
+}
+
 /** Issue a fresh join code for a class you own; the old code stops working. */
 export async function rotateJoinCode(classId: string): Promise<string> {
   const pending = getSupabase()

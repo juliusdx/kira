@@ -14,6 +14,8 @@ import {
 } from '../sync/classes'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
+import { Leaderboard } from './Leaderboard'
+import { setDisplayName } from '../sync/classes'
 
 // Teacher dashboard + learner join flow. All reads are RLS-gated server-side:
 // a teacher only ever receives rows for learners who joined their class.
@@ -138,16 +140,17 @@ export function Classes({ onBack }: { onBack: () => void }) {
       </Card>
 
       {joined.length > 0 && (
-        <Card>
-          <h2 className="font-semibold">{t('joined')}</h2>
-          <ul className="mt-2 flex flex-col gap-1">
-            {joined.map((c) => (
-              <li key={c.id} className="text-sm text-slate-600 dark:text-slate-300">
+        <>
+          <NameCard />
+          {joined.map((c) => (
+            <div key={c.id} className="grid gap-2">
+              <h2 className="px-1 text-sm font-semibold text-slate-500 dark:text-slate-400">
                 {c.name}
-              </li>
-            ))}
-          </ul>
-        </Card>
+              </h2>
+              <Leaderboard classId={c.id} />
+            </div>
+          ))}
+        </>
       )}
 
       {/* teacher: create + open classes */}
@@ -271,6 +274,8 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
         <p className="text-sm font-medium text-rose-600 dark:text-rose-400">{error}</p>
       )}
 
+      <Leaderboard classId={cls.id} />
+
       <h2 className="px-1 font-semibold">{t('learners')}</h2>
 
       {rows === null && <p className="px-1 text-sm text-slate-500">{t('loading')}</p>}
@@ -336,5 +341,53 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
         </Card>
       ))}
     </div>
+  )
+}
+
+/**
+ * A learner's display name. Without one the leaderboard reads "Learner"
+ * for everybody, which makes the ranking meaningless.
+ */
+function NameCard() {
+  const { t } = useKira()
+  const [name, setName] = useState('')
+  const [saved, setSaved] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  return (
+    <Card>
+      <h2 className="font-semibold">{t('yourName')}</h2>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        {t('yourNameHint')}
+      </p>
+      <div className="mt-3 flex gap-2">
+        <input
+          aria-label={t('yourName')}
+          value={name}
+          maxLength={24}
+          onChange={(e) => {
+            setName(e.target.value)
+            setSaved(false)
+          }}
+          className={`${input} ${FOCUS}`}
+          placeholder={t('yourName')}
+        />
+        <Button
+          variant="secondary"
+          disabled={busy || !name.trim()}
+          onClick={async () => {
+            setBusy(true)
+            try {
+              await setDisplayName(name)
+              setSaved(true)
+            } finally {
+              setBusy(false)
+            }
+          }}
+        >
+          {saved ? t('copied') : t('save')}
+        </Button>
+      </div>
+    </Card>
   )
 }

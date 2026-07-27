@@ -6,6 +6,7 @@ import { grade, type Response } from '../grading/grade'
 import { recordAttempt } from '../db/data'
 import { ItemRenderer } from './items/ItemRenderer'
 import { itemTypeLabel } from './items/shared'
+import { ComboPill } from './ComboPill'
 import { WorkedExample } from './WorkedExample'
 import { SelfExplain } from './SelfExplain'
 import { Feedback } from './Feedback'
@@ -23,6 +24,8 @@ const ERROR_PRONE_TAGS = ['debit-credit', 'provision']
 export interface SessionResult {
   answered: number
   correct: number
+  /** longest consecutive-correct run this session */
+  bestCombo: number
 }
 
 export function SessionScreen({
@@ -44,6 +47,11 @@ export function SessionScreen({
   )
   const [lastResponse, setLastResponse] = useState<Response | null>(null)
   const [lastCorrect, setLastCorrect] = useState(false)
+  // Consecutive correct answers this session. Deliberately NOT timed: the
+  // self-explanation gate exists to slow the learner down after a miss, and a
+  // clock would push them the other way.
+  const [combo, setCombo] = useState(0)
+  const [bestCombo, setBestCombo] = useState(0)
 
   const shownLessons = useRef(new Set<string>())
   const requeued = useRef(new Map<string, number>())
@@ -82,6 +90,11 @@ export function SessionScreen({
       const correct = grade(item, response)
       setLastResponse(response)
       setLastCorrect(correct)
+      setCombo((c) => {
+        const next = correct ? c + 1 : 0
+        setBestCombo((b) => Math.max(b, next))
+        return next
+      })
       // Record only the FIRST attempt of each item toward the summary.
       if (!firstResult.current.has(item.id))
         firstResult.current.set(item.id, correct)
@@ -115,9 +128,10 @@ export function SessionScreen({
       onFinish({
         answered: results.length,
         correct: results.filter(Boolean).length,
+        bestCombo,
       })
     }
-  }, [idx, queue, goToIndex, onFinish])
+  }, [idx, queue, goToIndex, onFinish, bestCombo])
 
   const dismissWorked = useCallback(() => {
     shownLessons.current.add(entry.lessonId)
@@ -145,6 +159,7 @@ export function SessionScreen({
           </svg>
         </button>
         <ProgressBar value={progress} label={t('progress')} className="flex-1" />
+        <ComboPill combo={combo} />
         <div className="w-12 text-right text-sm font-semibold tabular-nums text-slate-500 dark:text-slate-400">
           {Math.min(idx + 1, plannedTotal)}/{plannedTotal}
         </div>

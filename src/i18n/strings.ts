@@ -148,6 +148,26 @@ export const UI = {
   },
   back: { en: 'Back', ms: 'Kembali' },
   loading: { en: 'Loading…', ms: 'Memuatkan…' },
+  // gamification
+  badges: { en: 'Badges', ms: 'Lencana' },
+  badgeEarned: { en: 'New badge earned!', ms: 'Lencana baharu diperoleh!' },
+  bestRun: { en: 'Best run', ms: 'Rentetan terbaik' },
+  leaderboard: { en: 'This week', ms: 'Minggu ini' },
+  leaderboardHint: {
+    en: 'Items practised in the last 7 days',
+    ms: 'Item dilatih dalam 7 hari lepas',
+  },
+  you: { en: 'You', ms: 'Anda' },
+  yourName: { en: 'Your name', ms: 'Nama anda' },
+  yourNameHint: {
+    en: 'Shown to your class on the leaderboard.',
+    ms: 'Dipaparkan kepada kelas anda pada papan pendahulu.',
+  },
+  save: { en: 'Save', ms: 'Simpan' },
+  noActivity: {
+    en: 'No practice logged this week yet.',
+    ms: 'Belum ada latihan direkod minggu ini.',
+  },
   // auth errors, mapped from raw Supabase messages
   errNoAccount: {
     en: 'No account uses that email yet.',

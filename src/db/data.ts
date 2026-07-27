@@ -10,6 +10,18 @@ export async function loadReviewMap(): Promise<Map<string, ReviewState>> {
   return map
 }
 
+/** Flat attempt history — the raw material for derived badges. */
+export async function loadAttempts(): Promise<
+  { itemId: string; correct: boolean; createdAt: number }[]
+> {
+  const rows = await db.attempts.toArray()
+  return rows.map((r) => ({
+    itemId: r.itemId,
+    correct: r.correct,
+    createdAt: r.createdAt,
+  }))
+}
+
 /**
  * Record one attempt: advance the item's Leitner state, persist the attempt,
  * and return the new review state (so the in-memory session mirror can update).

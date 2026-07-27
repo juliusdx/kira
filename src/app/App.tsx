@@ -4,9 +4,11 @@ import type { ReviewState } from '../scheduler/scheduler'
 import {
   bumpStreak,
   getStreak,
+  loadAttempts,
   loadReviewMap,
   resetAllProgress,
 } from '../db/data'
+import { computeBadges, newlyEarned, type Badge } from './badges'
 import { buildQueue, type BuiltQueue } from '../session/buildQueue'
 import { syncNow, watchConnectivity } from '../sync/sync'
 import { SYNC_ENABLED } from '../sync/client'
@@ -25,15 +27,25 @@ export function App() {
   const { ready } = useKira()
   const [reviewMap, setReviewMap] = useState<Map<string, ReviewState> | null>(null)
   const [streak, setStreak] = useState(0)
+  const [badges, setBadges] = useState<Badge[]>([])
+  // badges earned by the session just finished, for the celebration screen
+  const [freshBadges, setFreshBadges] = useState<Badge[]>([])
   const [screen, setScreen] = useState<Screen>('home')
   const [session, setSession] = useState<BuiltQueue | null>(null)
   const [result, setResult] = useState<SessionResult | null>(null)
 
   const reload = useCallback(async () => {
     const now = Date.now()
-    const [map, s] = await Promise.all([loadReviewMap(), getStreak(now)])
+    const [map, s, attempts] = await Promise.all([
+      loadReviewMap(),
+      getStreak(now),
+      loadAttempts(),
+    ])
     setReviewMap(map)
     setStreak(s)
+    const next = computeBadges(map, attempts, now)
+    setBadges(next)
+    return next
   }, [])
 
   useEffect(() => {
@@ -61,14 +73,18 @@ export function App() {
   const finishSession = useCallback(
     async (r: SessionResult) => {
       if (r.answered > 0) await bumpStreak(Date.now())
-      await reload()
+      // `badges` still holds the pre-session snapshot at this point, so the
+      // diff is exactly what this session earned.
+      const before = badges
+      const after = await reload()
+      setFreshBadges(newlyEarned(before, after))
       setResult(r)
       setSession(null)
       setScreen('complete')
       // Push this session's work; failure is non-fatal (retried next launch).
       if (SYNC_ENABLED) void syncNow()
     },
-    [reload],
+    [reload, badges],
   )
 
   const quitSession = useCallback(() => {
@@ -124,6 +140,7 @@ export function App() {
         <SessionComplete
           result={result}
           streak={streak}
+          freshBadges={freshBadges}
           onHome={() => setScreen('home')}
         />
       )}
@@ -131,6 +148,7 @@ export function App() {
       {screen === 'progress' && (
         <Progress
           summary={summary}
+          badges={badges}
           onBack={() => setScreen('home')}
           onReset={doReset}
           onOpenAccount={SYNC_ENABLED ? () => setScreen('account') : undefined}

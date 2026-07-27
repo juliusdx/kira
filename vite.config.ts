@@ -41,6 +41,10 @@ export default defineConfig({
         // offline precache instead of making every learner download it.
         globIgnores: ['**/supabase-*.js'],
         cleanupOutdatedCaches: true,
+        // Push + notificationclick handlers. Imported rather than inlined so
+        // we keep the generateSW strategy instead of owning the whole
+        // precache pipeline just to add two listeners.
+        importScripts: ['push-sw.js'],
       },
       devOptions: { enabled: false },
     }),

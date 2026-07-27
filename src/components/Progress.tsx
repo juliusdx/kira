@@ -3,6 +3,7 @@ import { t as tc } from '../content/loader'
 import { useKira } from '../app/KiraContext'
 import { Button, Card, FOCUS, ProgressBar } from './ui'
 import { BadgeShelf } from './BadgeShelf'
+import { Reminders } from './Reminders'
 import type { Badge } from '../app/badges'
 
 export function Progress({
@@ -81,6 +82,8 @@ export function Progress({
         </div>
 
         <BadgeShelf badges={badges} />
+
+        <Reminders />
 
         {(onOpenAccount || onOpenClasses) && (
           <div className="flex gap-2 pt-2">

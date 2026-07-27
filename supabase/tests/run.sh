@@ -31,6 +31,7 @@ psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$HERE/harness.sql"          > /dev/null
 psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$MIG/0001_init.sql"         > /dev/null 2>&1
 psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$MIG/0002_classes.sql"      > /dev/null 2>&1
 psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$MIG/0003_leaderboard.sql"  > /dev/null 2>&1
+psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$MIG/0004_push_reminders.sql" > /dev/null 2>&1
 
 OUT=$(psql -q -d "$DB" -f "$HERE/rls_test.sql" 2>&1)
 
@@ -53,6 +54,26 @@ if [ "$LB_FALSE" -gt 0 ] || [ "$LB_ERR" -gt 0 ]; then
   exit 1
 fi
 echo "$OUT" | grep -E "PASS|FAIL|ERROR|^---|^====" || true
+
+# push suite, also on its own database
+PU_DB="${DB}_push"
+dropdb --if-exists "$PU_DB"; createdb "$PU_DB"
+psql -q -d "$PU_DB" -c "do \$\$ begin if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role nologin; end if; end \$\$;" > /dev/null 2>&1
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql"; do
+  psql -q -d "$PU_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+PU=$(psql -qAt -d "$PU_DB" -f "$HERE/push_test.sql" 2>&1)
+PU_FALSE=$(echo "$PU" | grep -cx 'f' || true)
+PU_TRUE=$(echo "$PU" | grep -cx 't' || true)
+PU_ERR=$(echo "$PU" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- push reminders: $PU_TRUE assertions true, $PU_FALSE false, $PU_ERR errors"
+dropdb --if-exists "$PU_DB"
+if [ "$PU_FALSE" -gt 0 ] || [ "$PU_ERR" -gt 0 ]; then
+  echo "$PU" | grep -E "FAIL_|ERROR"
+  echo "✗ PUSH TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
 
 FAILS=$(echo "$OUT" | grep -c "FAIL" || true)
 ERRS=$(echo "$OUT"  | grep -c "^psql.*ERROR" || true)

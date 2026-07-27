@@ -150,6 +150,24 @@ export const UI = {
   },
   back: { en: 'Back', ms: 'Kembali' },
   loading: { en: 'Loading…', ms: 'Memuatkan…' },
+  // reminders
+  reminders: { en: 'Daily reminder', ms: 'Peringatan harian' },
+  remindersBody: {
+    en: 'A nudge when reviews are due. Spaced repetition only works if you come back on the day.',
+    ms: 'Peringatan apabila ulang kaji perlu dibuat. Ulangan berjarak hanya berkesan jika anda kembali pada harinya.',
+  },
+  remindAt: { en: 'Remind me at', ms: 'Ingatkan saya pada' },
+  remindersOn: { en: 'Turn on reminders', ms: 'Hidupkan peringatan' },
+  remindersOff: { en: 'Turn off reminders', ms: 'Matikan peringatan' },
+  remindersActive: { en: 'Reminders are on for this device', ms: 'Peringatan aktif untuk peranti ini' },
+  remindersIos: {
+    en: 'On iPhone, add Kira to your Home Screen first (Share → Add to Home Screen), then reminders can be turned on.',
+    ms: 'Pada iPhone, tambah Kira ke Skrin Utama dahulu (Kongsi → Tambah ke Skrin Utama), kemudian peringatan boleh dihidupkan.',
+  },
+  remindersBlocked: {
+    en: 'Notifications are blocked for this site. Allow them in your browser settings to use reminders.',
+    ms: 'Pemberitahuan disekat untuk tapak ini. Benarkan dalam tetapan pelayar untuk menggunakan peringatan.',
+  },
   // gamification
   badges: { en: 'Badges', ms: 'Lencana' },
   badgeEarned: { en: 'New badge earned!', ms: 'Lencana baharu diperoleh!' },

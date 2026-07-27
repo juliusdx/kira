@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { JournalLine, Locale } from '../../content/types'
 import { localizedAccount } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
@@ -31,6 +31,8 @@ export function DoubleEntryBuilder({
   const { t } = useKira()
   const [drAcc, setDrAcc] = useState<string | null>(null)
   const [crAcc, setCrAcc] = useState<string | null>(null)
+  const drAccRef = useRef<string | null>(null)
+  const crAccRef = useRef<string | null>(null)
   const [drAmt, setDrAmt] = useState<number | ''>('')
   const [crAmt, setCrAmt] = useState<number | ''>('')
 
@@ -38,6 +40,34 @@ export function DoubleEntryBuilder({
 
   const balanced = drAmt !== '' && crAmt !== '' && drAmt === crAmt && drAmt > 0
   const canSubmit = !!drAcc && !!crAcc && balanced
+
+  /**
+   * A TAP that completes a balanced entry submits it, as a choice item does.
+   * Typing an amount never auto-submits, and nor does a tap once both accounts
+   * are already picked — so changing your mind about one account does not
+   * commit the entry before you can change the other.
+   */
+  const pick = (side: 'debit' | 'credit', account: string) => {
+    if (graded) return
+    // Refs, not state: picking both accounts within one React batch would
+    // otherwise have the second read a stale value for the first.
+    const prevDr = drAccRef.current
+    const prevCr = crAccRef.current
+    const nextDr = side === 'debit' ? account : prevDr
+    const nextCr = side === 'credit' ? account : prevCr
+    if (side === 'debit') {
+      drAccRef.current = account
+      setDrAcc(account)
+    } else {
+      crAccRef.current = account
+      setCrAcc(account)
+    }
+    if (!(prevDr && prevCr) && nextDr && nextCr && balanced)
+      onSubmit({
+        debit: { account: nextDr, amount: Number(drAmt) },
+        credit: { account: nextCr, amount: Number(crAmt) },
+      })
+  }
 
   const view = graded && lastResponse ? lastResponse : null
   const lineOk = (a: JournalLine, b: JournalLine) =>
@@ -91,7 +121,7 @@ export function DoubleEntryBuilder({
         currency={currency}
         amountLabel={t('amount')}
         selected={drAcc}
-        onPick={setDrAcc}
+        onPick={(a) => pick('debit', a)}
         amount={drAmt}
         onAmount={setDrAmt}
       />
@@ -104,7 +134,7 @@ export function DoubleEntryBuilder({
         currency={currency}
         amountLabel={t('amount')}
         selected={crAcc}
-        onPick={setCrAcc}
+        onPick={(a) => pick('credit', a)}
         amount={crAmt}
         onAmount={setCrAmt}
       />

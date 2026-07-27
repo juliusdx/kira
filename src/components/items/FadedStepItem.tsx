@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type {
   FadedStep,
   FadedStepItem as FadedStepItemType,
@@ -26,6 +26,9 @@ export function FadedStepItem({
   const { steps } = it.data
 
   const [filled, setFilled] = useState<Record<number, string | number>>({})
+  // Ref, not state: two taps in one React batch would otherwise overwrite each
+  // other instead of accumulating.
+  const filledRef = useRef<Record<number, string | number>>({})
 
   const view =
     graded && lastResponse && typeof lastResponse === 'object' && 'filled' in lastResponse
@@ -35,10 +38,24 @@ export function FadedStepItem({
 
   const blanks = blankSteps(it)
   const pool = fadedChoicePool(it)
-  const canSubmit = blanks.every(({ index }) => {
-    const v = active[index]
-    return v !== undefined && v !== ''
-  })
+  const complete = (f: Record<number, string | number>) =>
+    blanks.every(({ index }) => f[index] !== undefined && f[index] !== '')
+  const canSubmit = complete(active)
+
+  /**
+   * A TAP that completes the item submits it, the same way a choice item does —
+   * no second trip to Check. Typing never auto-submits (there is no way to know
+   * a number is finished), and neither does a tap on an already-complete item,
+   * so going back to fix one of several answers does not commit early.
+   */
+  const fill = (index: number, value: string | number, fromTap: boolean) => {
+    if (graded) return
+    const prev = filledRef.current
+    const next = { ...prev, [index]: value }
+    filledRef.current = next
+    setFilled(next)
+    if (fromTap && !complete(prev) && complete(next)) onSubmit({ filled: next })
+  }
 
   return (
     <div className="grid gap-4">
@@ -68,7 +85,7 @@ export function FadedStepItem({
                 pool={pool}
                 value={active[i]}
                 graded={graded}
-                onChange={(v) => !graded && setFilled((f) => ({ ...f, [i]: v }))}
+                onChange={(v, fromTap) => fill(i, v, fromTap)}
               />
             ) : (
               <WorkedStep key={i} step={step} locale={locale} />
@@ -78,7 +95,7 @@ export function FadedStepItem({
       </div>
 
       {!graded && (
-        <Button disabled={!canSubmit} onClick={() => onSubmit({ filled })}>
+        <Button disabled={!canSubmit} onClick={() => onSubmit({ filled: filledRef.current })}>
           {t('check')}
         </Button>
       )}
@@ -114,7 +131,8 @@ function BlankStep({
   pool: { value: string; value_ms: string }[]
   value: string | number | undefined
   graded: boolean
-  onChange: (v: string | number) => void
+  /** `fromTap` distinguishes a chip tap (a complete answer) from typing. */
+  onChange: (v: string | number, fromTap: boolean) => void
 }) {
   const { t } = useKira()
   const label = tc(step.label, locale)
@@ -135,7 +153,7 @@ function BlankStep({
       {step.kind === 'number' ? (
         <AmountInput
           value={typeof value === 'number' ? value : ''}
-          onChange={(v) => onChange(v === '' ? '' : v)}
+          onChange={(v) => onChange(v === '' ? '' : v, false)}
           disabled={graded}
           currency={step.unit ?? 'RM'}
           ariaLabel={label}
@@ -148,7 +166,7 @@ function BlankStep({
               label={locale === 'ms' ? o.value_ms : o.value}
               selected={value === o.value}
               disabled={graded}
-              onClick={() => onChange(o.value)}
+              onClick={() => onChange(o.value, true)}
             />
           ))}
         </div>

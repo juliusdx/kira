@@ -10,6 +10,7 @@ import { ComboPill } from './ComboPill'
 import { WorkedExample } from './WorkedExample'
 import { SelfExplain } from './SelfExplain'
 import { Feedback } from './Feedback'
+import { LocaleToggle } from './LocaleToggle'
 import { FOCUS, ProgressBar, TypeBadge } from './ui'
 
 type Phase = 'worked' | 'answering' | 'reflect' | 'feedback'
@@ -160,9 +161,12 @@ export function SessionScreen({
         </button>
         <ProgressBar value={progress} label={t('progress')} className="flex-1" />
         <ComboPill combo={combo} />
-        <div className="w-12 text-right text-sm font-semibold tabular-nums text-slate-500 dark:text-slate-400">
+        <div className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-500 dark:text-slate-400">
           {Math.min(idx + 1, plannedTotal)}/{plannedTotal}
         </div>
+        {/* Language is switchable on every question, not just before starting —
+            a learner who stalls on a term should not have to quit the session. */}
+        <LocaleToggle size="sm" />
       </div>
 
       <div className="flex-1 px-4 pb-4">

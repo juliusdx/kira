@@ -64,3 +64,60 @@ describe('DoubleEntryBuilder — amount input keeps focus across keystrokes', ()
     expect(onSubmit).toHaveBeenCalledWith(answer)
   })
 })
+
+describe('DoubleEntryBuilder — a tap that completes a balanced entry submits it', () => {
+  it('picking the last account auto-submits once the amounts balance', async () => {
+    const user = userEvent.setup()
+    const onSubmit = renderBuilder()
+
+    // amounts first, then accounts — so the completing action is a TAP
+    const dr = screen.getByLabelText('debit amount') as HTMLInputElement
+    dr.focus()
+    await user.keyboard('12000')
+    const cr = screen.getByLabelText('credit amount') as HTMLInputElement
+    cr.focus()
+    await user.keyboard('12000')
+    expect(onSubmit).not.toHaveBeenCalled() // typing alone never commits
+
+    await user.click(screen.getAllByRole('button', { name: 'Van' })[0]) // debit
+    expect(onSubmit).not.toHaveBeenCalled() // only one account picked
+
+    await user.click(screen.getAllByRole('button', { name: 'Cash' })[1]) // credit
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith(answer)
+  })
+
+  it('does not auto-submit while the entry is unbalanced', async () => {
+    const user = userEvent.setup()
+    const onSubmit = renderBuilder()
+
+    const dr = screen.getByLabelText('debit amount') as HTMLInputElement
+    dr.focus()
+    await user.keyboard('12000') // credit amount left empty
+
+    await user.click(screen.getAllByRole('button', { name: 'Van' })[0])
+    await user.click(screen.getAllByRole('button', { name: 'Cash' })[1])
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('changing an account after both are picked does not commit early', async () => {
+    const user = userEvent.setup()
+    const onSubmit = renderBuilder()
+
+    // both accounts first, THEN the amounts — completing action is typing
+    await user.click(screen.getAllByRole('button', { name: 'Van' })[0])
+    await user.click(screen.getAllByRole('button', { name: 'Cash' })[1])
+    const dr = screen.getByLabelText('debit amount') as HTMLInputElement
+    dr.focus()
+    await user.keyboard('12000')
+    const cr = screen.getByLabelText('credit amount') as HTMLInputElement
+    cr.focus()
+    await user.keyboard('12000')
+    expect(onSubmit).not.toHaveBeenCalled()
+
+    // re-picking the debit account must not fire — the learner may still want
+    // to change the credit side too.
+    await user.click(screen.getAllByRole('button', { name: 'Capital' })[0])
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+})

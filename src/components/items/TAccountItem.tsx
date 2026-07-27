@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { TAccountItem as TAccountItemType } from '../../content/types'
 import { localizedAccount, accountMs } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
@@ -18,6 +18,7 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
   )
 
   const [sides, setSides] = useState<Record<number, 'debit' | 'credit'>>({})
+  const sidesRef = useRef<Record<number, 'debit' | 'credit'>>({})
   const [balance, setBalance] = useState<number | ''>('')
 
   const view =
@@ -29,6 +30,26 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
   const allAssigned = entries.every((_, i) => activeSides[i] != null)
   const running = tAccountBalance(entries, activeSides)
   const canSubmit = allAssigned && balance !== ''
+
+  /**
+   * A TAP that completes the item submits it, as a choice item does. Typing the
+   * balance never auto-submits, and nor does a tap on an already-complete item —
+   * so correcting one of several sides does not commit before you fix the rest.
+   *
+   * The ref, not `sides`, is the source of truth here: two taps landing in one
+   * React batch would both read the same rendered `sides` and the second would
+   * drop the first.
+   */
+  const assign = (i: number, side: 'debit' | 'credit') => {
+    if (graded) return
+    const prev = sidesRef.current
+    const next = { ...prev, [i]: side }
+    sidesRef.current = next
+    setSides(next)
+    const was = entries.every((_, k) => prev[k] != null)
+    const now = entries.every((_, k) => next[k] != null)
+    if (!was && now && balance !== '') onSubmit({ sides: next, balance: Number(balance) })
+  }
 
   const drTotal = entries.reduce((s, e, i) => (activeSides[i] === 'debit' ? s + e.amount : s), 0)
   const crTotal = entries.reduce((s, e, i) => (activeSides[i] === 'credit' ? s + e.amount : s), 0)
@@ -83,7 +104,7 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
             <div className="w-40">
               <DrCrToggle
                 value={activeSides[i] ?? null}
-                onChange={(side) => !graded && setSides((s) => ({ ...s, [i]: side }))}
+                onChange={(side) => assign(i, side)}
                 disabled={graded}
                 drLabel={t('debit')}
                 crLabel={t('credit')}
@@ -123,7 +144,7 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
       {!graded && (
         <Button
           disabled={!canSubmit}
-          onClick={() => onSubmit({ sides, balance: Number(balance) })}
+          onClick={() => onSubmit({ sides: sidesRef.current, balance: Number(balance) })}
         >
           {t('submit')}
         </Button>

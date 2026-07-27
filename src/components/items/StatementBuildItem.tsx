@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type {
   StatementBuildItem as StatementBuildItemType,
   StatementSection,
@@ -23,6 +23,9 @@ export function StatementBuildItem({
   const { lines, sections } = it.data
 
   const [assigned, setAssigned] = useState<Record<number, string>>({})
+  // Ref, not state: two taps in one React batch would otherwise overwrite
+  // each other instead of accumulating.
+  const assignedRef = useRef<Record<number, string>>({})
   const [total, setTotal] = useState<number | ''>('')
 
   const view =
@@ -34,6 +37,22 @@ export function StatementBuildItem({
   const allAssigned = lines.every((_, i) => active[i] != null)
   const canSubmit = allAssigned && total !== ''
   const totals = sectionTotals(lines, active)
+
+  /**
+   * A TAP that completes the item submits it, as a choice item does. Typing the
+   * figure never auto-submits, and nor does a tap on an already-complete item —
+   * so re-sorting one line does not commit before you fix the others.
+   */
+  const assign = (i: number, key: string) => {
+    if (graded) return
+    const prev = assignedRef.current
+    const next = { ...prev, [i]: key }
+    assignedRef.current = next
+    setAssigned(next)
+    const was = lines.every((_, k) => prev[k] != null)
+    const now = lines.every((_, k) => next[k] != null)
+    if (!was && now && total !== '') onSubmit({ sections: next, total: Number(total) })
+  }
 
   const shownTotal = view ? view.total : total
   const totalCorrect = view ? view.total === it.answer.total : false
@@ -89,9 +108,7 @@ export function StatementBuildItem({
               value={active[i] ?? null}
               disabled={graded}
               reveal={graded ? line.section : undefined}
-              onChange={(key) =>
-                !graded && setAssigned((s) => ({ ...s, [i]: key }))
-              }
+              onChange={(key) => assign(i, key)}
             />
           </div>
         ))}
@@ -113,7 +130,7 @@ export function StatementBuildItem({
       {!graded && (
         <Button
           disabled={!canSubmit}
-          onClick={() => onSubmit({ sections: assigned, total: Number(total) })}
+          onClick={() => onSubmit({ sections: assignedRef.current, total: Number(total) })}
         >
           {t('submit')}
         </Button>

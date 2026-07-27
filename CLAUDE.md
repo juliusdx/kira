@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 110 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 117 passing, no network
 - Live-backend tests: `npm run test:integration` — 8 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -103,3 +103,10 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   read the row back.
 - 2026-07-27: local PG16 on this Mac fails to start without `LC_ALL=C`
   ("postmaster became multithreaded").
+- 2026-07-27: an item renderer's tap handler read its own state from the render
+  closure, so several taps in ONE React batch each saw the same snapshot and all
+  but the last were discarded (the T-account lost 5 of 6 side assignments) →
+  for state a handler ACCUMULATES into, use a ref (or a functional updater),
+  never the rendered value. `userEvent` cannot catch this because it awaits a
+  re-render between events, and nor can `fireEvent` — the regression test has to
+  dispatch both clicks inside one `act()`.

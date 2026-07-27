@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { ALL_ENTRIES, CONTENT } from './loader'
-import { grade, tAccountBalance, sectionTotals, type Response } from '../grading/grade'
+import {
+  blankSteps,
+  fadedChoicePool,
+  grade,
+  tAccountBalance,
+  sectionTotals,
+  type Response,
+} from '../grading/grade'
 import type { Item, LocalizedText } from './types'
 
 // Guards the whole authored bank (all stages). Any future content port —
@@ -32,6 +39,12 @@ function correctResponse(item: Item): Response {
       return {
         sections: Object.fromEntries(item.data.lines.map((l, i) => [i, l.section])),
         total: item.answer.total,
+      }
+    case 'faded_step':
+      return {
+        filled: Object.fromEntries(
+          blankSteps(item).map(({ step, index }) => [index, step.value]),
+        ),
       }
   }
 }
@@ -160,6 +173,63 @@ describe('content bank — per-type integrity', () => {
       expect(totals[keys[0]] - totals[keys[1]], `${item.id} total`).toBe(
         item.answer.total,
       )
+    }
+  })
+})
+
+describe('content bank — faded steps', () => {
+  it('faded_step: every step is well formed and something is actually faded', () => {
+    for (const item of items) {
+      if (item.type !== 'faded_step') continue
+      const { steps, scenario } = item.data
+      expect(steps.length, `${item.id} steps`).toBeGreaterThan(1)
+      if (scenario) expect(bilingual(scenario), `${item.id} scenario`).toBe(true)
+
+      for (const step of steps) {
+        expect(bilingual(step.label), `${item.id} step label`).toBe(true)
+        if (step.kind === 'number')
+          expect(Number.isFinite(step.value), `${item.id} step value`).toBe(true)
+        else {
+          expect(step.value.trim(), `${item.id} choice value`).not.toBe('')
+          expect(step.value_ms.trim(), `${item.id} choice value_ms`).not.toBe('')
+        }
+      }
+
+      // A step's own `value` is the answer key, so an item with nothing blank
+      // has no question in it — grade() rejects those outright.
+      const blanks = blankSteps(item)
+      expect(blanks.length, `${item.id} has no faded step`).toBeGreaterThan(0)
+
+      // A blanked choice needs a real decision: its answer must not be the
+      // only chip on offer.
+      if (blanks.some(({ step }) => step.kind === 'choice'))
+        expect(
+          fadedChoicePool(item).length,
+          `${item.id} choice pool is too small to be a question`,
+        ).toBeGreaterThan(1)
+    }
+  })
+
+  it('fading is progressive: blanks never decrease across a lesson (Spec §2)', () => {
+    for (const topic of CONTENT.topics) {
+      for (const lesson of topic.lessons) {
+        const faded = lesson.items.filter((i) => i.type === 'faded_step')
+        if (!faded.length) continue
+        const counts = faded.map((i) =>
+          i.type === 'faded_step' ? blankSteps(i).length : 0,
+        )
+        for (let i = 1; i < counts.length; i++)
+          expect(
+            counts[i],
+            `${lesson.id}: ${faded[i].id} un-fades (${counts[i - 1]} → ${counts[i]})`,
+          ).toBeGreaterThanOrEqual(counts[i - 1])
+        // A ladder must actually fade — otherwise it is just repetition.
+        if (faded.length > 1)
+          expect(
+            counts[counts.length - 1],
+            `${lesson.id} never fades: every rung blanks ${counts[0]} step(s)`,
+          ).toBeGreaterThan(counts[0])
+      }
     }
   })
 })

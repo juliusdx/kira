@@ -4,6 +4,7 @@ import { JournalEntryItem } from './JournalEntryItem'
 import { SpotErrorItem } from './SpotErrorItem'
 import { TAccountItem } from './TAccountItem'
 import { StatementBuildItem } from './StatementBuildItem'
+import { FadedStepItem } from './FadedStepItem'
 import type { ItemProps } from './shared'
 
 /** Dispatch to the renderer for the item's interaction type. */
@@ -22,5 +23,7 @@ export function ItemRenderer(props: ItemProps) {
       return <TAccountItem {...props} />
     case 'statement_build':
       return <StatementBuildItem {...props} />
+    case 'faded_step':
+      return <FadedStepItem {...props} />
   }
 }

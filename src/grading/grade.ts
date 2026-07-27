@@ -1,4 +1,4 @@
-import type { Item, JournalLine } from '../content/types'
+import type { FadedStep, FadedStepItem, Item, JournalLine } from '../content/types'
 
 // Pure grading. Each interaction produces a `Response`; grade() maps
 // (item, response) -> correct. No UI, no I/O — fully unit-testable.
@@ -20,12 +20,18 @@ export interface StatementResponse {
   total: number
 }
 
+export interface FadedStepResponse {
+  /** step index -> the value the learner supplied (blank steps only) */
+  filled: Record<number, string | number>
+}
+
 export type Response =
   | string // classify | debit_credit  (chosen canonical option)
   | number // numeric
   | JournalResponse // journal_entry | spot_error
   | TAccountResponse // t_account
   | StatementResponse // statement_build
+  | FadedStepResponse // faded_step
 
 function lineEq(a: JournalLine, b: JournalLine): boolean {
   return a.account === b.account && a.amount === b.amount
@@ -92,7 +98,47 @@ export function grade(item: Item, response: Response): boolean {
       // ... and the computed figure matches
       return sectionsOk && response.total === item.answer.total
     }
+
+    case 'faded_step': {
+      if (!isFadedStepResponse(response)) return false
+      const blanks = blankSteps(item)
+      // An item with nothing faded would grade as trivially correct.
+      if (!blanks.length) return false
+      // Strict equality also separates the kinds: a number step is never
+      // satisfied by the string "3000".
+      return blanks.every(({ step, index }) => response.filled[index] === step.value)
+    }
   }
+}
+
+/** The faded (blanked) steps of an item, with their positions preserved. */
+export function blankSteps(
+  item: FadedStepItem,
+): { step: FadedStep; index: number }[] {
+  return item.data.steps
+    .map((step, index) => ({ step, index }))
+    .filter(({ step }) => step.blank)
+}
+
+/**
+ * Options offered for a blank choice step: every choice value used in the
+ * item, plus any authored distractors. Deriving the pool from the steps keeps
+ * labels aligned by construction — no parallel `options_ms` array to drift.
+ */
+export function fadedChoicePool(
+  item: FadedStepItem,
+): { value: string; value_ms: string }[] {
+  const pool: { value: string; value_ms: string }[] = []
+  const seen = new Set<string>()
+  const add = (o: { value: string; value_ms: string }) => {
+    if (seen.has(o.value)) return
+    seen.add(o.value)
+    pool.push(o)
+  }
+  for (const step of item.data.steps)
+    if (step.kind === 'choice') add({ value: step.value, value_ms: step.value_ms })
+  for (const d of item.data.distractors ?? []) add(d)
+  return pool
 }
 
 /** Running total per section — used for the live statement preview. */
@@ -116,4 +162,7 @@ function isTAccountResponse(r: Response): r is TAccountResponse {
 }
 function isStatementResponse(r: Response): r is StatementResponse {
   return typeof r === 'object' && r !== null && 'sections' in r && 'total' in r
+}
+function isFadedStepResponse(r: Response): r is FadedStepResponse {
+  return typeof r === 'object' && r !== null && 'filled' in r
 }

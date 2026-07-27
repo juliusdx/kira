@@ -1,7 +1,15 @@
 import { describe, it, expect } from 'vitest'
-import { grade, isBalanced, sectionTotals, tAccountBalance } from './grade'
+import {
+  blankSteps,
+  fadedChoicePool,
+  grade,
+  isBalanced,
+  sectionTotals,
+  tAccountBalance,
+} from './grade'
 import type {
   ChoiceItem,
+  FadedStepItem,
   JournalEntryItem,
   NumericItem,
   SpotErrorItem,
@@ -121,6 +129,63 @@ describe('grade — statement_build', () => {
       expense: 6000,
     })
     expect(sectionTotals(sb.data.lines, { 0: 'income' })).toEqual({ income: 50000 })
+  })
+})
+
+// Rung 2 of a fading ladder: the first two steps are worked, the last two faded.
+const fs: FadedStepItem = {
+  id: 'f', type: 'faded_step', difficulty: 3, skill_tags: [],
+  prompt: { en: '', ms: '' }, explanation: { en: '', ms: '' },
+  data: {
+    steps: [
+      { kind: 'number', label: { en: 'Cost', ms: '' }, value: 60000 },
+      { kind: 'number', label: { en: 'Residual', ms: '' }, value: 10000 },
+      { kind: 'number', label: { en: 'Annual charge', ms: '' }, value: 10000, blank: true },
+      { kind: 'choice', label: { en: 'Account to debit', ms: '' }, value: 'Depreciation Expense', value_ms: 'Belanja Susut Nilai', blank: true },
+      { kind: 'choice', label: { en: 'Account to credit', ms: '' }, value: 'Accumulated Depreciation', value_ms: 'Susut Nilai Terkumpul' },
+    ],
+    distractors: [{ value: 'Cash', value_ms: 'Tunai' }],
+  },
+}
+
+describe('grade — faded_step', () => {
+  const right = { 2: 10000, 3: 'Depreciation Expense' }
+
+  it('grades only the blanked steps', () => {
+    expect(grade(fs, { filled: right })).toBe(true)
+    // worked steps are shown, not answered — supplying them changes nothing
+    expect(grade(fs, { filled: { ...right, 0: 999 } })).toBe(true)
+  })
+
+  it('rejects a wrong or missing blank', () => {
+    expect(grade(fs, { filled: { ...right, 2: 12000 } })).toBe(false)
+    expect(grade(fs, { filled: { ...right, 3: 'Cash' } })).toBe(false)
+    expect(grade(fs, { filled: { 2: 10000 } })).toBe(false)
+    expect(grade(fs, { filled: {} })).toBe(false)
+  })
+
+  it('does not accept a number typed as a string', () => {
+    expect(grade(fs, { filled: { ...right, 2: '10000' } })).toBe(false)
+  })
+
+  it('an item with nothing faded is never correct', () => {
+    const nothingFaded: FadedStepItem = {
+      ...fs,
+      data: { ...fs.data, steps: fs.data.steps.map((s) => ({ ...s, blank: false })) },
+    }
+    expect(grade(nothingFaded, { filled: right })).toBe(false)
+  })
+
+  it('blankSteps keeps the original positions', () => {
+    expect(blankSteps(fs).map((b) => b.index)).toEqual([2, 3])
+  })
+
+  it('fadedChoicePool offers every choice value plus distractors, deduped', () => {
+    expect(fadedChoicePool(fs).map((o) => o.value)).toEqual([
+      'Depreciation Expense',
+      'Accumulated Depreciation',
+      'Cash',
+    ])
   })
 })
 

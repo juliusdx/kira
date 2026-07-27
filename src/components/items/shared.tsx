@@ -169,6 +169,7 @@ export function itemTypeLabel(item: Item, locale: Locale): string {
     t_account: { en: 'T-account', ms: 'Akaun T' },
     spot_error: { en: 'Spot the error', ms: 'Kesan kesilapan' },
     statement_build: { en: 'Build the statement', ms: 'Bina penyata' },
+    faded_step: { en: 'Fill the step', ms: 'Isi langkah' },
   }
   return labels[item.type][locale]
 }

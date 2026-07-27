@@ -17,6 +17,7 @@ export type ItemType =
   | 't_account' // assign entries to Dr/Cr; compute closing balance
   | 'spot_error' // find and correct a wrong entry
   | 'statement_build' // sort lines into statement sections; compute the figure
+  | 'faded_step' // fill the blanked step(s) of a partially-worked solution
 
 export interface BaseItem {
   id: string
@@ -111,6 +112,48 @@ export interface StatementBuildItem extends BaseItem {
   answer: { total: number }
 }
 
+/**
+ * One line of a worked solution. A step is either already worked for the
+ * learner or `blank`, in which case they must supply its `value`.
+ */
+export interface FadedChoiceStep {
+  kind: 'choice'
+  label: LocalizedText // what this step decides, e.g. "Account to debit"
+  value: string // English canonical answer
+  value_ms: string // BM label for the same value
+  blank?: boolean
+}
+
+export interface FadedNumberStep {
+  kind: 'number'
+  label: LocalizedText
+  value: number
+  unit?: string // defaults to the bundle currency
+  blank?: boolean
+}
+
+export type FadedStep = FadedChoiceStep | FadedNumberStep
+
+/**
+ * Faded step (Spec §3, type 6) — the backward-fading mechanic. A procedure is
+ * shown as an ordered worked solution with some steps blanked out. Fading is
+ * expressed in the CONTENT, not in code: author the same procedure several
+ * times, blanking one more step each rung, last-first (Spec §2, "fully worked
+ * → last step blank → last two blank → cold solve").
+ *
+ * There is deliberately no separate `answer` — a blank step's own `value` is
+ * the answer key, so a ladder can never drift out of sync with its solution.
+ */
+export interface FadedStepItem extends BaseItem {
+  type: 'faded_step'
+  data: {
+    scenario?: LocalizedText // context shown above the workings
+    steps: FadedStep[]
+    /** Extra wrong options folded into the pool offered for blank choices. */
+    distractors?: { value: string; value_ms: string }[]
+  }
+}
+
 export type Item =
   | ChoiceItem
   | NumericItem
@@ -118,6 +161,7 @@ export type Item =
   | SpotErrorItem
   | TAccountItem
   | StatementBuildItem
+  | FadedStepItem
 
 export interface WorkedExample {
   prompt: LocalizedText

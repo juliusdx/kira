@@ -52,6 +52,11 @@ export const UI = {
     en: 'Sort each line, then work out the figure.',
     ms: 'Asingkan setiap baris, kemudian kira angkanya.',
   },
+  fillEachBlank: {
+    en: 'The workings are started for you. Fill in what is missing.',
+    ms: 'Kerja kira sudah dimulakan. Isikan yang tinggal.',
+  },
+  workings: { en: 'Workings', ms: 'Kerja kira' },
   yourAnswer: { en: 'Your answer', ms: 'Jawapan anda' },
   correctAnswer: { en: 'Correct answer', ms: 'Jawapan betul' },
   // self-explanation

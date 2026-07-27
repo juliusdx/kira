@@ -24,20 +24,25 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**102 items across 11 topics**, Stages 1–5:
+**186 items across 17 topics**, Stages 1–6:
 
 1–2. The accounting equation · debits & credits · journal entries · spot the error
 3. Ledger & T-accounts · the trial balance
 4. Income statement · statement of financial position
 5. Year-end adjustments — accruals & prepayments · depreciation · bad debts & provisions
+6. Bank reconciliation · control accounts · correction of errors & suspense ·
+   incomplete records · club & society accounts · partnership accounts
 
 Eight interaction types: `classify`, `debit_credit`, `numeric`,
 `journal_entry`, `t_account`, `spot_error`, `statement_build`, `faded_step`.
 
-Three of the lessons are **fading ladders** — the same procedure authored three
-times, one more step blanked each rung: the journal entry, the straight-line
-depreciation workings, and write-off-then-provide (where providing on the
-pre-write-off figure is the classic miss).
+Nine of the lessons are **fading ladders** — the same procedure authored three
+times, one more step blanked each rung. They sit on the procedures where the
+order of the steps is the whole lesson: the journal entry, straight-line
+depreciation, write-off-then-provide (providing on the pre-write-off figure is
+the classic miss), the bank reconciliation, the control account, clearing a
+suspense account to nil, profit by capital comparison, the subscriptions
+working, and the partnership appropriation.
 
 ### Authoring
 
@@ -62,7 +67,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 109 hermetic unit + component tests (the CI gate)
+npm test           # 110 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -149,4 +154,4 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
 - **Native apps.** A Capacitor wrap for the App Store / Play Store. Deferred
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
-- Stage 6+ content, FSRS scheduling, and the multi-tenant authoring UI.
+- Stage 7+ content, FSRS scheduling, and the multi-tenant authoring UI.

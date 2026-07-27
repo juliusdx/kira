@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 109 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 110 passing, no network
 - Live-backend tests: `npm run test:integration` — 8 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -23,7 +23,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 102 items / 11 topics / 16 lessons.
+- `seed_content.json` (repo ROOT) — all 186 items / 17 topics / 29 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -33,8 +33,9 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   (anon → email OTP), `classes.ts` (classroom), `push.ts` (web push)
 - `faded_step` items carry NO separate `answer` — a step's own `value` is the
   key and `blank: true` marks it as asked. Authoring a fading ladder is just
-  flipping `blank` on one more step per rung; the content guard enforces that
-  blanks never decrease within a lesson.
+  flipping `blank` on one more step per rung; the content guard enforces both
+  that blanks form a SUFFIX (fading is backward — never blank the middle and
+  hand over the answer) and that they never decrease within a lesson.
 - `src/app/badges.ts` — badges are DERIVED from review_state + attempts, never
   stored, so they sync for free
 - `supabase/migrations/000{1..4}_*.sql` — applied BY HAND via the SQL Editor
@@ -64,12 +65,18 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   the last unimplemented row of the §2 principles table). 9 new items in 3
   ladders: journal entry, straight-line depreciation, write-off-then-provide.
   Client-only — no schema, no Edge Function, no migration.
+- **2026-07-27 (later still)** — Stage 6 content, authored fresh (not ported):
+  6 topics / 84 items, taking the bank to 186. Bank reconciliation, control
+  accounts, correction of errors & suspense, incomplete records, club &
+  society accounts, partnership accounts. Each topic ends in a fading ladder
+  (9 ladders now). **BM terminology was written by Claude, not ported from
+  Julius's material — worth a read-through against the syllabus.**
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
   several times a day — store review turns a 2-minute deploy into 1–3 days.
   The OTP-code sign-in path means native needs no deep-link setup.
-- **Also open:** Stage 6+ content, FSRS scheduling, multi-tenant authoring UI.
+- **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
 - 2026-07-27: identity bugs keep recurring in different disguises → anonymous

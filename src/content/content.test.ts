@@ -210,6 +210,19 @@ describe('content bank — faded steps', () => {
     }
   })
 
+  it('fading is BACKWARD: the blanks are the last steps, never the middle', () => {
+    // Spec §2: "steps removed last-first". A rung that works the final answer
+    // for the learner and blanks the middle is a different exercise — it hands
+    // over the goal and hides the route.
+    for (const item of items) {
+      if (item.type !== 'faded_step') continue
+      const n = item.data.steps.length
+      const blanks = blankSteps(item).map(({ index }) => index)
+      const suffix = Array.from({ length: blanks.length }, (_, i) => n - blanks.length + i)
+      expect(blanks, `${item.id} fades the middle, not the tail`).toEqual(suffix)
+    }
+  })
+
   it('fading is progressive: blanks never decrease across a lesson (Spec §2)', () => {
     for (const topic of CONTENT.topics) {
       for (const lesson of topic.lessons) {

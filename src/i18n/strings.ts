@@ -144,6 +144,13 @@ export const UI = {
   lastActive: { en: 'Last active', ms: 'Aktif kali akhir' },
   never: { en: 'Never', ms: 'Tidak pernah' },
   weakest: { en: 'Needs work', ms: 'Perlu latihan' },
+  // Without this the ratio reads either way round — and on the same screen
+  // "By topic" shows a MASTERY percentage, where high is good. Say which.
+  weakestHint: {
+    en: 'Answers got wrong most often',
+    ms: 'Jawapan yang paling kerap salah',
+  },
+  wrongLabel: { en: 'wrong', ms: 'salah' },
   // relative times — these render on every roster card, so they must localize
   today: { en: 'today', ms: 'hari ini' },
   yesterday: { en: 'yesterday', ms: 'semalam' },

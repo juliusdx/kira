@@ -441,6 +441,9 @@ function LearnerDetailView({
           {detail.weakest.length > 0 && (
             <Card>
               <h2 className="font-semibold">{t('weakest')}</h2>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                {t('weakestHint')}
+              </p>
               <ul className="mt-2 flex flex-col gap-1.5">
                 {detail.weakest.map((w) => (
                   <li
@@ -449,7 +452,7 @@ function LearnerDetailView({
                   >
                     <span className="truncate">{skillLabel(w.tag, locale)}</span>
                     <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
-                      {w.wrong}/{w.attempts} ({w.wrongPct}%)
+                      {w.wrong}/{w.attempts} {t('wrongLabel')}
                     </span>
                   </li>
                 ))}

@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 117 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 115 passing, no network
 - Live-backend tests: `npm run test:integration` — 8 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -36,6 +36,11 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   flipping `blank` on one more step per rung; the content guard enforces both
   that blanks form a SUFFIX (fading is backward — never blank the middle and
   hand over the answer) and that they never decrease within a lesson.
+- **Submit rule:** an item commits on tap ONLY when the whole answer is that one
+  tap — `classify`, `debit_credit`, and a `faded_step` with a single choice
+  blank. Everything multi-part (T-account, statement build, double entry,
+  multi-blank faded step) waits for Check, so an earlier answer stays revisable.
+  Typing never auto-submits: there is no way to know a number is finished.
 - `src/app/badges.ts` — badges are DERIVED from review_state + attempts, never
   stored, so they sync for free
 - `supabase/migrations/000{1..4}_*.sql` — applied BY HAND via the SQL Editor
@@ -106,7 +111,12 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - 2026-07-27: an item renderer's tap handler read its own state from the render
   closure, so several taps in ONE React batch each saw the same snapshot and all
   but the last were discarded (the T-account lost 5 of 6 side assignments) →
-  for state a handler ACCUMULATES into, use a ref (or a functional updater),
-  never the rendered value. `userEvent` cannot catch this because it awaits a
-  re-render between events, and nor can `fireEvent` — the regression test has to
-  dispatch both clicks inside one `act()`.
+  for state a handler ACCUMULATES into, always use the functional updater
+  (`setX(x => ...)`), never the rendered value. `userEvent` cannot catch this
+  because it awaits a re-render between events, and nor can `fireEvent` — the
+  regression test has to dispatch both clicks inside one `act()`.
+- 2026-07-28: when driving the app from `javascript_tool`, clicking a chip and
+  then Submit **in the same JS tick** submits the PRE-click state and looks like
+  a bug → it is a test-driving artifact: real clicks are discrete events that
+  React flushes individually. Put the two clicks in separate tool calls before
+  concluding anything.

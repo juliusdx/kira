@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type {
   FadedStep,
   FadedStepItem as FadedStepItemType,
@@ -26,9 +26,6 @@ export function FadedStepItem({
   const { steps } = it.data
 
   const [filled, setFilled] = useState<Record<number, string | number>>({})
-  // Ref, not state: two taps in one React batch would otherwise overwrite each
-  // other instead of accumulating.
-  const filledRef = useRef<Record<number, string | number>>({})
 
   const view =
     graded && lastResponse && typeof lastResponse === 'object' && 'filled' in lastResponse
@@ -43,18 +40,21 @@ export function FadedStepItem({
   const canSubmit = complete(active)
 
   /**
-   * A TAP that completes the item submits it, the same way a choice item does —
-   * no second trip to Check. Typing never auto-submits (there is no way to know
-   * a number is finished), and neither does a tap on an already-complete item,
-   * so going back to fix one of several answers does not commit early.
+   * Auto-submit only when the WHOLE answer is a single tap — the same
+   * commitment a classify item already asks for. A multi-blank item always
+   * waits for Check, so an earlier answer can still be revised after the last
+   * one is given. Typing never auto-submits either: there is no way to know a
+   * number is finished.
    */
+  const oneTapAnswer = blanks.length === 1 && blanks[0].step.kind === 'choice'
+
   const fill = (index: number, value: string | number, fromTap: boolean) => {
     if (graded) return
-    const prev = filledRef.current
-    const next = { ...prev, [index]: value }
-    filledRef.current = next
-    setFilled(next)
-    if (fromTap && !complete(prev) && complete(next)) onSubmit({ filled: next })
+    // Functional updater, so several taps in one React batch accumulate rather
+    // than each overwriting the last.
+    setFilled((f) => ({ ...f, [index]: value }))
+    // With a single blank, this tap IS the whole answer.
+    if (fromTap && oneTapAnswer) onSubmit({ filled: { [index]: value } })
   }
 
   return (
@@ -95,7 +95,7 @@ export function FadedStepItem({
       </div>
 
       {!graded && (
-        <Button disabled={!canSubmit} onClick={() => onSubmit({ filled: filledRef.current })}>
+        <Button disabled={!canSubmit} onClick={() => onSubmit({ filled })}>
           {t('check')}
         </Button>
       )}

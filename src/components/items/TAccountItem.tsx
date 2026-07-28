@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { TAccountItem as TAccountItemType } from '../../content/types'
 import { localizedAccount, accountMs } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
@@ -18,7 +18,6 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
   )
 
   const [sides, setSides] = useState<Record<number, 'debit' | 'credit'>>({})
-  const sidesRef = useRef<Record<number, 'debit' | 'credit'>>({})
   const [balance, setBalance] = useState<number | ''>('')
 
   const view =
@@ -31,24 +30,13 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
   const running = tAccountBalance(entries, activeSides)
   const canSubmit = allAssigned && balance !== ''
 
-  /**
-   * A TAP that completes the item submits it, as a choice item does. Typing the
-   * balance never auto-submits, and nor does a tap on an already-complete item —
-   * so correcting one of several sides does not commit before you fix the rest.
-   *
-   * The ref, not `sides`, is the source of truth here: two taps landing in one
-   * React batch would both read the same rendered `sides` and the second would
-   * drop the first.
-   */
+  // A T-account is always a multi-part answer (a side per entry, plus the
+  // balance), so it never auto-submits — the learner keeps the chance to revise
+  // an earlier side after assigning the last one. The functional updater is what
+  // makes several taps in one React batch accumulate rather than overwrite.
   const assign = (i: number, side: 'debit' | 'credit') => {
     if (graded) return
-    const prev = sidesRef.current
-    const next = { ...prev, [i]: side }
-    sidesRef.current = next
-    setSides(next)
-    const was = entries.every((_, k) => prev[k] != null)
-    const now = entries.every((_, k) => next[k] != null)
-    if (!was && now && balance !== '') onSubmit({ sides: next, balance: Number(balance) })
+    setSides((s) => ({ ...s, [i]: side }))
   }
 
   const drTotal = entries.reduce((s, e, i) => (activeSides[i] === 'debit' ? s + e.amount : s), 0)
@@ -144,7 +132,7 @@ export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: I
       {!graded && (
         <Button
           disabled={!canSubmit}
-          onClick={() => onSubmit({ sides: sidesRef.current, balance: Number(balance) })}
+          onClick={() => onSubmit({ sides, balance: Number(balance) })}
         >
           {t('submit')}
         </Button>

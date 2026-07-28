@@ -55,7 +55,9 @@ describe('FadedStepItem', () => {
       expect(screen.getByRole('button', { name: label })).toBeTruthy()
   })
 
-  it('a tap that completes the item submits it — no second trip to Check', async () => {
+  // A MULTI-blank item always waits for Check, so an earlier answer can still
+  // be revised after the last one is given.
+  it('a multi-blank item never auto-submits, even when a tap completes it', async () => {
     const user = userEvent.setup()
     const onSubmit = renderItem()
 
@@ -65,61 +67,88 @@ describe('FadedStepItem', () => {
     const amount = screen.getByLabelText('Annual charge') as HTMLInputElement
     amount.focus()
     await user.keyboard('10000')
-    // typing never auto-submits — there is no way to know a number is finished
     expect(onSubmit).not.toHaveBeenCalled()
     expect(check.disabled).toBe(true) // the choice is still blank
 
-    await user.click(screen.getByRole('button', { name: 'Depreciation Expense' }))
-    // the tap completed the item, so it went in on its own. Worked steps
-    // (0 and 3) are never part of the response.
-    expect(onSubmit).toHaveBeenCalledTimes(1)
-    expect(onSubmit).toHaveBeenCalledWith({
-      filled: { 1: 10000, 2: 'Depreciation Expense' },
-    })
-  })
-
-  it('a tap that leaves another blank empty does NOT submit', async () => {
-    const user = userEvent.setup()
-    const onSubmit = renderItem()
-
-    // the number blank is still empty, so this tap only records a choice
+    // this tap completes the item — but it must still wait
     await user.click(screen.getByRole('button', { name: 'Depreciation Expense' }))
     expect(onSubmit).not.toHaveBeenCalled()
-
-    const check = screen.getByRole('button', { name: 'check' }) as HTMLButtonElement
-    expect(check.disabled).toBe(true)
-  })
-
-  it('typing the last blank still requires Check', async () => {
-    const user = userEvent.setup()
-    const onSubmit = renderItem()
-
-    await user.click(screen.getByRole('button', { name: 'Depreciation Expense' }))
-    const amount = screen.getByLabelText('Annual charge') as HTMLInputElement
-    amount.focus()
-    await user.keyboard('10000')
-    expect(onSubmit).not.toHaveBeenCalled()
-
-    const check = screen.getByRole('button', { name: 'check' }) as HTMLButtonElement
     expect(check.disabled).toBe(false)
-    await user.click(check)
-    expect(onSubmit).toHaveBeenCalledTimes(1)
-  })
 
-  it('re-tapping an already-complete item does not commit early', async () => {
-    const user = userEvent.setup()
-    const onSubmit = renderItem()
-
-    // complete it by TYPING last, so nothing has been submitted yet ...
-    await user.click(screen.getByRole('button', { name: 'Depreciation Expense' }))
-    const amount = screen.getByLabelText('Annual charge') as HTMLInputElement
-    amount.focus()
-    await user.keyboard('10000')
-    expect(onSubmit).not.toHaveBeenCalled()
-
-    // ... then change your mind about the account. That must NOT fire.
+    // ... and the learner can still change their mind first
     await user.click(screen.getByRole('button', { name: 'Cash' }))
     expect(onSubmit).not.toHaveBeenCalled()
+
+    await user.click(check)
+    // worked steps (0 and 3) are never part of the response
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ filled: { 1: 10000, 2: 'Cash' } })
+  })
+
+  // A SINGLE-blank choice is the whole answer in one tap, so it commits like a
+  // classify item — the first rung of most ladders is exactly this shape.
+  it('a single-blank choice submits on the tap, with no Check', async () => {
+    const user = userEvent.setup()
+    const oneBlank: FadedStepItemType = {
+      ...item,
+      data: {
+        ...item.data,
+        steps: [
+          item.data.steps[0],
+          { ...item.data.steps[1], blank: false },
+          item.data.steps[2],
+          { ...item.data.steps[3] },
+        ],
+      },
+    }
+    const onSubmit = vi.fn()
+    render(
+      <FadedStepItem
+        item={oneBlank}
+        locale="en"
+        graded={false}
+        lastResponse={null}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Depreciation Expense' }))
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ filled: { 2: 'Depreciation Expense' } })
+  })
+
+  it('a single-blank NUMBER still requires Check — typing is never a commitment', async () => {
+    const user = userEvent.setup()
+    const oneNumber: FadedStepItemType = {
+      ...item,
+      data: {
+        ...item.data,
+        steps: [
+          item.data.steps[0],
+          item.data.steps[1],
+          { ...item.data.steps[2], blank: false },
+          { ...item.data.steps[3] },
+        ],
+      },
+    }
+    const onSubmit = vi.fn()
+    render(
+      <FadedStepItem
+        item={oneNumber}
+        locale="en"
+        graded={false}
+        lastResponse={null}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    const amount = screen.getByLabelText('Annual charge') as HTMLInputElement
+    amount.focus()
+    await user.keyboard('10000')
+    expect(onSubmit).not.toHaveBeenCalled()
+
+    await user.click(screen.getByRole('button', { name: 'check' }))
+    expect(onSubmit).toHaveBeenCalledWith({ filled: { 1: 10000 } })
   })
 
   it('when graded, reveals the answer for a blank the learner got wrong', () => {
@@ -132,11 +161,12 @@ describe('FadedStepItem', () => {
     expect(screen.getByText('correctAnswer: RM 10,000')).toBeTruthy()
   })
 
-  // Regression: the tap handlers used to read `filled` from the render closure,
-  // so two taps landing in ONE React batch both saw the same empty map and the
-  // second silently discarded the first. Real fast tapping hits this; userEvent
-  // does not, because it awaits a re-render between events.
-  it('two taps in a single batch accumulate instead of overwriting', () => {
+  // Regression: a tap handler that reads its own state from the render closure
+  // loses answers when two taps land in ONE React batch — both see the same map
+  // and the second discards the first. userEvent cannot catch it (it awaits a
+  // re-render between events) and nor can fireEvent; the clicks have to be
+  // dispatched inside a single act().
+  it('two taps in a single batch accumulate instead of overwriting', async () => {
     const twoChoices: FadedStepItemType = {
       ...item,
       data: {
@@ -170,7 +200,9 @@ describe('FadedStepItem', () => {
       b.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
 
-    expect(onSubmit).toHaveBeenCalledTimes(1)
+    // Two blanks, so it waits for Check — and BOTH taps must have survived.
+    expect(onSubmit).not.toHaveBeenCalled()
+    await userEvent.setup().click(screen.getByRole('button', { name: 'check' }))
     expect(onSubmit).toHaveBeenCalledWith({
       filled: { 1: 'Depreciation Expense', 2: 'Accumulated Depreciation' },
     })

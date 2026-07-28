@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DoubleEntryBuilder } from './DoubleEntryBuilder'
 
@@ -65,59 +65,51 @@ describe('DoubleEntryBuilder — amount input keeps focus across keystrokes', ()
   })
 })
 
-describe('DoubleEntryBuilder — a tap that completes a balanced entry submits it', () => {
-  it('picking the last account auto-submits once the amounts balance', async () => {
+// A double entry is a multi-part answer (two accounts, two amounts), so it
+// always waits for Submit — no tap may commit it early.
+describe('DoubleEntryBuilder — never auto-submits', () => {
+  it('completing the entry with a tap does not commit it', async () => {
     const user = userEvent.setup()
     const onSubmit = renderBuilder()
 
-    // amounts first, then accounts — so the completing action is a TAP
+    // amounts first, so the last action is a TAP that completes a valid entry
     const dr = screen.getByLabelText('debit amount') as HTMLInputElement
     dr.focus()
     await user.keyboard('12000')
     const cr = screen.getByLabelText('credit amount') as HTMLInputElement
     cr.focus()
     await user.keyboard('12000')
-    expect(onSubmit).not.toHaveBeenCalled() // typing alone never commits
 
     await user.click(screen.getAllByRole('button', { name: 'Van' })[0]) // debit
-    expect(onSubmit).not.toHaveBeenCalled() // only one account picked
-
     await user.click(screen.getAllByRole('button', { name: 'Cash' })[1]) // credit
+    expect(onSubmit).not.toHaveBeenCalled()
+
+    // the learner can still change their mind, then commit deliberately
+    await user.click(screen.getByRole('button', { name: 'submit' }))
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onSubmit).toHaveBeenCalledWith(answer)
   })
 
-  it('does not auto-submit while the entry is unbalanced', async () => {
-    const user = userEvent.setup()
+  it('picking both accounts in one batch keeps both', async () => {
     const onSubmit = renderBuilder()
 
-    const dr = screen.getByLabelText('debit amount') as HTMLInputElement
-    dr.focus()
-    await user.keyboard('12000') // credit amount left empty
+    const drBtn = screen.getAllByRole('button', { name: 'Van' })[0]
+    const crBtn = screen.getAllByRole('button', { name: 'Cash' })[1]
+    // one act() => one React batch; independent state vars must both survive
+    act(() => {
+      drBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      crBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
 
-    await user.click(screen.getAllByRole('button', { name: 'Van' })[0])
-    await user.click(screen.getAllByRole('button', { name: 'Cash' })[1])
-    expect(onSubmit).not.toHaveBeenCalled()
-  })
-
-  it('changing an account after both are picked does not commit early', async () => {
     const user = userEvent.setup()
-    const onSubmit = renderBuilder()
-
-    // both accounts first, THEN the amounts — completing action is typing
-    await user.click(screen.getAllByRole('button', { name: 'Van' })[0])
-    await user.click(screen.getAllByRole('button', { name: 'Cash' })[1])
     const dr = screen.getByLabelText('debit amount') as HTMLInputElement
     dr.focus()
     await user.keyboard('12000')
     const cr = screen.getByLabelText('credit amount') as HTMLInputElement
     cr.focus()
     await user.keyboard('12000')
-    expect(onSubmit).not.toHaveBeenCalled()
 
-    // re-picking the debit account must not fire — the learner may still want
-    // to change the credit side too.
-    await user.click(screen.getAllByRole('button', { name: 'Capital' })[0])
-    expect(onSubmit).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'submit' }))
+    expect(onSubmit).toHaveBeenCalledWith(answer)
   })
 })

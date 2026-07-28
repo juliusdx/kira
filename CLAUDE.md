@@ -13,7 +13,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
 - **Hermetic tests (the CI gate): `npm test`** — 132 passing, no network
-- Live-backend tests: `npm run test:integration` — 8 passing, hits real Supabase
+- Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
   Postgres, applies all 5 migrations, runs 22 RLS + 13 leaderboard + 15 push
@@ -81,12 +81,13 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   app, so the cost is sunk. Deliberately deferred while the app still ships
   several times a day — store review turns a 2-minute deploy into 1–3 days.
   The OTP-code sign-in path means native needs no deep-link setup.
-- **2026-07-28 — ⚠️ MIGRATION 0005 IS WRITTEN BUT NOT YET APPLIED.** The
-  teacher/parent roster now reads `class_roster` / `learner_item_stats`
-  (SECURITY DEFINER, owner-guarded). **Do not push to `main` until Julius has
-  pasted `supabase/migrations/0005_roster_rollup.sql` into the SQL Editor** —
-  pushing deploys, and the live roster would 404 on the missing function.
-  Once applied, delete this bullet.
+- **2026-07-28** — Teacher/parent progress tracking made robust. Migration
+  0005 APPLIED to prod and verified live. The roster now reads `class_roster`
+  / `learner_item_stats` (SECURITY DEFINER, owner-guarded) instead of pulling
+  every attempt row down and rolling up in JS, which PostgREST was silently
+  truncating. Adds a per-learner detail view (per-topic bars, weakest skills,
+  recent misses), bilingual skill names, localized relative times, and
+  leave-class.
 - **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)

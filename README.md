@@ -76,7 +76,7 @@ npm run preview    # serve the built app (use this to test offline/install)
 Two further suites exist and are deliberately **not** part of `npm test`:
 
 ```bash
-npm run test:integration   # 8 tests against the live Supabase project
+npm run test:integration   # 9 tests against the live Supabase project
 ./supabase/tests/run.sh    # RLS policies vs a throwaway local Postgres
 ```
 

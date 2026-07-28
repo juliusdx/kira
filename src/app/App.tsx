@@ -20,8 +20,20 @@ import { SessionScreen, type SessionResult } from '../components/SessionScreen'
 import { SessionComplete } from '../components/SessionComplete'
 import { Account } from '../components/Account'
 import { Classes } from '../components/Classes'
+import { Badges } from '../components/Badges'
+import { ProfileSheet } from '../components/ProfileSheet'
+import { getProfile, type LocalProfile } from './profile'
+import { ensureSession } from '../sync/client'
 
-type Screen = 'home' | 'session' | 'complete' | 'progress' | 'account' | 'classes'
+type Screen =
+  | 'home'
+  | 'session'
+  | 'complete'
+  | 'progress'
+  | 'account'
+  | 'classes'
+  | 'badges'
+  | 'profile'
 
 export function App() {
   const { ready } = useKira()
@@ -33,6 +45,10 @@ export function App() {
   const [screen, setScreen] = useState<Screen>('home')
   const [session, setSession] = useState<BuiltQueue | null>(null)
   const [result, setResult] = useState<SessionResult | null>(null)
+  const [profile, setProfile] = useState<LocalProfile>({ name: null, avatar: null })
+  // Seeds the derived avatar so a learner has a distinct face before they
+  // ever pick one. Null (sync off / offline) simply falls back to the default.
+  const [userId, setUserId] = useState<string | null>(null)
 
   const reload = useCallback(async () => {
     const now = Date.now()
@@ -50,7 +66,13 @@ export function App() {
 
   useEffect(() => {
     void reload()
+    void getProfile().then(setProfile)
   }, [reload])
+
+  useEffect(() => {
+    if (!SYNC_ENABLED) return
+    void ensureSession().then(setUserId)
+  }, [])
 
   // Pull anything this device missed, then keep syncing when we come back
   // online. No-op unless Supabase credentials are configured.
@@ -122,8 +144,14 @@ export function App() {
         <Home
           summary={summary}
           streak={streak}
+          badges={badges}
+          name={profile.name}
+          avatar={profile.avatar}
+          userId={userId}
           onStart={startSession}
           onOpenProgress={() => setScreen('progress')}
+          onOpenBadges={() => setScreen('badges')}
+          onEditProfile={() => setScreen('profile')}
         />
       )}
 
@@ -141,6 +169,7 @@ export function App() {
           result={result}
           streak={streak}
           freshBadges={freshBadges}
+          dueLeft={summary.dueCount}
           onHome={() => setScreen('home')}
         />
       )}
@@ -148,7 +177,6 @@ export function App() {
       {screen === 'progress' && (
         <Progress
           summary={summary}
-          badges={badges}
           onBack={() => setScreen('home')}
           onReset={doReset}
           onOpenAccount={SYNC_ENABLED ? () => setScreen('account') : undefined}
@@ -168,6 +196,20 @@ export function App() {
       )}
 
       {screen === 'classes' && <Classes onBack={() => setScreen('progress')} />}
+
+      {screen === 'badges' && (
+        <Badges badges={badges} onBack={() => setScreen('home')} />
+      )}
+
+      {screen === 'profile' && (
+        <ProfileSheet
+          name={profile.name}
+          avatar={profile.avatar}
+          userId={userId}
+          onSaved={setProfile}
+          onClose={() => setScreen('home')}
+        />
+      )}
     </div>
   )
 }

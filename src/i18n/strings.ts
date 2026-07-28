@@ -144,6 +144,26 @@ export const UI = {
   lastActive: { en: 'Last active', ms: 'Aktif kali akhir' },
   never: { en: 'Never', ms: 'Tidak pernah' },
   weakest: { en: 'Needs work', ms: 'Perlu latihan' },
+  // learner identity + collection
+  editProfile: { en: 'Edit profile', ms: 'Sunting profil' },
+  addYourName: { en: 'Add your name', ms: 'Tambah nama anda' },
+  pickAvatar: { en: 'Pick your face', ms: 'Pilih wajah anda' },
+  noBadgesYet: {
+    en: 'Finish a session to earn your first.',
+    ms: 'Selesaikan satu sesi untuk dapat yang pertama.',
+  },
+  toGo: { en: 'to go', ms: 'lagi' },
+  earned: { en: 'Earned', ms: 'Diperoleh' },
+  locked: { en: 'Still locked', ms: 'Masih berkunci' },
+  perfectSession: { en: 'Flawless!', ms: 'Sempurna!' },
+  stillDue: {
+    en: '{n} more waiting whenever you are ready.',
+    ms: '{n} lagi menunggu bila-bila anda sedia.',
+  },
+  comeBackTomorrow: {
+    en: 'Nothing left due — come back tomorrow.',
+    ms: 'Tiada lagi perlu diulang — kembali esok.',
+  },
   // Without this the ratio reads either way round — and on the same screen
   // "By topic" shows a MASTERY percentage, where high is good. Say which.
   weakestHint: {

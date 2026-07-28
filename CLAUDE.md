@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 135 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 145 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -43,6 +43,14 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   Typing never auto-submits: there is no way to know a number is finished.
 - `src/app/badges.ts` — badges are DERIVED from review_state + attempts, never
   stored, so they sync for free
+- **Two design languages, on purpose.** Learner screens (Home, SessionComplete,
+  Badges, ProfileSheet) use `components/play.tsx` — rings, count-ups, bursts,
+  gradients. Teacher/parent screens (Classes, roster, Leaderboard) stay on the
+  sober `components/ui.tsx`: a progress report should look like a report.
+- `src/app/profile.ts` — the learner's own name + avatar, LOCAL-first in Dexie
+  and pushed to Supabase as a best effort. The name used to live only in the
+  cloud `profiles` table, which meant a learner practising alone could never
+  set one.
 - `supabase/migrations/000{1..5}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 

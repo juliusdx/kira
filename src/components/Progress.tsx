@@ -2,20 +2,16 @@ import type { ProgressSummary } from '../app/progress'
 import { t as tc } from '../content/loader'
 import { useKira } from '../app/KiraContext'
 import { Button, Card, FOCUS, ProgressBar } from './ui'
-import { BadgeShelf } from './BadgeShelf'
 import { Reminders } from './Reminders'
-import type { Badge } from '../app/badges'
 
 export function Progress({
   summary,
-  badges,
   onBack,
   onReset,
   onOpenAccount,
   onOpenClasses,
 }: {
   summary: ProgressSummary
-  badges: Badge[]
   onBack: () => void
   onReset: () => void
   /** omitted when cloud sync is not configured */
@@ -80,8 +76,6 @@ export function Progress({
             </Card>
           ))}
         </div>
-
-        <BadgeShelf badges={badges} />
 
         <Reminders />
 

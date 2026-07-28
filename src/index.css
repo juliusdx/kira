@@ -70,9 +70,41 @@ body {
   animation: kira-pop 0.22s ease-out both;
 }
 
+/* Celebration burst — pieces fly outward along their own angle. The angle is
+   passed in as --kira-angle so every piece shares one keyframe. */
+@keyframes kira-confetti {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--kira-angle)) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--kira-angle)) translateY(-110px) scale(0.4);
+  }
+}
+.kira-confetti {
+  animation: kira-confetti 900ms cubic-bezier(0.15, 0.6, 0.3, 1) both;
+}
+
+/* A slow, gentle breathing for the "ready to practise" call to action. */
+@keyframes kira-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+.animate-breathe {
+  animation: kira-breathe 3.2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-rise,
-  .animate-pop {
+  .animate-pop,
+  .kira-confetti,
+  .animate-breathe {
     animation: none;
   }
 }

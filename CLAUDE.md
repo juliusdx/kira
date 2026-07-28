@@ -133,6 +133,14 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   matches a WHOLE line — so a failing column inside a multi-column row
   (`t|f|t`) was invisible. Fixed with `tr '|' '\n'`; it immediately surfaced 2
   leaderboard assertions that had never been counted (11 → 13).
+- 2026-07-28: verifying against prod by creating a throwaway anonymous learner
+  in the browser leaves ORPHAN rows — RLS only lets a user delete their own
+  data, and a page reload throws the probe's access token away with it →
+  stash the probe JWT in `sessionStorage`, not a closure, so cleanup survives
+  a reload. There is no service_role key on this machine, so an uncleaned
+  probe can only be removed by Julius in the SQL Editor (see
+  `supabase/maintenance/cleanup_probe_users.sql` for a guarded pattern —
+  match by user id, and refuse to delete anyone who is in a class).
 - 2026-07-28: when driving the app from `javascript_tool`, clicking a chip and
   then Submit **in the same JS tick** submits the PRE-click state and looks like
   a bug → it is a test-driving artifact: real clicks are discrete events that

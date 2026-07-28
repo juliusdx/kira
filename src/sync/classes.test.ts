@@ -162,6 +162,36 @@ describe('weakestSkills', () => {
   it('ignores items with no attempts at all', () => {
     expect(weakestSkills([stat({ attempts: 0, wrong: 0 })])).toEqual([])
   })
+
+  // Regression, from a real roster card: ranking by error rate alone and
+  // taking the top 3 listed a tag at 1-wrong-in-10 under "Needs work" —
+  // reporting a learner as weak at the thing she was best at.
+  it('does not call a mostly-correct skill weak just to fill three slots', () => {
+    // dc-00x are tagged `debit-credit` only; ta-003 is tagged ledger+receivable
+    const out = weakestSkills([
+      // struggling: 3 wrong in 5
+      stat({ item_id: 'ta-003', attempts: 5, wrong: 3, last_wrong_at: iso(NOW) }),
+      // strong: 1 wrong in 10, spread over several debit-credit items
+      stat({ item_id: 'dc-001', attempts: 4, wrong: 1, last_wrong_at: iso(NOW) }),
+      stat({ item_id: 'dc-002', attempts: 3, wrong: 0 }),
+      stat({ item_id: 'dc-003', attempts: 3, wrong: 0 }),
+    ])
+    const tags = out.map((w) => w.tag)
+    expect(tags).toContain('ledger')
+    expect(tags, 'a 90%-correct skill was reported as needing work').not.toContain(
+      'debit-credit',
+    )
+  })
+
+  it('needs a real sample, not one unlucky answer', () => {
+    // 1 wrong out of 3 is 33% — over the rate bar but too thin to trust
+    expect(weakestSkills([stat({ attempts: 3, wrong: 1 })])).toEqual([])
+  })
+
+  it('says nothing at all when nothing stands out', () => {
+    const out = weakestSkills([stat({ attempts: 20, wrong: 1 })])
+    expect(out).toEqual([]) // the card hides rather than inventing a weakness
+  })
 })
 
 describe('recentMisses', () => {

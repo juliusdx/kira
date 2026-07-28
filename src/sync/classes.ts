@@ -383,6 +383,16 @@ export function rollUpDetail(rows: ItemStatRow[], now: number): LearnerDetail {
  */
 const MECHANIC_TAGS = new Set(['faded-step'])
 
+/**
+ * A tag has to be BOTH well-evidenced and actually going badly to be called
+ * "needs work". Ranking by error rate alone and taking the top 3 promoted
+ * whatever was least-bad into a list headed "Needs work" — a learner at 1
+ * wrong in 10 was being reported as weak at the thing she is best at, which
+ * would send a parent to drill exactly the wrong topic.
+ */
+const MIN_ATTEMPTS = 4
+const MIN_WRONG_PCT = 30
+
 export function weakestSkills(rows: ItemStatRow[], max = 3): WeakSkill[] {
   const tally = new Map<string, { n: number; wrong: number }>()
   for (const r of rows) {
@@ -397,13 +407,13 @@ export function weakestSkills(rows: ItemStatRow[], max = 3): WeakSkill[] {
     }
   }
   return [...tally.entries()]
-    .filter(([, t]) => t.n >= 3 && t.wrong > 0)
     .map(([tag, t]) => ({
       tag,
       attempts: t.n,
       wrong: t.wrong,
       wrongPct: Math.round((t.wrong / t.n) * 100),
     }))
+    .filter((w) => w.attempts >= MIN_ATTEMPTS && w.wrongPct >= MIN_WRONG_PCT)
     .sort((a, b) => b.wrongPct - a.wrongPct || b.wrong - a.wrong)
     .slice(0, max)
 }

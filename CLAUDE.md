@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 146 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 148 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -24,7 +24,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 186 items / 17 topics / 29 lessons.
+- `seed_content.json` (repo ROOT) — all 197 items / 17 topics / 31 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -85,11 +85,6 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   society accounts, partnership accounts. Each topic ends in a fading ladder
   (9 ladders now). **BM terminology was written by Claude, not ported from
   Julius's material — worth a read-through against the syllabus.**
-- **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
-  Julius already holds paid Apple + Google dev accounts from the timesheet
-  app, so the cost is sunk. Deliberately deferred while the app still ships
-  several times a day — store review turns a 2-minute deploy into 1–3 days.
-  The OTP-code sign-in path means native needs no deep-link setup.
 - **2026-07-28** — Teacher/parent progress tracking made robust. Migration
   0005 APPLIED to prod and verified live. The roster now reads `class_roster`
   / `learner_item_stats` (SECURITY DEFINER, owner-guarded) instead of pulling
@@ -102,6 +97,33 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   screen, a bigger session-end moment, and name + emoji avatar reachable by
   every learner. Migration 0006 APPLIED and verified live — a chosen face
   follows the account and shows on the leaderboard and the teacher's roster.
+- **2026-07-28 (later)** — Balancing off, authored against a real stall: Ariel
+  had cleared Stages 1–2 and got stuck closing T-accounts. Two new lessons in
+  `t5-ledger`, 11 items, bank now 197. `l30-balance-off` drills the thing that
+  actually trips people — the balance c/d is written on the SMALLER side while
+  the account's real balance is on the larger one — and includes the two cases
+  that break the guess "receivables are debit, payables are credit": a
+  receivables account closing credit (customer overpaid) and a bank account
+  closing credit (overdraft). `l31-faded-balancing` is the 10th fading ladder:
+  total each side → put the difference on the smaller side as c/d → bring it
+  down on the larger side as b/d, 2 → 4 → 6 blanks. New skill tag
+  `balancing-off` (labelled in `loader.ts`, so it can name a weakness on the
+  teacher's roster). Content-only — no schema, no migration, no Edge Function.
+  **The BM here was written by Claude, so it wants the same read-through
+  against the syllabus as Stage 6 — in particular c/d ("baki c/d") and b/d
+  ("baki b/d"), which are kept as the English abbreviations on purpose.**
+- **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
+  Julius already holds paid Apple + Google dev accounts from the timesheet
+  app, so the cost is sunk. Deliberately deferred while the app still ships
+  several times a day — store review turns a 2-minute deploy into 1–3 days.
+  The OTP-code sign-in path means native needs no deep-link setup.
+- **Deferred with a reason:** a mid-session badge toast. Badges recompute from
+  ALL attempts, so firing one mid-session means recomputing after every answer
+  — it needs a cheap incremental check first, not a bolt-on.
+- **Needs a human, not code:** the Stage 6 BM terminology — and now the
+  balancing-off lessons — have never been read against the syllabus. They are
+  the parts of the bank Claude authored rather than ported, and they are now in
+  front of Ariel.
 - **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
@@ -162,6 +184,22 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   probe can only be removed by Julius in the SQL Editor (see
   `supabase/maintenance/cleanup_probe_users.sql` for a guarded pattern —
   match by user id, and refuse to delete anyone who is in a class).
+- 2026-07-28: verifying new content in the browser used to mean minting yet
+  another throwaway anonymous user on PROD, because the dev server reads the
+  real `.env` → added a `localonly` Vite mode (`.env.localonly.local`, blank
+  Supabase vars → `SYNC_ENABLED` false → no sign-in at all) and a
+  `dev-local-only` entry in `.claude/launch.json` on port 5179. Use it for any
+  UI check that does not specifically need the cloud.
+- 2026-07-28: to reach a NEW lesson without answering the 30+ items ahead of
+  it, seed `reviewState` straight into IndexedDB (`indexedDB.open('kira')`,
+  store `reviewState`, rows `{itemId, box: 5, dueAt: <future>, streak, 
+  lastResult, updatedAt}`) — `buildQueue` then treats them as done and offers
+  the next unseen items in content order.
+- 2026-07-28: `get_page_text` and `screenshot` on the preview both read a STALE
+  frame — a click looks like it did nothing, and every count-up on the Home
+  dashboard reads 0 because rAF is throttled while the pane is not painting.
+  Re-read in a SEPARATE tool call before concluding anything, and trust a
+  screenshot over the text dump for animated values.
 - 2026-07-28: when driving the app from `javascript_tool`, clicking a chip and
   then Submit **in the same JS tick** submits the PRE-click state and looks like
   a bug → it is a test-driving artifact: real clicks are discrete events that

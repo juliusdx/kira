@@ -171,6 +171,7 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
   'credit-purchase': { en: 'Credit purchases', ms: 'Belian kredit' },
   receivable: { en: 'Receivables', ms: 'Penghutang' },
   ledger: { en: 'Ledger & T-accounts', ms: 'Lejar & akaun T' },
+  'balancing-off': { en: 'Balancing off an account', ms: 'Mengimbangkan akaun' },
   'trial-balance': { en: 'Trial balance', ms: 'Imbangan duga' },
   'income-statement': { en: 'Income statement', ms: 'Penyata pendapatan' },
   'financial-position': {

@@ -24,10 +24,10 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**186 items across 17 topics**, Stages 1–6:
+**197 items across 17 topics**, Stages 1–6:
 
 1–2. The accounting equation · debits & credits · journal entries · spot the error
-3. Ledger & T-accounts · the trial balance
+3. Ledger & T-accounts · balancing off · the trial balance
 4. Income statement · statement of financial position
 5. Year-end adjustments — accruals & prepayments · depreciation · bad debts & provisions
 6. Bank reconciliation · control accounts · correction of errors & suspense ·
@@ -36,11 +36,12 @@ Every feature is tied to a research-backed principle (see
 Eight interaction types: `classify`, `debit_credit`, `numeric`,
 `journal_entry`, `t_account`, `spot_error`, `statement_build`, `faded_step`.
 
-Nine of the lessons are **fading ladders** — the same procedure authored three
+Ten of the lessons are **fading ladders** — the same procedure authored three
 times, one more step blanked each rung. They sit on the procedures where the
 order of the steps is the whole lesson: the journal entry, straight-line
 depreciation, write-off-then-provide (providing on the pre-write-off figure is
-the classic miss), the bank reconciliation, the control account, clearing a
+the classic miss), balancing off a ledger account (the balance c/d goes on the
+*smaller* side), the bank reconciliation, the control account, clearing a
 suspense account to nil, profit by capital comparison, the subscriptions
 working, and the partnership appropriation.
 
@@ -67,7 +68,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 146 hermetic unit + component tests (the CI gate)
+npm test           # 148 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -106,6 +107,11 @@ src/
 `scheduler.ts`, `grade.ts` and `buildQueue.ts` are pure modules with no I/O —
 the scheduling and marking rules are unit-tested independently of the UI.
 
+Two design languages, deliberately. Learner screens (home, session end, badges,
+profile) use `components/play.tsx` — rings, count-ups, celebration bursts.
+Teacher and parent screens stay on the sober `components/ui.tsx`: a progress
+report should look like a report, not like a game.
+
 ## Cloud features
 
 The app stays local-first — every read and write hits IndexedDB, and the whole
@@ -133,6 +139,13 @@ unchanged when Supabase credentials are absent.
 - **Daily reminders.** Web push, sent by a Supabase Edge Function on an hourly
   cron that picks whoever's *local* hour matches their chosen time and actually
   has reviews due.
+- **Names and faces.** A display name and an emoji avatar, set by any learner
+  from the home header — local-first in Dexie, pushed to the cloud so they reach the
+  leaderboard and the teacher's roster. An avatar is derived from the user id
+  until one is chosen, so a leaderboard is never a wall of blanks. The allowed
+  faces are a CHECK constraint in the database, not client-side validation:
+  `profiles` is self-service under RLS, so whatever a learner can store is
+  drawn on their classmates' screens.
 
 Security note: **RLS is the only boundary** — the publishable key ships in a
 public bundle by design. Policies are tested in `supabase/tests/`.

@@ -100,6 +100,59 @@ describe('content bank — per-type integrity', () => {
     }
   })
 
+  // The input strips everything that is not a digit, so an answer a learner
+  // physically cannot type is unanswerable however correct it is.
+  it('every typed number is a whole, non-negative figure', () => {
+    const typed: { id: string; label: string; value: number }[] = []
+    for (const item of items) {
+      if (item.type === 'numeric') typed.push({ id: item.id, label: 'answer', value: item.answer })
+      else if (item.type === 't_account')
+        typed.push({ id: item.id, label: 'balance', value: item.answer.balance })
+      else if (item.type === 'statement_build')
+        typed.push({ id: item.id, label: 'total', value: item.answer.total })
+      else if (item.type === 'faded_step')
+        for (const { step, index } of blankSteps(item))
+          if (step.kind === 'number')
+            typed.push({ id: item.id, label: `step ${index}`, value: step.value })
+    }
+    const impossible = typed
+      .filter((t) => !Number.isInteger(t.value) || t.value < 0)
+      .map((t) => `${t.id} ${t.label} = ${t.value}`)
+    expect(impossible, 'AmountInput accepts digits only').toEqual([])
+  })
+
+  // A currency leads its figure, a ratio unit trails it. Getting this wrong
+  // renders "% 30" or "times 8", and a word unit with no BM label shows English
+  // in a BM-first app.
+  it('non-currency units trail their figure and carry a BM label', () => {
+    const units: { id: string; unit: string; after?: boolean; ms?: string }[] = []
+    for (const item of items) {
+      if (item.type === 'numeric' && item.data.unit)
+        units.push({
+          id: item.id,
+          unit: item.data.unit,
+          after: item.data.unitAfter,
+          ms: item.data.unit_ms,
+        })
+      else if (item.type === 'faded_step')
+        for (const step of item.data.steps)
+          if (step.kind === 'number' && step.unit)
+            units.push({
+              id: item.id,
+              unit: step.unit,
+              after: step.unitAfter,
+              ms: step.unit_ms,
+            })
+    }
+    for (const u of units) {
+      if (u.unit === CONTENT.meta.currency) continue
+      expect(u.after, `${u.id}: unit "${u.unit}" must set unitAfter`).toBe(true)
+      // A symbol reads the same in both languages; a word does not.
+      if (/[a-z]/i.test(u.unit))
+        expect(u.ms?.trim(), `${u.id}: unit "${u.unit}" needs a BM label`).toBeTruthy()
+    }
+  })
+
   it('double entries balance (Dr = Cr) with positive amounts', () => {
     for (const item of items) {
       if (item.type !== 'journal_entry' && item.type !== 'spot_error') continue

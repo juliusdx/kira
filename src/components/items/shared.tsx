@@ -11,8 +11,14 @@ export interface ItemProps {
   onSubmit: (r: Response) => void
 }
 
-export function formatAmount(n: number, currency = 'RM'): string {
-  return `${currency} ${n.toLocaleString('en-MY')}`
+/**
+ * A currency leads its figure (`RM 30`), a ratio unit trails it (`30%`,
+ * `8 times`). `%` sits tight against the number; a word unit takes a space.
+ */
+export function formatAmount(n: number, unit = 'RM', unitAfter = false): string {
+  const value = n.toLocaleString('en-MY')
+  if (!unitAfter) return `${unit} ${value}`
+  return unit === '%' ? `${value}%` : `${value} ${unit}`
 }
 
 /** Tappable account chip used by journal-entry / spot-error builders. */
@@ -50,23 +56,33 @@ export function AmountInput({
   onChange,
   disabled,
   currency = 'RM',
+  unitAfter = false,
   ariaLabel,
 }: {
   value: number | ''
   onChange: (v: number | '') => void
   disabled?: boolean
   currency?: string
+  /** Put the unit after the field — `30 %`, `8 times` — instead of before it. */
+  unitAfter?: boolean
   ariaLabel: string
 }) {
+  const unit = (
+    <span
+      className={`text-sm font-semibold text-slate-500 dark:text-slate-400 ${
+        unitAfter ? 'pr-3' : 'pl-3'
+      }`}
+    >
+      {currency}
+    </span>
+  )
   return (
     <div
       className={`flex items-center rounded-xl bg-slate-100 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-700/60 dark:ring-slate-600 ${
         disabled ? 'opacity-70' : ''
       }`}
     >
-      <span className="pl-3 text-sm font-semibold text-slate-500 dark:text-slate-400">
-        {currency}
-      </span>
+      {!unitAfter && unit}
       <input
         type="text"
         inputMode="numeric"
@@ -82,6 +98,7 @@ export function AmountInput({
         className="min-h-11 w-full bg-transparent px-2 text-base font-semibold text-slate-900 outline-none tabular-nums dark:text-white"
         placeholder="0"
       />
+      {unitAfter && unit}
     </div>
   )
 }

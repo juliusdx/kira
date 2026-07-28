@@ -46,7 +46,16 @@ export interface ChoiceItem extends BaseItem {
 
 export interface NumericItem extends BaseItem {
   type: 'numeric'
-  data: { unit?: string }
+  data: {
+    unit?: string // defaults to the bundle currency
+    unit_ms?: string // parallel BM label ('times' → 'kali'); '%' needs none
+    /**
+     * Where the unit sits. A currency leads (`RM 30`); a ratio trails
+     * (`30%`, `8 times`). Authored per item because it is a property of the
+     * unit, not of the renderer.
+     */
+    unitAfter?: boolean
+  }
   answer: number
 }
 
@@ -129,6 +138,8 @@ export interface FadedNumberStep {
   label: LocalizedText
   value: number
   unit?: string // defaults to the bundle currency
+  unit_ms?: string // see NumericItem.data.unit_ms
+  unitAfter?: boolean // see NumericItem.data.unitAfter
   blank?: boolean
 }
 

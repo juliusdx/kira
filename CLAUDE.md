@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 148 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 154 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -24,7 +24,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 197 items / 17 topics / 31 lessons.
+- `seed_content.json` (repo ROOT) — all 253 items / 21 topics / 43 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -112,6 +112,24 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   **The BM here was written by Claude, so it wants the same read-through
   against the syllabus as Stage 6 — in particular c/d ("baki c/d") and b/d
   ("baki b/d"), which are kept as the English abbreviations on purpose.**
+- **2026-07-28 (later still)** — Stage 7 content: 4 topics / 12 lessons / 56
+  items, taking the bank to 253 and finishing the Form 5 syllabus. Limited
+  company accounts (share capital, debentures, reserves, appropriation),
+  manufacturing accounts (direct vs indirect vs non-factory, prime cost, cost
+  of production), ratio analysis (margins, mark-up, liquidity, ROCE, turnover,
+  collection period, and reading what a movement MEANS), and cash budgets
+  (timing, and what never appears because no money moves). Each topic ends in
+  a fading ladder — 14 ladders now. Content-only apart from one renderer
+  change below. **BM authored by Claude again — same read-through needed.**
+- **A numeric answer must be a whole, non-negative figure.** `AmountInput`
+  strips every non-digit, so a decimal or a negative answer is unanswerable no
+  matter how correct it is. The content guard now fails the build on one. This
+  is why ratio items are figured to come out whole (a 20% margin IS a 25%
+  mark-up) rather than to look realistic.
+- **A numeric unit is authored, not assumed.** `unit` + `unit_ms` + `unitAfter`
+  on a `numeric` item's data and on a `faded_step` number step. A currency
+  leads its figure, a ratio unit trails it, and a WORD unit needs a BM label
+  or a BM-first app shows English. All three are guarded in `content.test.ts`.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -120,11 +138,12 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - **Deferred with a reason:** a mid-session badge toast. Badges recompute from
   ALL attempts, so firing one mid-session means recomputing after every answer
   — it needs a cheap incremental check first, not a bolt-on.
-- **Needs a human, not code:** the Stage 6 BM terminology — and now the
-  balancing-off lessons — have never been read against the syllabus. They are
-  the parts of the bank Claude authored rather than ported, and they are now in
-  front of Ariel.
-- **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
+- **Needs a human, not code:** the BM terminology of Stages 6 and 7 and of the
+  balancing-off lessons has never been read against the syllabus — by now that
+  is the MAJORITY of the bank (151 of 253 items). It is the part Claude
+  authored rather than ported, and it is in front of Ariel.
+- **Also open:** Stage 8+ content if the syllabus warrants it, FSRS
+  scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
 - 2026-07-27: identity bugs keep recurring in different disguises → anonymous

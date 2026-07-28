@@ -24,7 +24,7 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**197 items across 17 topics**, Stages 1–6:
+**253 items across 21 topics**, Stages 1–7:
 
 1–2. The accounting equation · debits & credits · journal entries · spot the error
 3. Ledger & T-accounts · balancing off · the trial balance
@@ -32,18 +32,25 @@ Every feature is tied to a research-backed principle (see
 5. Year-end adjustments — accruals & prepayments · depreciation · bad debts & provisions
 6. Bank reconciliation · control accounts · correction of errors & suspense ·
    incomplete records · club & society accounts · partnership accounts
+7. Limited company accounts · manufacturing accounts · ratio analysis · cash budgets
 
 Eight interaction types: `classify`, `debit_credit`, `numeric`,
 `journal_entry`, `t_account`, `spot_error`, `statement_build`, `faded_step`.
 
-Ten of the lessons are **fading ladders** — the same procedure authored three
-times, one more step blanked each rung. They sit on the procedures where the
-order of the steps is the whole lesson: the journal entry, straight-line
+Fourteen of the lessons are **fading ladders** — the same procedure authored
+three times, one more step blanked each rung. They sit on the procedures where
+the order of the steps is the whole lesson: the journal entry, straight-line
 depreciation, write-off-then-provide (providing on the pre-write-off figure is
 the classic miss), balancing off a ledger account (the balance c/d goes on the
 *smaller* side), the bank reconciliation, the control account, clearing a
 suspense account to nil, profit by capital comparison, the subscriptions
-working, and the partnership appropriation.
+working, the partnership appropriation, the company appropriation, the
+manufacturing account, both profit margins, and a month of a cash budget.
+
+A numeric answer is a whole, non-negative figure — the input accepts digits
+only — and its unit is authored, not assumed: a currency leads its figure
+(`RM 1,500`) and a ratio unit trails it (`20%`, `8 times`, and `8 kali` when
+the learner is reading in BM).
 
 ### Authoring
 
@@ -68,7 +75,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 148 hermetic unit + component tests (the CI gate)
+npm test           # 154 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)

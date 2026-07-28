@@ -196,6 +196,16 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
   subscriptions: { en: 'Subscriptions', ms: 'Yuran' },
   partnership: { en: 'Partnership', ms: 'Perkongsian' },
   appropriation: { en: 'Profit appropriation', ms: 'Pengagihan untung' },
+  // Stage 7
+  'company-accounts': { en: 'Limited company accounts', ms: 'Akaun syarikat berhad' },
+  'share-capital': { en: 'Share capital', ms: 'Modal saham' },
+  dividends: { en: 'Dividends', ms: 'Dividen' },
+  manufacturing: { en: 'Manufacturing accounts', ms: 'Akaun pengilangan' },
+  'cost-of-production': { en: 'Cost of production', ms: 'Kos pengeluaran' },
+  'ratio-analysis': { en: 'Ratio analysis', ms: 'Analisis nisbah' },
+  profitability: { en: 'Profitability', ms: 'Keberuntungan' },
+  liquidity: { en: 'Liquidity', ms: 'Kecairan' },
+  'cash-budget': { en: 'Cash budget', ms: 'Belanjawan tunai' },
   'faded-step': { en: 'Faded workings', ms: 'Kerja kira dilunturkan' },
 }
 

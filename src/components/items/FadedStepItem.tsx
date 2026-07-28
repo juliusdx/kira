@@ -155,7 +155,8 @@ function BlankStep({
           value={typeof value === 'number' ? value : ''}
           onChange={(v) => onChange(v === '' ? '' : v, false)}
           disabled={graded}
-          currency={step.unit ?? 'RM'}
+          currency={stepUnit(step, locale)}
+          unitAfter={step.unitAfter ?? false}
           ariaLabel={label}
         />
       ) : (
@@ -181,7 +182,14 @@ function BlankStep({
   )
 }
 
+/** A number step's unit, in the reading locale ('times' → 'kali'). */
+function stepUnit(step: FadedStep, locale: Locale): string {
+  if (step.kind !== 'number') return 'RM'
+  return (locale === 'ms' ? step.unit_ms : undefined) ?? step.unit ?? 'RM'
+}
+
 function stepValueLabel(step: FadedStep, locale: Locale): string {
-  if (step.kind === 'number') return formatAmount(step.value, step.unit ?? 'RM')
+  if (step.kind === 'number')
+    return formatAmount(step.value, stepUnit(step, locale), step.unitAfter ?? false)
   return locale === 'ms' ? step.value_ms : step.value
 }

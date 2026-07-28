@@ -4,14 +4,19 @@ import { Button, Card, FOCUS, ProgressBar } from './ui'
 import {
   createClass,
   getClassRoster,
+  getLearnerDetail,
   joinClass,
+  leaveClass,
   listJoinedClasses,
   listMyClasses,
   removeMember,
   rotateJoinCode,
   type ClassRow,
+  type LearnerDetail,
   type LearnerSummary,
 } from '../sync/classes'
+import { skillLabel, t as tc } from '../content/loader'
+import type { UIKey } from '../i18n/strings'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
 import { Leaderboard } from './Leaderboard'
@@ -28,13 +33,21 @@ function formatCode(code: string): string {
   return code.replace(/(.{4})(?=.)/g, '$1-')
 }
 
-function relativeTime(iso: string | null, never: string): string {
-  if (!iso) return never
-  const days = Math.floor((Date.now() - Date.parse(iso)) / 86_400_000)
-  if (days <= 0) return 'today'
-  if (days === 1) return 'yesterday'
-  if (days < 30) return `${days}d ago`
-  return `${Math.floor(days / 30)}mo ago`
+/**
+ * Localized "when". This renders on every roster card, so leaving it in
+ * English put hardcoded English in front of a BM-default audience.
+ */
+export function relativeTime(
+  iso: string | null,
+  t: (k: UIKey) => string,
+  now: number = Date.now(),
+): string {
+  if (!iso) return t('never')
+  const days = Math.floor((now - Date.parse(iso)) / 86_400_000)
+  if (days <= 0) return t('today')
+  if (days === 1) return t('yesterday')
+  if (days < 30) return t('daysAgo').replace('{n}', String(days))
+  return t('monthsAgo').replace('{n}', String(Math.floor(days / 30)))
 }
 
 export function Classes({ onBack }: { onBack: () => void }) {
@@ -144,9 +157,25 @@ export function Classes({ onBack }: { onBack: () => void }) {
           <NameCard />
           {joined.map((c) => (
             <div key={c.id} className="grid gap-2">
-              <h2 className="px-1 text-sm font-semibold text-slate-500 dark:text-slate-400">
-                {c.name}
-              </h2>
+              <div className="flex items-baseline justify-between gap-2 px-1">
+                <h2 className="truncate text-sm font-semibold text-slate-500 dark:text-slate-400">
+                  {c.name}
+                </h2>
+                <button
+                  className={`shrink-0 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 ${FOCUS}`}
+                  onClick={async () => {
+                    if (!confirm(t('leaveConfirm'))) return
+                    try {
+                      await leaveClass(c.id)
+                      await refresh()
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : String(e))
+                    }
+                  }}
+                >
+                  {t('leaveClass')}
+                </button>
+              </div>
               <Leaderboard classId={c.id} />
             </div>
           ))}
@@ -156,6 +185,9 @@ export function Classes({ onBack }: { onBack: () => void }) {
       {/* teacher: create + open classes */}
       <Card>
         <h2 className="font-semibold">{t('teacherView')}</h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          {t('parentHint')}
+        </p>
         {!hasEmail && (
           <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">
             {t('needAccountForClass')}
@@ -206,6 +238,7 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
   const [code, setCode] = useState(cls.join_code)
   const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
   const [error, setError] = useState<string | null>(null)
+  const [detailOf, setDetailOf] = useState<LearnerSummary | null>(null)
 
   const refresh = useCallback(async () => {
     try {
@@ -219,6 +252,15 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
   useEffect(() => {
     void refresh()
   }, [refresh])
+
+  if (detailOf)
+    return (
+      <LearnerDetailView
+        cls={cls}
+        learner={detailOf}
+        onBack={() => setDetailOf(null)}
+      />
+    )
 
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col gap-4 px-5 py-6">
@@ -292,7 +334,7 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
               {r.displayName ?? `${r.userId.slice(0, 8)}…`}
             </span>
             <span className="shrink-0 text-xs text-slate-500 dark:text-slate-400">
-              {t('lastActive')}: {relativeTime(r.lastActiveAt, t('never'))}
+              {t('lastActive')}: {relativeTime(r.lastActiveAt, t)}
             </span>
           </div>
 
@@ -320,26 +362,151 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
             ))}
           </dl>
 
-          {r.weakestSkills.length > 0 && (
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-              <span className="font-medium">{t('weakest')}:</span>{' '}
-              {r.weakestSkills.join(', ')}
-            </p>
-          )}
-
-          <Button
-            variant="ghost"
-            className="mt-2 w-full text-sm"
-            onClick={async () => {
-              if (!confirm(t('removeConfirm'))) return
-              await removeMember(cls.id, r.userId)
-              await refresh()
-            }}
-          >
-            {t('remove')}
-          </Button>
+          <div className="mt-3 flex gap-2">
+            <Button
+              variant="secondary"
+              className="flex-1 text-sm"
+              onClick={() => setDetailOf(r)}
+            >
+              {t('viewProgress')}
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-sm"
+              onClick={async () => {
+                if (!confirm(t('removeConfirm'))) return
+                await removeMember(cls.id, r.userId)
+                await refresh()
+              }}
+            >
+              {t('remove')}
+            </Button>
+          </div>
         </Card>
       ))}
+    </div>
+  )
+}
+
+/**
+ * One learner in depth: WHERE they are struggling, not just that they are.
+ * The topic bars come from the same computeProgress() the learner sees on
+ * their own screen, so the two views can never disagree.
+ */
+function LearnerDetailView({
+  cls,
+  learner,
+  onBack,
+}: {
+  cls: ClassRow
+  learner: LearnerSummary
+  onBack: () => void
+}) {
+  const { t, locale } = useKira()
+  const [detail, setDetail] = useState<LearnerDetail | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    getLearnerDetail(cls.id, learner.userId)
+      .then((d) => alive && setDetail(d))
+      .catch((e) => alive && setError(e instanceof Error ? e.message : String(e)))
+    return () => {
+      alive = false
+    }
+  }, [cls.id, learner.userId])
+
+  const name = learner.displayName ?? `${learner.userId.slice(0, 8)}…`
+
+  return (
+    <div className="mx-auto flex min-h-full w-full max-w-md flex-col gap-4 px-5 py-6">
+      <header className="flex items-center justify-between gap-2">
+        <h1 className="truncate text-xl font-bold">{name}</h1>
+        <Button variant="ghost" onClick={onBack}>
+          {t('back')}
+        </Button>
+      </header>
+
+      <p className="-mt-2 text-sm text-slate-500 dark:text-slate-400">
+        {t('lastActive')}: {relativeTime(learner.lastActiveAt, t)}
+      </p>
+
+      {error && (
+        <p className="text-sm font-medium text-rose-600 dark:text-rose-400">{error}</p>
+      )}
+      {!detail && !error && <p className="text-sm text-slate-500">{t('loading')}</p>}
+
+      {detail && (
+        <>
+          {detail.weakest.length > 0 && (
+            <Card>
+              <h2 className="font-semibold">{t('weakest')}</h2>
+              <ul className="mt-2 flex flex-col gap-1.5">
+                {detail.weakest.map((w) => (
+                  <li
+                    key={w.tag}
+                    className="flex items-baseline justify-between gap-3 text-sm"
+                  >
+                    <span className="truncate">{skillLabel(w.tag, locale)}</span>
+                    <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
+                      {w.wrong}/{w.attempts} ({w.wrongPct}%)
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
+          <Card>
+            <h2 className="font-semibold">{t('byTopic')}</h2>
+            <ul className="mt-3 flex flex-col gap-3">
+              {detail.topics.map((tp) => (
+                <li key={tp.topic.id}>
+                  <div className="flex items-baseline justify-between gap-2 text-sm">
+                    <span className="truncate">{tc(tp.topic.title, locale)}</span>
+                    <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
+                      {tp.seen === 0 ? t('notPractised') : `${tp.masteryPct}%`}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    value={tp.masteryPct}
+                    label={tc(tp.topic.title, locale)}
+                    className="mt-1"
+                  />
+                  <p className="mt-0.5 text-[11px] text-slate-400 dark:text-slate-500">
+                    {tp.seen}/{tp.total} {t('seen')} · {tp.mastered}{' '}
+                    {t('itemsMastered')}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          <Card>
+            <h2 className="font-semibold">{t('recentMisses')}</h2>
+            {detail.recentMisses.length === 0 ? (
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                {t('noMisses')}
+              </p>
+            ) : (
+              <ul className="mt-2 flex flex-col gap-3">
+                {detail.recentMisses.map((m) => (
+                  <li key={m.itemId}>
+                    <p className="text-sm text-slate-800 dark:text-slate-100">
+                      {tc(m.prompt, locale)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      {m.topicTitle ? `${tc(m.topicTitle, locale)} · ` : ''}
+                      {m.wrong}
+                      {t('timesWrong')} · {relativeTime(m.lastWrongAt, t)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        </>
+      )}
     </div>
   )
 }

@@ -67,7 +67,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 115 hermetic unit + component tests (the CI gate)
+npm test           # 132 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -83,7 +83,7 @@ npm run test:integration   # 8 tests against the live Supabase project
 `test:integration` is excluded from CI so a deploy never depends on Supabase
 uptime, and so pushes don't mint throwaway anonymous users. `run.sh` applies
 every migration to a scratch database and asserts the security policies
-(22 RLS + 11 leaderboard + 15 push reminder checks) — **run it before applying
+(22 RLS + 13 leaderboard + 15 push + 23 roster checks) — **run it before applying
 any new migration to production.**
 
 ## Architecture

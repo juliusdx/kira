@@ -12,12 +12,12 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 115 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 132 passing, no network
 - Live-backend tests: `npm run test:integration` — 8 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
-  Postgres, applies all 4 migrations, runs 22 RLS + 11 leaderboard + 15 push
-  assertions. **Run this before handing Julius any new migration.**
+  Postgres, applies all 5 migrations, runs 22 RLS + 13 leaderboard + 15 push
+  + 23 roster assertions. **Run this before handing Julius any new migration.**
 - Types: `npm run typecheck`
 - Build: `npm run build`
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
@@ -43,7 +43,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   Typing never auto-submits: there is no way to know a number is finished.
 - `src/app/badges.ts` — badges are DERIVED from review_state + attempts, never
   stored, so they sync for free
-- `supabase/migrations/000{1..4}_*.sql` — applied BY HAND via the SQL Editor
+- `supabase/migrations/000{1..5}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
@@ -81,6 +81,12 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   app, so the cost is sunk. Deliberately deferred while the app still ships
   several times a day — store review turns a 2-minute deploy into 1–3 days.
   The OTP-code sign-in path means native needs no deep-link setup.
+- **2026-07-28 — ⚠️ MIGRATION 0005 IS WRITTEN BUT NOT YET APPLIED.** The
+  teacher/parent roster now reads `class_roster` / `learner_item_stats`
+  (SECURITY DEFINER, owner-guarded). **Do not push to `main` until Julius has
+  pasted `supabase/migrations/0005_roster_rollup.sql` into the SQL Editor** —
+  pushing deploys, and the live roster would 404 on the missing function.
+  Once applied, delete this bullet.
 - **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
@@ -115,6 +121,17 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   (`setX(x => ...)`), never the rendered value. `userEvent` cannot catch this
   because it awaits a re-render between events, and nor can `fireEvent` — the
   regression test has to dispatch both clicks inside one `act()`.
+- 2026-07-28: the teacher roster fetched every review_state row and every
+  attempt for every member and rolled them up in JS → PostgREST silently
+  TRUNCATES at the project's "Max rows" cap (Supabase default 1000), so the
+  numbers would have quietly gone wrong as soon as a class was real — no error,
+  just a partial slice → aggregate in Postgres. General rule: any `.in(...)`
+  over a growing table is a truncation bug waiting to happen; if a query has no
+  natural bound, it belongs in an RPC.
+- 2026-07-28: `run.sh` counted assertions with `grep -cx 'f'`, which only
+  matches a WHOLE line — so a failing column inside a multi-column row
+  (`t|f|t`) was invisible. Fixed with `tr '|' '\n'`; it immediately surfaced 2
+  leaderboard assertions that had never been counted (11 → 13).
 - 2026-07-28: when driving the app from `javascript_tool`, clicking a chip and
   then Submit **in the same JS tick** submits the PRE-click state and looks like
   a bug → it is a test-driving artifact: real clicks are discrete events that

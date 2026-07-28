@@ -1,6 +1,8 @@
 import { getSupabase } from './client'
-import { ALL_ENTRIES } from '../content/loader'
-import { isDue, masteryWeight, type ReviewState } from '../scheduler/scheduler'
+import { ALL_ENTRIES, getEntry, topicOf } from '../content/loader'
+import { computeProgress, type TopicProgress } from '../app/progress'
+import { masteryWeight, type ReviewState } from '../scheduler/scheduler'
+import type { LocalizedText } from '../content/types'
 
 // Classroom data access (migration 0002). Everything here is gated by RLS on
 // the server: a teacher only ever receives rows for learners who themselves
@@ -25,23 +27,32 @@ export interface LearnerSummary {
   masteryPct: number
   accuracyPct: number | null
   attempts: number
-  /** skill tags with the worst accuracy, worst first (max 3) */
-  weakestSkills: string[]
 }
 
-interface RemoteReview {
+/** One row of `class_roster` (migration 0005) — already aggregated in Postgres. */
+export interface RosterRow {
   user_id: string
-  item_id: string
-  box: number
-  due_at: string
-  updated_at: string
+  display_name: string | null
+  joined_at: string
+  last_active_at: string | null
+  seen: number
+  mastered: number
+  due: number
+  /** counts for boxes 1..5, so the weighting rule stays in scheduler.ts */
+  box_counts: number[]
+  attempts: number
+  correct: number
 }
 
-interface RemoteAttempt {
-  user_id: string
+/** One row of `learner_item_stats` (migration 0005) — one per item touched. */
+export interface ItemStatRow {
   item_id: string
-  correct: boolean
-  created_at: string
+  box: number | null
+  due_at: string | null
+  attempts: number
+  wrong: number
+  last_wrong_at: string | null
+  last_at: string | null
 }
 
 const TOTAL_ITEMS = ALL_ENTRIES.length
@@ -168,6 +179,25 @@ export async function listJoinedClasses(): Promise<ClassRow[]> {
     .filter((c): c is ClassRow => Boolean(c))
 }
 
+/**
+ * Leave a class you joined. The learner's own progress is untouched — only the
+ * membership row goes, so the teacher stops seeing them. Allowed by the
+ * "leave or be removed" policy from migration 0002.
+ */
+export async function leaveClass(classId: string): Promise<void> {
+  const pending = getSupabase()
+  if (!pending) throw new Error('sync disabled')
+  const supabase = await pending
+  const { data: auth } = await supabase.auth.getUser()
+  if (!auth.user) throw new Error('not signed in')
+  const { error } = await supabase
+    .from('class_members')
+    .delete()
+    .eq('class_id', classId)
+    .eq('user_id', auth.user.id)
+  if (error) throw new Error(error.message)
+}
+
 export async function removeMember(
   classId: string,
   userId: string,
@@ -184,164 +214,215 @@ export async function removeMember(
 }
 
 /**
- * Roster for one class, with each learner's progress rolled up.
+ * Roster for one class, one row per learner.
  *
- * Three queries rather than one per learner: memberships, then all their
- * review_state rows, then all their attempts — each scoped by RLS.
+ * Aggregated in Postgres by `class_roster` (migration 0005) rather than here.
+ * The old client-side version fetched every review_state row and every attempt
+ * for every member, which PostgREST silently truncates at the project's "Max
+ * rows" cap — so the numbers quietly went wrong as soon as a class was real.
  */
-export async function getClassRoster(
-  classId: string,
-  now: number = Date.now(),
-): Promise<LearnerSummary[]> {
+export async function getClassRoster(classId: string): Promise<LearnerSummary[]> {
   const pending = getSupabase()
   if (!pending) return []
   const supabase = await pending
 
-  const { data: members, error: mErr } = await supabase
-    .from('class_members')
-    .select('user_id, joined_at')
-    .eq('class_id', classId)
-  if (mErr) throw new Error(mErr.message)
-  if (!members?.length) return []
-
-  const ids = (members as { user_id: string }[]).map((m) => m.user_id)
-
-  // profiles is fetched separately rather than embedded: class_members.user_id
-  // and profiles.id both reference auth.users, with no FK between the two
-  // tables, so PostgREST cannot infer a relationship to embed.
-  const [
-    { data: profiles, error: pErr },
-    { data: reviews, error: rErr },
-    { data: attempts, error: aErr },
-  ] = await Promise.all([
-    supabase.from('profiles').select('id, display_name').in('id', ids),
-    supabase
-      .from('review_state')
-      .select('user_id, item_id, box, due_at, updated_at')
-      .in('user_id', ids),
-    supabase
-      .from('attempts')
-      .select('user_id, item_id, correct, created_at')
-      .in('user_id', ids),
-  ])
-  if (pErr) throw new Error(pErr.message)
-  if (rErr) throw new Error(rErr.message)
-  if (aErr) throw new Error(aErr.message)
-
-  const nameById = new Map(
-    ((profiles ?? []) as { id: string; display_name: string | null }[]).map(
-      (p) => [p.id, p.display_name],
-    ),
-  )
-
-  return rollUp(
-    (members as { user_id: string; joined_at: string }[]).map((m) => ({
-      ...m,
-      profiles: { display_name: nameById.get(m.user_id) ?? null },
-    })),
-    (reviews ?? []) as RemoteReview[],
-    (attempts ?? []) as RemoteAttempt[],
-    now,
-  )
+  const { data, error } = await supabase.rpc('class_roster', {
+    p_class_id: classId,
+  })
+  if (error) throw new Error(error.message)
+  return mapRosterRows((data ?? []) as RosterRow[])
 }
 
 /**
- * Pure roll-up of raw rows into per-learner summaries. Split out from the
- * network call so it can be unit-tested.
+ * Pure mapping of aggregated rows into summaries. Separate from the network
+ * call so it can be unit-tested, and so the mastery WEIGHTING stays here in
+ * TypeScript next to scheduler.ts rather than being duplicated in SQL.
  */
-export function rollUp(
-  members: {
-    user_id: string
-    joined_at: string
-    profiles: { display_name: string | null } | null
-  }[],
-  reviews: RemoteReview[],
-  attempts: RemoteAttempt[],
-  now: number,
-): LearnerSummary[] {
-  const byUserReviews = new Map<string, RemoteReview[]>()
-  for (const r of reviews) {
-    const list = byUserReviews.get(r.user_id)
-    if (list) list.push(r)
-    else byUserReviews.set(r.user_id, [r])
-  }
-
-  const byUserAttempts = new Map<string, RemoteAttempt[]>()
-  for (const a of attempts) {
-    const list = byUserAttempts.get(a.user_id)
-    if (list) list.push(a)
-    else byUserAttempts.set(a.user_id, [a])
-  }
-
-  return members
-    .map((m) => {
-      const rs = byUserReviews.get(m.user_id) ?? []
-      const as = byUserAttempts.get(m.user_id) ?? []
-
-      let mastered = 0
-      let due = 0
-      let weightSum = 0
-      let lastActive = 0
-
-      for (const r of rs) {
-        if (r.box >= 5) mastered++
-        const state: ReviewState = {
-          box: r.box,
-          dueAt: Date.parse(r.due_at),
-          streak: 0,
-          lastResult: null,
-          updatedAt: Date.parse(r.updated_at),
-        }
-        if (isDue(state, now)) due++
-        weightSum += masteryWeight(state)
-        lastActive = Math.max(lastActive, state.updatedAt)
-      }
-      for (const a of as) {
-        lastActive = Math.max(lastActive, Date.parse(a.created_at))
-      }
-
-      const correct = as.filter((a) => a.correct).length
-
-      return {
-        userId: m.user_id,
-        displayName: m.profiles?.display_name ?? null,
-        joinedAt: m.joined_at,
-        lastActiveAt: lastActive ? new Date(lastActive).toISOString() : null,
-        seen: rs.length,
-        mastered,
-        due,
-        // denominator is the whole content set, matching the learner's own
-        // Progress screen
-        masteryPct: TOTAL_ITEMS
-          ? Math.round((weightSum / TOTAL_ITEMS) * 100)
-          : 0,
-        accuracyPct: as.length ? Math.round((correct / as.length) * 100) : null,
-        attempts: as.length,
-        weakestSkills: weakestSkills(as),
-      }
-    })
-    .sort((a, b) => {
-      // most recently active first; never-active last
-      const at = a.lastActiveAt ? Date.parse(a.lastActiveAt) : -1
-      const bt = b.lastActiveAt ? Date.parse(b.lastActiveAt) : -1
-      return bt - at
-    })
+export function mapRosterRows(rows: RosterRow[]): LearnerSummary[] {
+  return rows.map((r) => {
+    // box_counts[i] is the number of items sitting in box i+1
+    const weightSum = (r.box_counts ?? []).reduce(
+      (sum, n, i) => sum + Number(n) * boxWeight(i + 1),
+      0,
+    )
+    const attempts = Number(r.attempts)
+    const correct = Number(r.correct)
+    return {
+      userId: r.user_id,
+      displayName: r.display_name?.trim() ? r.display_name : null,
+      joinedAt: r.joined_at,
+      lastActiveAt: r.last_active_at,
+      seen: Number(r.seen),
+      mastered: Number(r.mastered),
+      due: Number(r.due),
+      // denominator is the whole content set, matching the learner's own
+      // Progress screen
+      masteryPct: TOTAL_ITEMS ? Math.round((weightSum / TOTAL_ITEMS) * 100) : 0,
+      accuracyPct: attempts ? Math.round((correct / attempts) * 100) : null,
+      attempts,
+    }
+  })
 }
 
-/** Skill tags with the worst accuracy (min 3 attempts), worst first, max 3. */
-function weakestSkills(attempts: RemoteAttempt[]): string[] {
+/** Mastery weight of a single box, via the scheduler so the rule has one home. */
+function boxWeight(box: number): number {
+  return masteryWeight({
+    box,
+    dueAt: 0,
+    streak: 0,
+    lastResult: null,
+    updatedAt: 0,
+  })
+}
+
+// --- one learner, in detail ------------------------------------------------
+
+export interface WeakSkill {
+  tag: string
+  attempts: number
+  wrong: number
+  wrongPct: number
+}
+
+export interface RecentMiss {
+  itemId: string
+  prompt: LocalizedText
+  topicTitle: LocalizedText | null
+  wrong: number
+  lastWrongAt: string
+}
+
+export interface LearnerDetail {
+  topics: TopicProgress[]
+  overallPct: number
+  seen: number
+  attempts: number
+  accuracyPct: number | null
+  weakest: WeakSkill[]
+  recentMisses: RecentMiss[]
+}
+
+/**
+ * Everything behind one learner's row: which TOPICS are weak, not just that
+ * the learner is struggling. Bounded by the content bank (one row per item
+ * touched), so unlike raw attempts it cannot outgrow the row cap.
+ */
+export async function getLearnerDetail(
+  classId: string,
+  userId: string,
+  now: number = Date.now(),
+): Promise<LearnerDetail> {
+  const pending = getSupabase()
+  if (!pending) return emptyDetail(now)
+  const supabase = await pending
+
+  const { data, error } = await supabase.rpc('learner_item_stats', {
+    p_class_id: classId,
+    p_user_id: userId,
+  })
+  if (error) throw new Error(error.message)
+  return rollUpDetail((data ?? []) as ItemStatRow[], now)
+}
+
+function emptyDetail(now: number): LearnerDetail {
+  const p = computeProgress(new Map(), now)
+  return {
+    topics: p.topics,
+    overallPct: p.overallPct,
+    seen: 0,
+    attempts: 0,
+    accuracyPct: null,
+    weakest: [],
+    recentMisses: [],
+  }
+}
+
+/** Pure roll-up of one learner's per-item rows. Unit-tested. */
+export function rollUpDetail(rows: ItemStatRow[], now: number): LearnerDetail {
+  // Reuse the learner's OWN progress computation, so a teacher and a learner
+  // can never be looking at two different definitions of the same number.
+  const reviewMap = new Map<string, ReviewState>()
+  for (const r of rows) {
+    if (r.box == null) continue
+    reviewMap.set(r.item_id, {
+      box: Number(r.box),
+      dueAt: r.due_at ? Date.parse(r.due_at) : 0,
+      streak: 0,
+      lastResult: null,
+      updatedAt: r.last_at ? Date.parse(r.last_at) : 0,
+    })
+  }
+  const progress = computeProgress(reviewMap, now)
+
+  let attempts = 0
+  let wrongTotal = 0
+  for (const r of rows) {
+    attempts += Number(r.attempts)
+    wrongTotal += Number(r.wrong)
+  }
+
+  return {
+    topics: progress.topics,
+    overallPct: progress.overallPct,
+    seen: progress.seenCount,
+    attempts,
+    accuracyPct: attempts
+      ? Math.round(((attempts - wrongTotal) / attempts) * 100)
+      : null,
+    weakest: weakestSkills(rows),
+    recentMisses: recentMisses(rows),
+  }
+}
+
+/**
+ * Skill tags the learner gets wrong most often (min 3 attempts), worst first.
+ *
+ * MECHANIC tags are excluded: `faded-step` describes how a question is
+ * presented, not anything a learner can be weak at, and reporting it as a
+ * "weakest skill" to a parent is just noise.
+ */
+const MECHANIC_TAGS = new Set(['faded-step'])
+
+export function weakestSkills(rows: ItemStatRow[], max = 3): WeakSkill[] {
   const tally = new Map<string, { n: number; wrong: number }>()
-  for (const a of attempts) {
-    for (const tag of SKILLS_BY_ITEM.get(a.item_id) ?? []) {
+  for (const r of rows) {
+    const n = Number(r.attempts)
+    if (!n) continue
+    for (const tag of SKILLS_BY_ITEM.get(r.item_id) ?? []) {
+      if (MECHANIC_TAGS.has(tag)) continue
       const t = tally.get(tag) ?? { n: 0, wrong: 0 }
-      t.n++
-      if (!a.correct) t.wrong++
+      t.n += n
+      t.wrong += Number(r.wrong)
       tally.set(tag, t)
     }
   }
   return [...tally.entries()]
     .filter(([, t]) => t.n >= 3 && t.wrong > 0)
-    .sort((a, b) => b[1].wrong / b[1].n - a[1].wrong / a[1].n)
-    .slice(0, 3)
-    .map(([tag]) => tag)
+    .map(([tag, t]) => ({
+      tag,
+      attempts: t.n,
+      wrong: t.wrong,
+      wrongPct: Math.round((t.wrong / t.n) * 100),
+    }))
+    .sort((a, b) => b.wrongPct - a.wrongPct || b.wrong - a.wrong)
+    .slice(0, max)
+}
+
+/** The items most recently got wrong — what to actually sit down and go over. */
+export function recentMisses(rows: ItemStatRow[], max = 5): RecentMiss[] {
+  return rows
+    .filter((r) => Number(r.wrong) > 0 && r.last_wrong_at)
+    .sort((a, b) => Date.parse(b.last_wrong_at!) - Date.parse(a.last_wrong_at!))
+    .slice(0, max)
+    .map((r) => {
+      const entry = getEntry(r.item_id)
+      return {
+        itemId: r.item_id,
+        // an id with no entry means content was removed after the attempt
+        prompt: entry?.item.prompt ?? { en: r.item_id, ms: r.item_id },
+        topicTitle: topicOf(r.item_id)?.title ?? null,
+        wrong: Number(r.wrong),
+        lastWrongAt: r.last_wrong_at!,
+      }
+    })
 }

@@ -42,8 +42,8 @@ for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" "$MIG/
   psql -q -d "$LB_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
 done
 LB=$(psql -qAt -d "$LB_DB" -f "$HERE/leaderboard_test.sql" 2>&1)
-LB_FALSE=$(echo "$LB" | grep -cx 'f' || true)
-LB_TRUE=$(echo "$LB" | grep -cx 't' || true)
+LB_FALSE=$(echo "$LB" | tr '|' '\n' | grep -cx 'f' || true)
+LB_TRUE=$(echo "$LB" | tr '|' '\n' | grep -cx 't' || true)
 LB_ERR=$(echo "$LB" | grep -cE 'FAIL_|ERROR' || true)
 echo "--- leaderboard: $LB_TRUE assertions true, $LB_FALSE false, $LB_ERR errors"
 dropdb --if-exists "$LB_DB"
@@ -63,14 +63,35 @@ for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" "$MIG/
   psql -q -d "$PU_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
 done
 PU=$(psql -qAt -d "$PU_DB" -f "$HERE/push_test.sql" 2>&1)
-PU_FALSE=$(echo "$PU" | grep -cx 'f' || true)
-PU_TRUE=$(echo "$PU" | grep -cx 't' || true)
+PU_FALSE=$(echo "$PU" | tr '|' '\n' | grep -cx 'f' || true)
+PU_TRUE=$(echo "$PU" | tr '|' '\n' | grep -cx 't' || true)
 PU_ERR=$(echo "$PU" | grep -cE 'FAIL_|ERROR' || true)
 echo "--- push reminders: $PU_TRUE assertions true, $PU_FALSE false, $PU_ERR errors"
 dropdb --if-exists "$PU_DB"
 if [ "$PU_FALSE" -gt 0 ] || [ "$PU_ERR" -gt 0 ]; then
   echo "$PU" | grep -E "FAIL_|ERROR"
   echo "✗ PUSH TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
+# roster roll-up suite, also on its own database
+RO_DB="${DB}_roster"
+dropdb --if-exists "$RO_DB"; createdb "$RO_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql"; do
+  psql -q -d "$RO_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+RO=$(psql -qAt -d "$RO_DB" -f "$HERE/roster_test.sql" 2>&1)
+RO_FALSE=$(echo "$RO" | tr '|' '\n' | grep -cx 'f' || true)
+RO_TRUE=$(echo "$RO" | tr '|' '\n' | grep -cx 't' || true)
+RO_ERR=$(echo "$RO" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- roster roll-up: $RO_TRUE assertions true, $RO_FALSE false, $RO_ERR errors"
+dropdb --if-exists "$RO_DB"
+if [ "$RO_FALSE" -gt 0 ] || [ "$RO_ERR" -gt 0 ]; then
+  echo "$RO" | grep -E "FAIL_|ERROR"
+  echo "✗ ROSTER TESTS FAILED"
   dropdb --if-exists "$DB"
   exit 1
 fi

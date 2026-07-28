@@ -149,6 +149,62 @@ export function accountMs(account: string): string {
   return ACCOUNT_GLOSSARY_MS[account] ?? account
 }
 
+/**
+ * Tags that describe HOW a question is presented rather than anything a
+ * learner can be weak at. They are excluded from the teacher's "weakest
+ * skills" — telling a parent their child's weakness is "faded-step" is noise.
+ */
+export const MECHANIC_SKILL_TAGS = new Set(['faded-step'])
+
+/**
+ * Human, bilingual names for skill tags. The raw tags are kebab-case slugs
+ * written for the author, not for a parent reading a progress card — and this
+ * app is BM-first, so an English slug is doubly wrong on screen.
+ */
+export const SKILL_LABELS: Record<string, LocalizedText> = {
+  equation: { en: 'The accounting equation', ms: 'Persamaan perakaunan' },
+  classification: { en: 'Classifying accounts', ms: 'Mengelas akaun' },
+  equity: { en: 'Equity', ms: 'Ekuiti' },
+  inventory: { en: 'Inventory', ms: 'Inventori' },
+  'debit-credit': { en: 'Debit & credit', ms: 'Debit & kredit' },
+  'double-entry': { en: 'Double entry', ms: 'Catatan bergu' },
+  'credit-purchase': { en: 'Credit purchases', ms: 'Belian kredit' },
+  receivable: { en: 'Receivables', ms: 'Penghutang' },
+  ledger: { en: 'Ledger & T-accounts', ms: 'Lejar & akaun T' },
+  'trial-balance': { en: 'Trial balance', ms: 'Imbangan duga' },
+  'income-statement': { en: 'Income statement', ms: 'Penyata pendapatan' },
+  'financial-position': {
+    en: 'Statement of financial position',
+    ms: 'Penyata kedudukan kewangan',
+  },
+  'statement-placement': { en: 'Where a figure belongs', ms: 'Penempatan angka' },
+  accruals: { en: 'Accruals', ms: 'Terakru' },
+  prepayments: { en: 'Prepayments', ms: 'Prabayar' },
+  depreciation: { en: 'Depreciation', ms: 'Susut nilai' },
+  'bad-debts': { en: 'Bad debts', ms: 'Hutang lapuk' },
+  provision: {
+    en: 'Provision for doubtful debts',
+    ms: 'Peruntukan hutang ragu',
+  },
+  'bank-reconciliation': { en: 'Bank reconciliation', ms: 'Penyesuaian bank' },
+  'control-accounts': { en: 'Control accounts', ms: 'Akaun kawalan' },
+  'error-types': { en: 'Types of error', ms: 'Jenis kesilapan' },
+  suspense: { en: 'Suspense account', ms: 'Akaun penyelesaian' },
+  'incomplete-records': { en: 'Incomplete records', ms: 'Rekod tak lengkap' },
+  'club-accounts': { en: 'Club accounts', ms: 'Akaun kelab' },
+  subscriptions: { en: 'Subscriptions', ms: 'Yuran' },
+  partnership: { en: 'Partnership', ms: 'Perkongsian' },
+  appropriation: { en: 'Profit appropriation', ms: 'Pengagihan untung' },
+  'faded-step': { en: 'Faded workings', ms: 'Kerja kira dilunturkan' },
+}
+
+/** Readable name for a skill tag, falling back to the slug de-kebabed. */
+export function skillLabel(tag: string, locale: Locale): string {
+  const label = SKILL_LABELS[tag]
+  if (label) return t(label, locale)
+  return tag.replace(/-/g, ' ')
+}
+
 /** Localized label for a single account (English canonical -> display). */
 export function localizedAccount(
   account: string,

@@ -144,6 +144,32 @@ export const UI = {
   lastActive: { en: 'Last active', ms: 'Aktif kali akhir' },
   never: { en: 'Never', ms: 'Tidak pernah' },
   weakest: { en: 'Needs work', ms: 'Perlu latihan' },
+  // relative times — these render on every roster card, so they must localize
+  today: { en: 'today', ms: 'hari ini' },
+  yesterday: { en: 'yesterday', ms: 'semalam' },
+  daysAgo: { en: '{n}d ago', ms: '{n} hari lalu' },
+  monthsAgo: { en: '{n}mo ago', ms: '{n} bulan lalu' },
+  // learner detail
+  viewProgress: { en: 'See details', ms: 'Lihat butiran' },
+  byTopic: { en: 'By topic', ms: 'Mengikut topik' },
+  recentMisses: { en: 'Recently got wrong', ms: 'Baru-baru ini salah' },
+  noMisses: {
+    en: 'Nothing wrong yet — or not enough practice to tell.',
+    ms: 'Belum ada yang salah — atau latihan belum cukup.',
+  },
+  notPractised: { en: 'Not practised yet', ms: 'Belum dilatih' },
+  timesWrong: { en: '× wrong', ms: '× salah' },
+  // leaving a class
+  leaveClass: { en: 'Leave class', ms: 'Tinggalkan kelas' },
+  leaveConfirm: {
+    en: 'Leave this class? Your progress stays on your own account — the teacher just stops seeing it.',
+    ms: 'Tinggalkan kelas ini? Kemajuan anda kekal dalam akaun anda — guru cuma tidak lagi melihatnya.',
+  },
+  // parent framing
+  parentHint: {
+    en: 'Tracking one child? Make a class, then enter its code once on their device.',
+    ms: 'Menjejak seorang anak? Buat satu kelas, kemudian masukkan kodnya sekali pada peranti mereka.',
+  },
   remove: { en: 'Remove', ms: 'Buang' },
   removeConfirm: {
     en: 'Remove this learner from the class? Their progress is not deleted.',

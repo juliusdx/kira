@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ALL_ENTRIES, CONTENT } from './loader'
+import { ALL_ENTRIES, CONTENT, MECHANIC_SKILL_TAGS, SKILL_LABELS } from './loader'
 import {
   blankSteps,
   fadedChoicePool,
@@ -244,6 +244,22 @@ describe('content bank — faded steps', () => {
           ).toBeGreaterThan(counts[0])
       }
     }
+  })
+})
+
+describe('content bank — skill tags', () => {
+  it('every tag used by an item has a bilingual human name', () => {
+    // The teacher/parent view renders these, so an unlabelled tag would show a
+    // raw kebab-case slug on a progress card — in an app that defaults to BM.
+    const used = new Set(items.flatMap((i) => i.skill_tags ?? []))
+    const missing = [...used].filter((tag) => !bilingual(SKILL_LABELS[tag]))
+    expect(missing, `skill tags with no SKILL_LABELS entry`).toEqual([])
+  })
+
+  it('every mechanic tag is a real tag, so the exclusion still bites', () => {
+    const used = new Set(items.flatMap((i) => i.skill_tags ?? []))
+    for (const tag of MECHANIC_SKILL_TAGS)
+      expect(used.has(tag), `${tag} is excluded but no item uses it`).toBe(true)
   })
 })
 

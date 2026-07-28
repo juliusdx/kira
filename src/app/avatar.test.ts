@@ -43,6 +43,23 @@ describe('avatarFor', () => {
   })
 })
 
+describe('the allow-list matches the database', () => {
+  it('SQL CHECK constraint and AVATARS hold exactly the same faces', async () => {
+    // The constraint in migration 0006 is the real boundary — profiles has a
+    // self-service RLS policy, so a learner can write their own row directly.
+    // If the two lists drift, a face offered in the picker is rejected on save
+    // (or worse, one the picker never offers becomes writable).
+    const { readFileSync } = await import('node:fs')
+    const sql = readFileSync('supabase/migrations/0006_avatars.sql', 'utf8')
+    const block = sql.slice(
+      sql.indexOf('profiles_avatar_allowed check ('),
+      sql.indexOf('-- ---', sql.indexOf('profiles_avatar_allowed check (')),
+    )
+    const inSql = [...block.matchAll(/'([^']+)'/g)].map((m) => m[1])
+    expect(inSql.sort()).toEqual([...AVATARS].sort())
+  })
+})
+
 describe('hashSeed', () => {
   it('is deterministic and unsigned', () => {
     expect(hashSeed('abc')).toBe(hashSeed('abc'))

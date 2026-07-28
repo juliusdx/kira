@@ -22,7 +22,7 @@ import { Account } from '../components/Account'
 import { Classes } from '../components/Classes'
 import { Badges } from '../components/Badges'
 import { ProfileSheet } from '../components/ProfileSheet'
-import { getProfile, type LocalProfile } from './profile'
+import { getProfile, pullProfile, type LocalProfile } from './profile'
 import { ensureSession } from '../sync/client'
 
 type Screen =
@@ -71,7 +71,11 @@ export function App() {
 
   useEffect(() => {
     if (!SYNC_ENABLED) return
-    void ensureSession().then(setUserId)
+    void ensureSession().then(async (id) => {
+      setUserId(id)
+      // name + face follow the account, so a new device is not anonymous
+      setProfile(await pullProfile())
+    })
   }, [])
 
   // Pull anything this device missed, then keep syncing when we come back

@@ -12,12 +12,13 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 145 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 146 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
-  Postgres, applies all 5 migrations, runs 22 RLS + 13 leaderboard + 15 push
-  + 23 roster assertions. **Run this before handing Julius any new migration.**
+  Postgres, applies all 6 migrations, runs 22 RLS + 13 leaderboard + 15 push
+  + 23 roster + 14 avatar assertions. **Run this before handing Julius any new
+  migration.**
 - Types: `npm run typecheck`
 - Build: `npm run build`
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
@@ -51,7 +52,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   and pushed to Supabase as a best effort. The name used to live only in the
   cloud `profiles` table, which meant a learner practising alone could never
   set one.
-- `supabase/migrations/000{1..5}_*.sql` — applied BY HAND via the SQL Editor
+- `supabase/migrations/000{1..6}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
@@ -96,6 +97,11 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   truncating. Adds a per-learner detail view (per-topic bars, weakest skills,
   recent misses), bilingual skill names, localized relative times, and
   leave-class.
+- **2026-07-28 — MIGRATION 0006 (avatars) WRITTEN, NOT YET APPLIED.** Safe to
+  deploy ahead of it: every new cloud call is wrapped, and prod returns
+  PGRST202 / 42703 which the client already swallows (verified live). Until it
+  is applied a chosen face is device-local; after, it follows the account and
+  shows on the leaderboard and roster. Delete this bullet once applied.
 - **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)

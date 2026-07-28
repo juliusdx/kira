@@ -16,6 +16,7 @@ const iso = (t: number) => new Date(t).toISOString()
 const rosterRow = (over: Partial<RosterRow> = {}): RosterRow => ({
   user_id: 'u1',
   display_name: 'Aina',
+  avatar: null,
   joined_at: iso(NOW - 10 * day),
   last_active_at: iso(NOW - day),
   seen: 2,
@@ -42,6 +43,7 @@ describe('mapRosterRows', () => {
   it('passes the server aggregates through and derives accuracy', () => {
     const [row] = mapRosterRows([rosterRow()])
     expect(row.displayName).toBe('Aina')
+    expect(row.avatar).toBeNull()
     expect(row.seen).toBe(2)
     expect(row.mastered).toBe(1)
     expect(row.due).toBe(1)

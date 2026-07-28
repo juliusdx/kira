@@ -20,6 +20,7 @@ import type { UIKey } from '../i18n/strings'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
 import { Leaderboard } from './Leaderboard'
+import { Avatar } from './play'
 
 // Teacher dashboard + learner join flow. All reads are RLS-gated server-side:
 // a teacher only ever receives rows for learners who joined their class.
@@ -327,12 +328,13 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
 
       {rows?.map((r) => (
         <Card key={r.userId}>
-          <div className="flex items-baseline justify-between gap-2">
-            <span className="truncate font-semibold">
+          <div className="flex items-center gap-2.5">
+            <Avatar seed={r.userId} chosen={r.avatar} size="sm" />
+            <span className="min-w-0 flex-1 truncate font-semibold">
               {r.displayName ?? `${r.userId.slice(0, 8)}…`}
             </span>
             <span className="shrink-0 text-xs text-slate-500 dark:text-slate-400">
-              {t('lastActive')}: {relativeTime(r.lastActiveAt, t)}
+              {relativeTime(r.lastActiveAt, t)}
             </span>
           </div>
 
@@ -419,7 +421,10 @@ function LearnerDetailView({
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col gap-4 px-5 py-6">
       <header className="flex items-center justify-between gap-2">
-        <h1 className="truncate text-xl font-bold">{name}</h1>
+        <div className="flex min-w-0 items-center gap-2.5">
+          <Avatar seed={learner.userId} chosen={learner.avatar} />
+          <h1 className="truncate text-xl font-bold">{name}</h1>
+        </div>
         <Button variant="ghost" onClick={onBack}>
           {t('back')}
         </Button>

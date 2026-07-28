@@ -9,8 +9,7 @@ import { SYNC_ENABLED } from '../sync/client'
 // lives in Dexie, and is pushed to the cloud as a best effort so the teacher's
 // roster and the leaderboard still show it.
 //
-// The avatar is local-only for now; migration 0006 adds the column that lets it
-// travel with the account.
+// Both travel with the account: display_name since 0001, avatar since 0006.
 
 const NAME_KEY = 'profile.name'
 const AVATAR_KEY = 'profile.avatar'
@@ -54,4 +53,36 @@ export async function setName(name: string): Promise<string | null> {
 
 export async function setAvatar(emoji: string): Promise<void> {
   await setMeta(AVATAR_KEY, emoji)
+  if (!SYNC_ENABLED) return
+  try {
+    const { setAvatar: push } = await import('../sync/classes')
+    await push(emoji)
+  } catch {
+    // offline or signed out — the local choice still stands
+  }
+}
+
+/**
+ * Adopt the identity stored against the account. Called once the session is
+ * known, so a learner who signs in on a NEW device gets their name and face
+ * back rather than starting anonymous; anything already set locally wins, so
+ * this never overwrites a choice made on this device.
+ */
+export async function pullProfile(): Promise<LocalProfile> {
+  const local = await getProfile()
+  if (!SYNC_ENABLED || (local.name && local.avatar)) return local
+  try {
+    const { getMyProfile } = await import('../sync/classes')
+    const remote = await getMyProfile()
+    if (!remote) return local
+    const merged: LocalProfile = {
+      name: local.name ?? clean(remote.display_name),
+      avatar: local.avatar ?? remote.avatar ?? null,
+    }
+    if (merged.name !== local.name) await setMeta(NAME_KEY, merged.name)
+    if (merged.avatar !== local.avatar) await setMeta(AVATAR_KEY, merged.avatar)
+    return merged
+  } catch {
+    return local
+  }
 }

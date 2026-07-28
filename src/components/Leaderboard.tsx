@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useKira } from '../app/KiraContext'
 import { Card } from './ui'
+import { Avatar } from './play'
 import { getLeaderboard, type LeaderRow } from '../sync/classes'
 import { getIdentity } from '../sync/identity'
 
@@ -67,6 +68,7 @@ export function Leaderboard({ classId }: { classId: string }) {
               <span className="w-6 shrink-0 text-center text-sm font-bold tabular-nums text-slate-400">
                 {MEDALS[i] ?? i + 1}
               </span>
+              <Avatar seed={r.userId} chosen={r.avatar} size="sm" />
               <span
                 className={`min-w-0 flex-1 truncate text-sm ${
                   mine

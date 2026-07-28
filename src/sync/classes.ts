@@ -18,6 +18,8 @@ export interface ClassRow {
 export interface LearnerSummary {
   userId: string
   displayName: string | null
+  /** the face the learner chose; null means fall back to the derived one */
+  avatar: string | null
   joinedAt: string
   /** null when the learner has not synced anything yet */
   lastActiveAt: string | null
@@ -33,6 +35,7 @@ export interface LearnerSummary {
 export interface RosterRow {
   user_id: string
   display_name: string | null
+  avatar: string | null
   joined_at: string
   last_active_at: string | null
   seen: number
@@ -99,6 +102,7 @@ export async function joinClass(code: string): Promise<string> {
 export interface LeaderRow {
   userId: string
   displayName: string
+  avatar: string | null
   score: number
 }
 
@@ -121,10 +125,16 @@ export async function getLeaderboard(
   })
   if (error) throw new Error(error.message)
   return (
-    (data ?? []) as { user_id: string; display_name: string; score: number }[]
+    (data ?? []) as {
+      user_id: string
+      display_name: string
+      avatar: string | null
+      score: number
+    }[]
   ).map((r) => ({
     userId: r.user_id,
     displayName: r.display_name,
+    avatar: r.avatar ?? null,
     score: Number(r.score),
   }))
 }
@@ -139,6 +149,35 @@ export async function setDisplayName(name: string): Promise<string | null> {
   })
   if (error) throw new Error(error.message)
   return (data as string | null) ?? null
+}
+
+/** Store the learner's chosen face. The DB allow-list rejects anything else. */
+export async function setAvatar(emoji: string): Promise<string | null> {
+  const pending = getSupabase()
+  if (!pending) throw new Error('sync disabled')
+  const supabase = await pending
+  const { data, error } = await supabase.rpc('set_avatar', { p_avatar: emoji })
+  if (error) throw new Error(error.message)
+  return (data as string | null) ?? null
+}
+
+/** The signed-in learner's own profile row, for restoring it on a new device. */
+export async function getMyProfile(): Promise<{
+  display_name: string | null
+  avatar: string | null
+} | null> {
+  const pending = getSupabase()
+  if (!pending) return null
+  const supabase = await pending
+  const { data: auth } = await supabase.auth.getUser()
+  if (!auth.user) return null
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('display_name, avatar')
+    .eq('id', auth.user.id)
+    .maybeSingle()
+  if (error) throw new Error(error.message)
+  return (data as { display_name: string | null; avatar: string | null } | null) ?? null
 }
 
 /** Issue a fresh join code for a class you own; the old code stops working. */
@@ -250,6 +289,7 @@ export function mapRosterRows(rows: RosterRow[]): LearnerSummary[] {
     return {
       userId: r.user_id,
       displayName: r.display_name?.trim() ? r.display_name : null,
+      avatar: r.avatar ?? null,
       joinedAt: r.joined_at,
       lastActiveAt: r.last_active_at,
       seen: Number(r.seen),

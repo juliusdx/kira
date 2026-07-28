@@ -80,7 +80,7 @@ RO_DB="${DB}_roster"
 dropdb --if-exists "$RO_DB"; createdb "$RO_DB"
 for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
          "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
-         "$MIG/0005_roster_rollup.sql"; do
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql"; do
   psql -q -d "$RO_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
 done
 RO=$(psql -qAt -d "$RO_DB" -f "$HERE/roster_test.sql" 2>&1)
@@ -92,6 +92,27 @@ dropdb --if-exists "$RO_DB"
 if [ "$RO_FALSE" -gt 0 ] || [ "$RO_ERR" -gt 0 ]; then
   echo "$RO" | grep -E "FAIL_|ERROR"
   echo "✗ ROSTER TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
+# avatar suite, also on its own database
+AV_DB="${DB}_avatar"
+dropdb --if-exists "$AV_DB"; createdb "$AV_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql"; do
+  psql -q -d "$AV_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+AV=$(psql -qAt -d "$AV_DB" -f "$HERE/avatar_test.sql" 2>&1)
+AV_FALSE=$(echo "$AV" | tr '|' '\n' | grep -cx 'f' || true)
+AV_TRUE=$(echo "$AV" | tr '|' '\n' | grep -cx 't' || true)
+AV_ERR=$(echo "$AV" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- avatars: $AV_TRUE assertions true, $AV_FALSE false, $AV_ERR errors"
+dropdb --if-exists "$AV_DB"
+if [ "$AV_FALSE" -gt 0 ] || [ "$AV_ERR" -gt 0 ]; then
+  echo "$AV" | grep -E "FAIL_|ERROR"
+  echo "✗ AVATAR TESTS FAILED"
   dropdb --if-exists "$DB"
   exit 1
 fi

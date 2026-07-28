@@ -97,11 +97,11 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   truncating. Adds a per-learner detail view (per-topic bars, weakest skills,
   recent misses), bilingual skill names, localized relative times, and
   leave-class.
-- **2026-07-28 — MIGRATION 0006 (avatars) WRITTEN, NOT YET APPLIED.** Safe to
-  deploy ahead of it: every new cloud call is wrapped, and prod returns
-  PGRST202 / 42703 which the client already swallows (verified live). Until it
-  is applied a chosen face is device-local; after, it follows the account and
-  shows on the leaderboard and roster. Delete this bullet once applied.
+- **2026-07-28** — Learner-side restyle (`components/play.tsx`): Home as a
+  dashboard with a mastery ring and next-badge nudge, a badges collection
+  screen, a bigger session-end moment, and name + emoji avatar reachable by
+  every learner. Migration 0006 APPLIED and verified live — a chosen face
+  follows the account and shows on the leaderboard and the teacher's roster.
 - **Also open:** Stage 7+ content, FSRS scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
@@ -147,6 +147,13 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   matches a WHOLE line — so a failing column inside a multi-column row
   (`t|f|t`) was invisible. Fixed with `tr '|' '\n'`; it immediately surfaced 2
   leaderboard assertions that had never been counted (11 → 13).
+- 2026-07-28: a migration was pasted in HALVES (a snippet in chat + "copy the
+  rest with pbcopy") and only the first half ran — the column and CHECK
+  constraint landed, all three functions did not. It looked exactly like a
+  stale PostgREST schema cache; `select proname from pg_proc` is what
+  distinguished "never created" from "created but not visible to the API" →
+  hand over a migration as ONE block, never split, and diagnose via pg_proc
+  before blaming the cache.
 - 2026-07-28: verifying against prod by creating a throwaway anonymous learner
   in the browser leaves ORPHAN rows — RLS only lets a user delete their own
   data, and a page reload throws the probe's access token away with it →

@@ -135,6 +135,56 @@ describe.skipIf(!configured)('roster RPCs — against live Supabase', () => {
     })
     expect(peekErr, 'a stranger could read a learner').not.toBeNull()
 
+    // --- avatars (migration 0006) ------------------------------------------
+    const { error: avErr } = await learner.rpc('set_avatar', { p_avatar: '🦊' })
+    expect(avErr, avErr?.message).toBeNull()
+
+    // THE KEY GUARD, live: profiles has a self-service RLS policy, so a learner
+    // can write their own row DIRECTLY and skip the RPC. Whatever lands here is
+    // drawn on classmates' and the teacher's screens, so the database — not the
+    // client — has to be what refuses it.
+    const junk = await learner
+      .from('profiles')
+      .update({ avatar: 'BUY CHEAP PILLS' })
+      .eq('id', learnerId)
+    expect(junk.error, 'the database accepted arbitrary avatar text').not.toBeNull()
+
+    // and the real value survived the attempt
+    const mine = await learner
+      .from('profiles')
+      .select('display_name, avatar')
+      .eq('id', learnerId)
+      .maybeSingle()
+    expect(mine.error, mine.error?.message).toBeNull()
+    expect((mine.data as { avatar: string }).avatar).toBe('🦊')
+
+    // it reaches the teacher's roster ...
+    const { data: roster2 } = await teacher.rpc('class_roster', { p_class_id: classId })
+    const withFace = mapRosterRows((roster2 ?? []) as RosterRow[]).find(
+      (r) => r.userId === learnerId,
+    )
+    expect(withFace?.avatar).toBe('🦊')
+
+    // ... and the classmate-facing leaderboard
+    const { data: board, error: bErr } = await learner.rpc('class_leaderboard', {
+      p_class_id: classId,
+      p_since: new Date(Date.now() - 7 * 86_400_000).toISOString(),
+    })
+    expect(bErr, bErr?.message).toBeNull()
+    const boardRow = ((board ?? []) as { user_id: string; avatar: string | null }[]).find(
+      (r) => r.user_id === learnerId,
+    )
+    expect(boardRow?.avatar).toBe('🦊')
+
+    // clearing falls back to the derived face
+    await learner.rpc('set_avatar', { p_avatar: null })
+    const cleared = await learner
+      .from('profiles')
+      .select('avatar')
+      .eq('id', learnerId)
+      .maybeSingle()
+    expect((cleared.data as { avatar: string | null }).avatar).toBeNull()
+
     // --- clean up the learner's probe rows ---------------------------------
     await learner.from('attempts').delete().eq('item_id', PROBE)
     await learner.from('review_state').delete().eq('item_id', PROBE)

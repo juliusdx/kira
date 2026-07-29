@@ -260,8 +260,32 @@ export async function leaveClass(classId: string): Promise<void> {
     .eq('class_id', classId)
     .eq('user_id', auth.user.id)
   if (error) throw new Error(error.message)
+
+  // Same read-back as removeMember, and for the same reason: 204 is what an
+  // RLS-filtered delete returns, so the status cannot be believed on its own.
+  const { data: still, error: readErr } = await supabase
+    .from('class_members')
+    .select('user_id')
+    .eq('class_id', classId)
+    .eq('user_id', auth.user.id)
+  if (readErr) return
+  if ((still ?? []).length > 0) {
+    throw new Error('you are still a member of this class')
+  }
 }
 
+/**
+ * Remove a learner from a class.
+ *
+ * Reads the membership back instead of trusting the status, because PostgREST
+ * answers an RLS-filtered DELETE with 204 — the same thing it says when the
+ * delete worked. Without the read-back a refused removal is indistinguishable
+ * from a successful one, and the teacher is told the learner is gone while the
+ * roster keeps serving them.
+ *
+ * An already-absent member is a SUCCESS, not an error: the caller asked for
+ * "not in this class", and that is the state either way.
+ */
 export async function removeMember(
   classId: string,
   userId: string,
@@ -275,6 +299,17 @@ export async function removeMember(
     .eq('class_id', classId)
     .eq('user_id', userId)
   if (error) throw new Error(error.message)
+
+  const { data: still, error: readErr } = await supabase
+    .from('class_members')
+    .select('user_id')
+    .eq('class_id', classId)
+    .eq('user_id', userId)
+  // A failed verification is not a failed removal — say only what is known.
+  if (readErr) return
+  if ((still ?? []).length > 0) {
+    throw new Error('the learner is still a member of this class')
+  }
 }
 
 /**

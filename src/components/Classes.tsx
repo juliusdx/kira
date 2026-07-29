@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useKira } from '../app/KiraContext'
 import { Button, Card, FOCUS, ProgressBar } from './ui'
 import {
@@ -22,6 +22,7 @@ import { copyText } from '../lib/clipboard'
 import { buildAuthoringBrief } from '../lib/authoringBrief'
 import { describeChosen } from '../lib/chosenAnswer'
 import { getItemNotes, saveItemNote, NOTE_MAX, type SaveResult } from '../sync/notes'
+import { friendlyClassError, isOffline } from '../sync/classErrors'
 import { Leaderboard } from './Leaderboard'
 import { ItemPreview } from './ItemPreview'
 import { Avatar } from './play'
@@ -36,6 +37,112 @@ const input =
 /** ABCD-EFGH-IJKL — the stored code has no separators. */
 function formatCode(code: string): string {
   return code.replace(/(.{4})(?=.)/g, '$1-')
+}
+
+/**
+ * Turn whatever the network threw into something a parent can act on, and keep
+ * the raw text when we do not recognise it — this screen has no local fallback
+ * to compare against, so a swallowed error would be invisible.
+ */
+function useErrorText() {
+  const { t } = useKira()
+  // The returned function must be referentially STABLE. It is a dependency of
+  // the load callbacks below, which are in turn dependencies of the effects
+  // that fetch — and `useKira()` hands back a fresh `t` on every render. With
+  // `[t]` here, every render produced a new fetch callback, so the mount
+  // effect became an every-render effect: a reload loop against the RPC that
+  // also stomped the teacher's just-saved note state on each pass.
+  const latest = useRef(t)
+  latest.current = t
+  return useCallback((e: unknown): string => {
+    const raw = e instanceof Error ? e.message : String(e)
+    const friendly = friendlyClassError(raw)
+    const say = latest.current
+    return friendly.raw ? `${say(friendly.key)} (${friendly.raw})` : say(friendly.key)
+  }, [])
+}
+
+/**
+ * "as of 14:32" under a report. A progress report with no timestamp invites
+ * the reader to believe it is live; this one is a snapshot taken when the
+ * screen opened, and a parent watching their child practise in the next room
+ * needs to know which.
+ */
+export function freshness(
+  loadedAt: number | null,
+  t: (k: UIKey) => string,
+  now: number = Date.now(),
+): string {
+  if (loadedAt === null) return ''
+  const mins = Math.floor((now - loadedAt) / 60_000)
+  const when =
+    mins < 1
+      ? t('justNow')
+      : mins < 60
+        ? t('minutesAgo').replace('{n}', String(mins))
+        : t('hoursAgo').replace('{n}', String(Math.floor(mins / 60)))
+  return t('asOf').replace('{t}', when)
+}
+
+/**
+ * A report header: what you are looking at, when it was taken, and a way to
+ * take it again. Every teacher screen loaded once on mount and then sat there
+ * looking authoritative for as long as it was open.
+ */
+function ReportHeader({
+  loadedAt,
+  busy,
+  onRefresh,
+}: {
+  loadedAt: number | null
+  busy: boolean
+  onRefresh: () => void
+}) {
+  const { t } = useKira()
+  const [, tick] = useState(0)
+  // Re-render once a minute so "as of just now" does not stay "just now" for
+  // an hour. Cheap: one setState on a screen with no animation.
+  useEffect(() => {
+    const id = setInterval(() => tick((n) => n + 1), 60_000)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <div className="flex items-baseline justify-between gap-2 px-1">
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        {busy ? t('refreshing') : freshness(loadedAt, t)}
+      </p>
+      <button
+        onClick={onRefresh}
+        disabled={busy}
+        className={`shrink-0 rounded-lg px-2 py-1 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 disabled:opacity-50 dark:text-indigo-400 dark:hover:bg-indigo-500/10 ${FOCUS}`}
+      >
+        {t('refresh')}
+      </button>
+    </div>
+  )
+}
+
+/** Shown while the browser reports no connection, on the one screen that needs it. */
+function OfflineBanner() {
+  const { t } = useKira()
+  const [offline, setOffline] = useState(isOffline())
+  useEffect(() => {
+    const on = () => setOffline(false)
+    const off = () => setOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => {
+      window.removeEventListener('online', on)
+      window.removeEventListener('offline', off)
+    }
+  }, [])
+  if (!offline) return null
+  return (
+    <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">
+      {t('offlineBanner')}
+    </p>
+  )
 }
 
 /**
@@ -57,6 +164,7 @@ export function relativeTime(
 
 export function Classes({ onBack }: { onBack: () => void }) {
   const { t } = useKira()
+  const errorText = useErrorText()
   const [mine, setMine] = useState<ClassRow[]>([])
   const [joined, setJoined] = useState<ClassRow[]>([])
   const [open, setOpen] = useState<ClassRow | null>(null)
@@ -81,11 +189,11 @@ export function Classes({ onBack }: { onBack: () => void }) {
       setHasEmail(Boolean(id?.email))
       setError(null)
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      setError(errorText(e))
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [errorText])
 
   useEffect(() => {
     void refresh()
@@ -99,11 +207,11 @@ export function Classes({ onBack }: { onBack: () => void }) {
       setCode('')
       await refresh()
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      setError(errorText(e))
     } finally {
       setBusy(false)
     }
-  }, [code, refresh])
+  }, [code, refresh, errorText])
 
   const doCreate = useCallback(async () => {
     setBusy(true)
@@ -113,11 +221,11 @@ export function Classes({ onBack }: { onBack: () => void }) {
       setNewName('')
       await refresh()
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      setError(errorText(e))
     } finally {
       setBusy(false)
     }
-  }, [newName, refresh])
+  }, [newName, refresh, errorText])
 
   if (open) {
     return <Roster cls={open} onBack={() => { setOpen(null); void refresh() }} />
@@ -173,7 +281,7 @@ export function Classes({ onBack }: { onBack: () => void }) {
                       await leaveClass(c.id)
                       await refresh()
                     } catch (e) {
-                      setError(e instanceof Error ? e.message : String(e))
+                      setError(errorText(e))
                     }
                   }}
                 >
@@ -238,20 +346,27 @@ export function Classes({ onBack }: { onBack: () => void }) {
 
 function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
   const { t } = useKira()
+  const errorText = useErrorText()
   const [rows, setRows] = useState<LearnerSummary[] | null>(null)
   const [code, setCode] = useState(cls.join_code)
   const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
   const [error, setError] = useState<string | null>(null)
   const [detailOf, setDetailOf] = useState<LearnerSummary | null>(null)
+  const [loadedAt, setLoadedAt] = useState<number | null>(null)
+  const [busy, setBusy] = useState(false)
 
   const refresh = useCallback(async () => {
+    setBusy(true)
     try {
       setRows(await getClassRoster(cls.id))
+      setLoadedAt(Date.now())
       setError(null)
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      setError(errorText(e))
+    } finally {
+      setBusy(false)
     }
-  }, [cls.id])
+  }, [cls.id, errorText])
 
   useEffect(() => {
     void refresh()
@@ -262,7 +377,13 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
       <LearnerDetailView
         cls={cls}
         learner={detailOf}
-        onBack={() => setDetailOf(null)}
+        // Re-read the roster on the way back: the teacher has just been looking
+        // at a detail screen that may itself have been refreshed, and two
+        // disagreeing snapshots of the same learner is worse than one old one.
+        onBack={() => {
+          setDetailOf(null)
+          void refresh()
+        }}
       />
     )
 
@@ -274,6 +395,9 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
           {t('back')}
         </Button>
       </header>
+
+      <OfflineBanner />
+      <ReportHeader loadedAt={loadedAt} busy={busy} onRefresh={() => void refresh()} />
 
       <Card>
         <p className="text-sm text-slate-500 dark:text-slate-400">{t('shareCode')}</p>
@@ -302,7 +426,7 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
               try {
                 setCode(await rotateJoinCode(cls.id))
               } catch (e) {
-                setError(e instanceof Error ? e.message : String(e))
+                setError(errorText(e))
               }
             }}
           >
@@ -380,7 +504,16 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
               className="text-sm"
               onClick={async () => {
                 if (!confirm(t('removeConfirm'))) return
-                await removeMember(cls.id, r.userId)
+                // The only mutation on this screen that used to run bare. A
+                // refused delete answers 204 exactly like a successful one, so
+                // removeMember reads the membership back — and the failure has
+                // to surface here or the teacher is told it worked.
+                try {
+                  await removeMember(cls.id, r.userId)
+                  setError(null)
+                } catch (e) {
+                  setError(errorText(e))
+                }
                 await refresh()
               }}
             >
@@ -410,6 +543,7 @@ export function LearnerDetailView({
   onBack: () => void
 }) {
   const { t, locale } = useKira()
+  const errorText = useErrorText()
   const [detail, setDetail] = useState<LearnerDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [openMiss, setOpenMiss] = useState<string | null>(null)
@@ -420,25 +554,36 @@ export function LearnerDetailView({
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [saved, setSaved] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<Record<string, SaveResult | 'saving'>>({})
+  const [loadedAt, setLoadedAt] = useState<number | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  /**
+   * Reload the report. Note what it does NOT touch: `notes`, the teacher's
+   * working copy. Refreshing a report while someone is halfway through writing
+   * an explanation must not take the sentence out from under them.
+   */
+  const load = useCallback(async () => {
+    setBusy(true)
+    try {
+      const d = await getLearnerDetail(cls.id, learner.userId)
+      setDetail(d)
+      // Bounded by the 5 misses on screen, never the whole bank.
+      const stored = await getItemNotes(d.recentMisses.map((m) => m.itemId))
+      const asRecord = Object.fromEntries(stored)
+      setNotes((current) => ({ ...asRecord, ...current }))
+      setSaved(asRecord)
+      setLoadedAt(Date.now())
+      setError(null)
+    } catch (e) {
+      setError(errorText(e))
+    } finally {
+      setBusy(false)
+    }
+  }, [cls.id, learner.userId, errorText])
 
   useEffect(() => {
-    let alive = true
-    getLearnerDetail(cls.id, learner.userId)
-      .then(async (d) => {
-        if (!alive) return
-        setDetail(d)
-        // Bounded by the 5 misses on screen, never the whole bank.
-        const stored = await getItemNotes(d.recentMisses.map((m) => m.itemId))
-        if (!alive) return
-        const asRecord = Object.fromEntries(stored)
-        setNotes(asRecord)
-        setSaved(asRecord)
-      })
-      .catch((e) => alive && setError(e instanceof Error ? e.message : String(e)))
-    return () => {
-      alive = false
-    }
-  }, [cls.id, learner.userId])
+    void load()
+  }, [load])
 
   /**
    * Save on blur, not on every keystroke: a note is a paragraph a teacher
@@ -486,6 +631,9 @@ export function LearnerDetailView({
       <p className="-mt-2 text-sm text-slate-500 dark:text-slate-400">
         {t('lastActive')}: {relativeTime(learner.lastActiveAt, t)}
       </p>
+
+      <OfflineBanner />
+      <ReportHeader loadedAt={loadedAt} busy={busy} onRefresh={() => void load()} />
 
       {error && (
         <p className="text-sm font-medium text-rose-600 dark:text-rose-400">{error}</p>

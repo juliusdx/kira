@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 204 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 222 passing, no network
 - Live-backend tests: `npm run test:integration` — 11 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
@@ -219,6 +219,26 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     pins this.
   - Saves on BLUR, not per keystroke, and not at all when the text is unchanged
     — reopening a miss to re-read a note must not bump its timestamp.
+- **2026-07-29 (robustness pass on the teacher view)** — no schema change.
+  - **A removal could fail silently.** `removeMember` trusted the status, but
+    PostgREST answers an RLS-filtered DELETE with 204 — identical to success —
+    and the call site was the one mutation on the screen with no try/catch. It
+    now reads the membership back and the failure surfaces. `leaveClass` got
+    the same treatment. An already-absent member is SUCCESS (the caller asked
+    for "not in this class"), and a failed read-back is NOT reported as a
+    failed delete: it proves nothing either way.
+  - **Every teacher screen is now a dated report** — `ReportHeader` shows "as
+    of 5 min ago" plus a refresh, and returning from a learner detail re-reads
+    the roster so two snapshots cannot disagree. Refreshing deliberately does
+    NOT overwrite the teacher's in-progress note.
+  - **`sync/classErrors.ts`** maps PostgREST's words onto bilingual strings, as
+    `authErrors.ts` does for auth. Unmapped messages KEEP their raw text: this
+    screen has no local fallback, so a swallowed error is invisible.
+  - An offline banner, because Kira is offline-first everywhere except here and
+    never said so.
+  - `confirm()` on leave/rotate/remove is knowingly left as-is — browser chrome
+    in an installed PWA and off-style, but it works and it is not a robustness
+    problem.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -331,6 +351,15 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   ids; STEP 0 is the footprint fallback for runs from before this, and its
   predicate is tested in `supabase/tests/cleanup_test.sql` — a DELETE against
   prod deserves at least what a migration gets.
+- 2026-07-29: **a hook that returns a fresh function each render silently turns
+  a mount effect into an every-render effect.** A new `useErrorText()` closed
+  over `t` from `useKira()`, which is a NEW function on every render, so the
+  `useCallback` that fetched was new every render, so its `useEffect` re-ran
+  every render — a reload loop against the RPC that also reset screen state
+  under the user. It surfaced as an unrelated NOTE test failing, and the
+  regression test measured 11,067 calls where 2 were expected. → any hook
+  whose result becomes a dependency of a fetch must be referentially STABLE:
+  hold the changing value in a ref and give `useCallback` an empty dep array.
 - 2026-07-29: a SQL test that said `set role postgres` to escape RLS failed on
   this Mac, where the superuser is `julius` — and `\set ON_ERROR_STOP on` made
   that abort the whole file, so `run.sh` exited non-zero with the suite's own

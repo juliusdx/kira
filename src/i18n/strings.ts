@@ -335,6 +335,50 @@ export const UI = {
     en: 'Too many attempts. Wait a while and try again.',
     ms: 'Terlalu banyak percubaan. Tunggu sebentar dan cuba lagi.',
   },
+  // classroom / roster failures (src/sync/classErrors.ts)
+  errOffline: {
+    en: 'No connection. Practice works offline — this progress report does not.',
+    ms: 'Tiada sambungan. Latihan berfungsi luar talian — laporan kemajuan ini tidak.',
+  },
+  errSignedOut: {
+    en: 'Signed out on this device. Open Account and sign in again.',
+    ms: 'Telah log keluar pada peranti ini. Buka Akaun dan log masuk semula.',
+  },
+  errNotAllowed: {
+    en: 'You do not have access to this class.',
+    ms: 'Anda tiada akses kepada kelas ini.',
+  },
+  errBadJoinCode: {
+    en: 'That code does not work. It may have been replaced — ask for a new one.',
+    ms: 'Kod itu tidak berfungsi. Ia mungkin telah diganti — minta kod baharu.',
+  },
+  errAlreadyJoined: {
+    en: 'You are already in this class.',
+    ms: 'Anda sudah berada dalam kelas ini.',
+  },
+  errBackendMissing: {
+    en: 'This part of the app is not ready on the server yet.',
+    ms: 'Bahagian aplikasi ini belum sedia di pelayan.',
+  },
+  errClassGeneric: {
+    en: "Couldn't load that. Try again.",
+    ms: 'Gagal memuatkan. Cuba lagi.',
+  },
+  errRemoveFailed: {
+    en: 'That learner was not removed. Try again.',
+    ms: 'Pelajar itu tidak dibuang. Cuba lagi.',
+  },
+  // refreshing a report
+  refresh: { en: 'Refresh', ms: 'Muat semula' },
+  refreshing: { en: 'Refreshing…', ms: 'Memuat semula…' },
+  asOf: { en: 'as of {t}', ms: 'setakat {t}' },
+  justNow: { en: 'just now', ms: 'sebentar tadi' },
+  minutesAgo: { en: '{n} min ago', ms: '{n} minit lalu' },
+  hoursAgo: { en: '{n}h ago', ms: '{n} jam lalu' },
+  offlineBanner: {
+    en: 'Offline — showing the last report that loaded.',
+    ms: 'Luar talian — memaparkan laporan terakhir yang dimuatkan.',
+  },
   errBadEmail: {
     en: 'That email address is not valid.',
     ms: 'Alamat e-mel itu tidak sah.',

@@ -62,6 +62,31 @@ describe('buildAuthoringBrief', () => {
     expect(brief).toContain('more practice')
   })
 
+  // The single most useful line in the brief: it tells the author whether the
+  // fix is more items or a rewritten explanation.
+  it('includes what the learner actually answered, marking the wrong parts', () => {
+    const brief = buildAuthoringBrief({
+      ...base,
+      chosen: [
+        { label: 'Sold goods on credit', value: 'debit', ok: true },
+        { label: 'Cash received from customer', value: 'debit', ok: false },
+        { label: 'Closing balance', value: 'RM 1,500', ok: false },
+      ],
+    })
+    expect(brief).toContain('What they actually answered')
+    expect(brief).toContain('Cash received from customer: debit')
+    expect(brief).toMatch(/✗ Cash received from customer/)
+    // a part they got right is listed but not marked as the mistake
+    expect(brief).not.toMatch(/✗ Sold goods on credit/)
+  })
+
+  it('omits the answer section entirely when nothing was recorded', () => {
+    for (const chosen of [undefined, null, []]) {
+      const brief = buildAuthoringBrief({ ...base, chosen })
+      expect(brief).not.toContain('What they actually answered')
+    }
+  })
+
   it('does not fall over on an anonymous learner or a missing lesson', () => {
     const brief = buildAuthoringBrief({
       ...base,

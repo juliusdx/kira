@@ -243,6 +243,45 @@ describe('recentMisses', () => {
   })
 })
 
+describe('recentMisses — the learner’s actual answer (migration 0007)', () => {
+  const miss = (lastWrong: Parameters<typeof recentMisses>[2]) =>
+    recentMisses(
+      [stat({ item_id: 'ta-008', attempts: 3, wrong: 3, last_wrong_at: iso(NOW) })],
+      5,
+      lastWrong,
+    )[0]
+
+  // 0007 is applied BY HAND, so a build reaches users before the function
+  // exists. "We were never told" must be distinguishable from "she answered
+  // nothing", or the panel claims an answer was not recorded when in fact it
+  // has simply not been asked for.
+  it('is undefined when the RPC returned nothing at all', () => {
+    expect(miss([]).chosen).toBeUndefined()
+    expect(recentMisses([stat({ wrong: 1, last_wrong_at: iso(NOW) })])[0].chosen).toBeUndefined()
+  })
+
+  it('is null when the attempt predates the client syncing chosen', () => {
+    const m = miss([{ item_id: 'ta-008', chosen: null, wrong_at: iso(NOW) }])
+    expect(m.chosen).toBeNull()
+    expect('chosen' in m).toBe(true) // present, but empty
+  })
+
+  it('carries the payload through untouched for the client to interpret', () => {
+    const payload = { sides: { 0: 'debit', 1: 'debit' }, balance: 1500 }
+    expect(miss([{ item_id: 'ta-008', chosen: payload, wrong_at: iso(NOW) }]).chosen).toEqual(
+      payload,
+    )
+  })
+
+  it('matches answers to the right item, ignoring answers for others', () => {
+    const m = miss([
+      { item_id: 'dc-006', chosen: '"Debit"', wrong_at: iso(NOW) },
+      { item_id: 'ta-008', chosen: { balance: 42 }, wrong_at: iso(NOW) },
+    ])
+    expect(m.chosen).toEqual({ balance: 42 })
+  })
+})
+
 describe('siblingCount', () => {
   it('counts other items sharing a teachable skill, excluding the item itself', () => {
     const n = siblingCount('ta-006') // ledger + balancing-off

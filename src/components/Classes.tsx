@@ -20,6 +20,7 @@ import type { UIKey } from '../i18n/strings'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
 import { buildAuthoringBrief } from '../lib/authoringBrief'
+import { describeChosen } from '../lib/chosenAnswer'
 import { Leaderboard } from './Leaderboard'
 import { ItemPreview } from './ItemPreview'
 import { Avatar } from './play'
@@ -557,6 +558,10 @@ function MissRow({
 }) {
   const { t, locale } = useKira()
   const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
+  const chosenLines =
+    miss.item && miss.chosen !== undefined
+      ? describeChosen(miss.item, miss.chosen, locale, t)
+      : null
 
   return (
     <li>
@@ -587,6 +592,49 @@ function MissRow({
           ) : (
             <>
               <ItemPreview item={miss.item} locale={locale} />
+
+              {/* Only rendered once 0007 is applied AND an answer was stored:
+                  undefined means we were never told, which is not the same as
+                  "she answered nothing". */}
+              {miss.chosen !== undefined && (
+                <div>
+                  <p className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+                    {t('whatTheyPut')}
+                  </p>
+                  {chosenLines === null ? (
+                    <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                      {t('answerUnknown')}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                        {t('whatTheyPutHint')}
+                      </p>
+                      <div className="mt-1 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200 dark:bg-slate-900/40 dark:ring-slate-700">
+                        {chosenLines.map((line, i) => (
+                          <div
+                            key={i}
+                            className="flex items-baseline justify-between gap-3 py-1 text-sm"
+                          >
+                            <span className="min-w-0 text-slate-600 dark:text-slate-300">
+                              {line.label}
+                            </span>
+                            <span
+                              className={`shrink-0 font-semibold tabular-nums ${
+                                line.ok
+                                  ? 'text-slate-500 dark:text-slate-400'
+                                  : 'text-rose-700 dark:text-rose-300'
+                              }`}
+                            >
+                              {line.value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
               <div>
                 <p className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
@@ -636,6 +684,7 @@ function MissRow({
                     teacherNote: note,
                     learnerName,
                     locale,
+                    chosen: chosenLines,
                   })
                   // Never claim success without checking: the clipboard is
                   // unavailable in an insecure context and fails silently.

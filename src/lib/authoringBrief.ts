@@ -1,5 +1,6 @@
 import type { Item, Locale, LocalizedText } from '../content/types'
 import { skillLabel, t as tc } from '../content/loader'
+import type { ChosenLine } from './chosenAnswer'
 
 /**
  * Content is DATA, and the author is a person with a text editor — so the way
@@ -21,6 +22,13 @@ export interface BriefInput {
   teacherNote: string
   learnerName: string | null
   locale: Locale
+  /**
+   * The learner's last wrong answer, already made readable. Null when it was
+   * never recorded. This is the most useful line in the whole brief: it is the
+   * difference between "add more items" and "the explanation never addresses
+   * the mistake they are actually making".
+   */
+  chosen?: ChosenLine[] | null
 }
 
 function bilingual(text: LocalizedText | null | undefined): string {
@@ -57,6 +65,17 @@ export function buildAuthoringBrief(input: BriefInput): string {
   lines.push(`Question`)
   lines.push(`  ${bilingual(item.prompt)}`)
   lines.push(``)
+
+  if (input.chosen?.length) {
+    lines.push(`What they actually answered (most recent wrong attempt)`)
+    for (const line of input.chosen) {
+      // Mark the wrong parts: on a multi-part item the misconception is in
+      // which PART went wrong, and an unmarked list buries that.
+      lines.push(`  ${line.ok ? ' ' : '✗'} ${line.label}: ${line.value}`)
+    }
+    lines.push(``)
+  }
+
   lines.push(`Explanation the learner is shown now`)
   lines.push(`  ${bilingual(item.explanation)}`)
   lines.push(``)

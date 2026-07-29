@@ -195,6 +195,15 @@ export const UI = {
     en: 'What the learner was told',
     ms: 'Apa yang diberitahu kepada pelajar',
   },
+  whatTheyPut: { en: 'What they put', ms: 'Apa yang mereka jawab' },
+  whatTheyPutHint: {
+    en: 'Their most recent wrong answer. The parts in red are the mistake.',
+    ms: 'Jawapan salah mereka yang terkini. Bahagian merah ialah kesilapannya.',
+  },
+  answerUnknown: {
+    en: 'This answer was not recorded.',
+    ms: 'Jawapan ini tidak direkodkan.',
+  },
   itemMissing: {
     en: 'This question is no longer in the app.',
     ms: 'Soalan ini tiada lagi dalam aplikasi.',

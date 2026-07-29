@@ -117,6 +117,31 @@ if [ "$AV_FALSE" -gt 0 ] || [ "$AV_ERR" -gt 0 ]; then
   exit 1
 fi
 
+# last-wrong-answer suite (0007), also on its own database
+LW_DB="${DB}_lastwrong"
+dropdb --if-exists "$LW_DB"; createdb "$LW_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
+         "$MIG/0007_last_wrong_answer.sql"; do
+  psql -q -d "$LW_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+LW=$(psql -qAt -d "$LW_DB" -f "$HERE/last_wrong_test.sql" 2>&1)
+LW_FALSE=$(echo "$LW" | tr '|' '\n' | grep -cx 'f' || true)
+LW_TRUE=$(echo "$LW" | tr '|' '\n' | grep -cx 't' || true)
+# every negative case must have been BLOCKED; a missing "blocked_" line means
+# the guard let it through without raising, which grep -c 'f' cannot see.
+LW_BLOCKED=$(echo "$LW" | grep -c 'blocked_' || true)
+LW_ERR=$(echo "$LW" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- last wrong answer: $LW_TRUE assertions true, $LW_FALSE false, $LW_BLOCKED blocked, $LW_ERR errors"
+dropdb --if-exists "$LW_DB"
+if [ "$LW_FALSE" -gt 0 ] || [ "$LW_ERR" -gt 0 ] || [ "$LW_BLOCKED" -lt 5 ]; then
+  echo "$LW" | grep -E "FAIL_|ERROR"
+  echo "✗ LAST WRONG ANSWER TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
 FAILS=$(echo "$OUT" | grep -c "FAIL" || true)
 ERRS=$(echo "$OUT"  | grep -c "^psql.*ERROR" || true)
 PASSES=$(echo "$OUT" | grep -c "PASS" || true)

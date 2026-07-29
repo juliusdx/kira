@@ -12,13 +12,13 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 171 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 188 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
-  Postgres, applies all 6 migrations, runs 22 RLS + 13 leaderboard + 15 push
-  + 23 roster + 14 avatar assertions. **Run this before handing Julius any new
-  migration.**
+  Postgres, applies all 7 migrations, runs 22 RLS + 13 leaderboard + 15 push
+  + 23 roster + 14 avatar + 13 last-wrong assertions. **Run this before
+  handing Julius any new migration.**
 - Types: `npm run typecheck`
 - Build: `npm run build`
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
@@ -52,7 +52,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   and pushed to Supabase as a best effort. The name used to live only in the
   cloud `profiles` table, which meant a learner practising alone could never
   set one.
-- `supabase/migrations/000{1..6}_*.sql` — applied BY HAND via the SQL Editor
+- `supabase/migrations/000{1..7}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
@@ -145,10 +145,23 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     renders no inputs and no buttons.
   - The teacher's note is NOT persisted — it is copied out or lost, and the
     UI says so. Storing it means a table, a policy and a migration.
-  - **Not built, and asked for:** what the learner actually ANSWERED. That is
-    `attempts.chosen`, which `learner_item_stats` does not return; it needs a
-    migration 0007 with a new owner-guarded RPC. Without it the panel can say
-    what the right answer is but not which wrong one she picked.
+- **2026-07-29 (later)** — Migration 0007 `learner_last_wrong`: the panel now
+  shows WHAT SHE PUT, not just that she was wrong. One row per wrongly-answered
+  item carrying the most recent `chosen` payload, guarded exactly like
+  `learner_item_stats` (owns the class AND the learner is in THAT class —
+  verified by deleting the membership check and watching test 8 fail).
+  `lib/chosenAnswer.ts` turns the opaque jsonb into readable lines and marks
+  the parts that were wrong, because on a multi-part item the misconception IS
+  which part went wrong. The answer also goes into the authoring brief.
+  - **`chosen` is opaque to the database on purpose.** Its shape is per
+    interaction type and known only to `grading/grade.ts`; SQL has never known
+    what an item is. `describeChosen` is therefore defensive on every path —
+    an item re-authored to a different type after the attempt must degrade to
+    "not recorded", never throw on a teacher's screen.
+  - **The client tolerates 0007 being absent**, because a push deploys before
+    Julius pastes the SQL. A failing `learner_last_wrong` is swallowed and the
+    rest of the report renders. `chosen: undefined` (never told) is
+    deliberately distinct from `chosen: null` (attempt predates the sync).
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

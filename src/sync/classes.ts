@@ -366,6 +366,13 @@ export interface RecentMiss {
   lessonTitle: LocalizedText | null
   /** Other items in the bank drilling the same skills — what to practise next. */
   siblings: number
+  /**
+   * What the learner last answered (migration 0007), as opaque jsonb — only
+   * the client knows the shape, so `lib/chosenAnswer.ts` reads it.
+   * `undefined` means we were not told (0007 not applied yet, or no wrong
+   * attempt recorded); `null` means the attempt predates syncing `chosen`.
+   */
+  chosen?: unknown
 }
 
 export interface LearnerDetail {
@@ -392,12 +399,29 @@ export async function getLearnerDetail(
   if (!pending) return emptyDetail(now)
   const supabase = await pending
 
-  const { data, error } = await supabase.rpc('learner_item_stats', {
-    p_class_id: classId,
-    p_user_id: userId,
-  })
-  if (error) throw new Error(error.message)
-  return rollUpDetail((data ?? []) as ItemStatRow[], now)
+  const [stats, lastWrong] = await Promise.all([
+    supabase.rpc('learner_item_stats', { p_class_id: classId, p_user_id: userId }),
+    // Migration 0007 is applied BY HAND, so a deploy reaches users before the
+    // function exists. Treat its absence as "no answers recorded" rather than
+    // failing the whole detail screen — the rest of the report is unaffected.
+    supabase
+      .rpc('learner_last_wrong', { p_class_id: classId, p_user_id: userId })
+      .then((r) => (r.error ? { data: null, error: null } : r)),
+  ])
+  if (stats.error) throw new Error(stats.error.message)
+
+  return rollUpDetail(
+    (stats.data ?? []) as ItemStatRow[],
+    now,
+    (lastWrong.data ?? []) as LastWrongRow[],
+  )
+}
+
+/** One row of `learner_last_wrong` (migration 0007). */
+export interface LastWrongRow {
+  item_id: string
+  chosen: unknown
+  wrong_at: string
 }
 
 function emptyDetail(now: number): LearnerDetail {
@@ -414,7 +438,11 @@ function emptyDetail(now: number): LearnerDetail {
 }
 
 /** Pure roll-up of one learner's per-item rows. Unit-tested. */
-export function rollUpDetail(rows: ItemStatRow[], now: number): LearnerDetail {
+export function rollUpDetail(
+  rows: ItemStatRow[],
+  now: number,
+  lastWrong: LastWrongRow[] = [],
+): LearnerDetail {
   // Reuse the learner's OWN progress computation, so a teacher and a learner
   // can never be looking at two different definitions of the same number.
   const reviewMap = new Map<string, ReviewState>()
@@ -446,7 +474,7 @@ export function rollUpDetail(rows: ItemStatRow[], now: number): LearnerDetail {
       ? Math.round(((attempts - wrongTotal) / attempts) * 100)
       : null,
     weakest: weakestSkills(rows),
-    recentMisses: recentMisses(rows),
+    recentMisses: recentMisses(rows, 5, lastWrong),
   }
 }
 
@@ -495,7 +523,12 @@ export function weakestSkills(rows: ItemStatRow[], max = 3): WeakSkill[] {
 }
 
 /** The items most recently got wrong — what to actually sit down and go over. */
-export function recentMisses(rows: ItemStatRow[], max = 5): RecentMiss[] {
+export function recentMisses(
+  rows: ItemStatRow[],
+  max = 5,
+  lastWrong: LastWrongRow[] = [],
+): RecentMiss[] {
+  const chosenByItem = new Map(lastWrong.map((r) => [r.item_id, r.chosen]))
   return rows
     .filter((r) => Number(r.wrong) > 0 && r.last_wrong_at)
     .sort((a, b) => Date.parse(b.last_wrong_at!) - Date.parse(a.last_wrong_at!))
@@ -512,6 +545,9 @@ export function recentMisses(rows: ItemStatRow[], max = 5): RecentMiss[] {
         item: entry?.item ?? null,
         lessonTitle: lessonOf(r.item_id)?.title ?? null,
         siblings: siblingCount(r.item_id),
+        // undefined = migration 0007 not applied (or no answer recorded);
+        // null = an attempt written before the client ever synced `chosen`.
+        chosen: chosenByItem.has(r.item_id) ? chosenByItem.get(r.item_id) : undefined,
       }
     })
 }

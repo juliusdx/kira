@@ -13,7 +13,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
 - **Hermetic tests (the CI gate): `npm test`** — 188 passing, no network
-- Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
+- Live-backend tests: `npm run test:integration` — 10 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
   Postgres, applies all 7 migrations, runs 22 RLS + 13 leaderboard + 15 push
@@ -145,7 +145,10 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     renders no inputs and no buttons.
   - The teacher's note is NOT persisted — it is copied out or lost, and the
     UI says so. Storing it means a table, a policy and a migration.
-- **2026-07-29 (later)** — Migration 0007 `learner_last_wrong`: the panel now
+- **2026-07-29 (later)** — Migration 0007 `learner_last_wrong` APPLIED to prod
+  and VERIFIED LIVE (`lastWrong.integration.test.ts`, plus an unauthenticated
+  REST probe returning 42501 from inside the function rather than PGRST202).
+  The panel now
   shows WHAT SHE PUT, not just that she was wrong. One row per wrongly-answered
   item carrying the most recent `chosen` payload, guarded exactly like
   `learner_item_stats` (owns the class AND the learner is in THAT class —

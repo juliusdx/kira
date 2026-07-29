@@ -21,6 +21,7 @@ import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
 import { buildAuthoringBrief } from '../lib/authoringBrief'
 import { describeChosen } from '../lib/chosenAnswer'
+import { getItemNotes, saveItemNote, NOTE_MAX, type SaveResult } from '../sync/notes'
 import { Leaderboard } from './Leaderboard'
 import { ItemPreview } from './ItemPreview'
 import { Avatar } from './play'
@@ -397,7 +398,9 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
  * The topic bars come from the same computeProgress() the learner sees on
  * their own screen, so the two views can never disagree.
  */
-function LearnerDetailView({
+// eslint-disable-next-line react-refresh/only-export-components -- exported so
+// Classes.notes.test.tsx can drive the real component rather than a copy of it.
+export function LearnerDetailView({
   cls,
   learner,
   onBack,
@@ -411,19 +414,60 @@ function LearnerDetailView({
   const [error, setError] = useState<string | null>(null)
   const [openMiss, setOpenMiss] = useState<string | null>(null)
   // Notes live up here, not inside the row, so collapsing a miss (or opening
-  // another) does not throw away what the teacher has typed. They are still
-  // gone on navigation — the UI says so rather than implying they are saved.
+  // another) does not throw away what the teacher has typed. Since 0008 they
+  // also outlive the page: what is held here is the working copy, and what is
+  // in `saved` is what the server has actually confirmed.
   const [notes, setNotes] = useState<Record<string, string>>({})
+  const [saved, setSaved] = useState<Record<string, string>>({})
+  const [status, setStatus] = useState<Record<string, SaveResult | 'saving'>>({})
 
   useEffect(() => {
     let alive = true
     getLearnerDetail(cls.id, learner.userId)
-      .then((d) => alive && setDetail(d))
+      .then(async (d) => {
+        if (!alive) return
+        setDetail(d)
+        // Bounded by the 5 misses on screen, never the whole bank.
+        const stored = await getItemNotes(d.recentMisses.map((m) => m.itemId))
+        if (!alive) return
+        const asRecord = Object.fromEntries(stored)
+        setNotes(asRecord)
+        setSaved(asRecord)
+      })
       .catch((e) => alive && setError(e instanceof Error ? e.message : String(e)))
     return () => {
       alive = false
     }
   }, [cls.id, learner.userId])
+
+  /**
+   * Save on blur, not on every keystroke: a note is a paragraph a teacher
+   * writes in one go, and a debounce would mean the status line flickered
+   * through "saving" while they were still mid-sentence.
+   *
+   * Nothing is written when the text has not changed — reopening a miss to
+   * re-read a note must not touch the row or its timestamp.
+   */
+  const commitNote = useCallback(
+    async (itemId: string) => {
+      const text = notes[itemId] ?? ''
+      if (text.trim() === (saved[itemId] ?? '')) return
+      const identity = await getIdentity()
+      if (!identity) {
+        setStatus((s) => ({ ...s, [itemId]: 'failed' }))
+        return
+      }
+      setStatus((s) => ({ ...s, [itemId]: 'saving' }))
+      const result = await saveItemNote(identity.userId, itemId, text)
+      setStatus((s) => ({ ...s, [itemId]: result }))
+      // Only move the confirmed copy on a confirmed write, so a failure leaves
+      // the teacher's text on screen and still marked unsaved.
+      if (result !== 'failed') {
+        setSaved((s) => ({ ...s, [itemId]: text.trim() }))
+      }
+    },
+    [notes, saved],
+  )
 
   const name = learner.displayName ?? `${learner.userId.slice(0, 8)}…`
 
@@ -516,6 +560,9 @@ function LearnerDetailView({
                     }
                     note={notes[m.itemId] ?? ''}
                     onNote={(v) => setNotes((n) => ({ ...n, [m.itemId]: v }))}
+                    onCommitNote={() => commitNote(m.itemId)}
+                    saveStatus={status[m.itemId] ?? null}
+                    dirty={(notes[m.itemId] ?? '').trim() !== (saved[m.itemId] ?? '')}
                   />
                 ))}
               </ul>
@@ -548,6 +595,9 @@ function MissRow({
   onToggle,
   note,
   onNote,
+  onCommitNote,
+  saveStatus,
+  dirty,
 }: {
   miss: RecentMiss
   learnerName: string | null
@@ -555,6 +605,9 @@ function MissRow({
   onToggle: () => void
   note: string
   onNote: (v: string) => void
+  onCommitNote: () => void
+  saveStatus: SaveResult | 'saving' | null
+  dirty: boolean
 }) {
   const { t, locale } = useKira()
   const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
@@ -665,10 +718,35 @@ function MissRow({
                   id={`note-${miss.itemId}`}
                   value={note}
                   onChange={(e) => onNote(e.target.value)}
+                  onBlur={onCommitNote}
                   rows={3}
+                  maxLength={NOTE_MAX}
                   placeholder={t('betterExplanationPlaceholder')}
                   className="mt-1.5 w-full rounded-2xl bg-white p-3 text-sm ring-1 ring-slate-200 outline-none placeholder:text-slate-400 dark:bg-slate-800 dark:text-white dark:ring-slate-700"
                 />
+                {/* Never claim a save that was not observed: `failed` covers
+                    both a rejected write and 0008 not being applied yet, and
+                    in both cases the text is still on screen to copy out. */}
+                <p
+                  role="status"
+                  className={`mt-1 text-xs ${
+                    saveStatus === 'failed'
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : 'text-slate-500 dark:text-slate-400'
+                  }`}
+                >
+                  {saveStatus === 'saving'
+                    ? t('noteSaving')
+                    : saveStatus === 'failed'
+                      ? t('noteSaveFailed')
+                      : dirty
+                        ? t('noteUnsaved')
+                        : saveStatus === 'saved' || saveStatus === 'cleared'
+                          ? t('noteSaved')
+                          : note
+                            ? t('noteSaved')
+                            : ''}
+                </p>
               </div>
 
               <Button

@@ -218,8 +218,15 @@ export const UI = {
   },
   betterExplanation: { en: 'A better explanation', ms: 'Penjelasan yang lebih baik' },
   betterExplanationHint: {
-    en: 'Say it the way you would say it to them. This is not saved — copy it out before you leave the page.',
-    ms: 'Tulis seperti anda akan menerangkannya kepada mereka. Ini tidak disimpan — salin sebelum meninggalkan halaman ini.',
+    en: 'Say it the way you would say it to them. Saved to your account when you tap away — only you can see it.',
+    ms: 'Tulis seperti anda akan menerangkannya kepada mereka. Disimpan ke akaun anda apabila anda mengetik di luar kotak — hanya anda boleh melihatnya.',
+  },
+  noteSaving: { en: 'Saving…', ms: 'Menyimpan…' },
+  noteSaved: { en: 'Saved', ms: 'Disimpan' },
+  noteUnsaved: { en: 'Not saved yet', ms: 'Belum disimpan' },
+  noteSaveFailed: {
+    en: "Couldn't save — copy it out before you leave the page.",
+    ms: 'Gagal menyimpan — salin sebelum meninggalkan halaman ini.',
   },
   betterExplanationPlaceholder: {
     en: 'e.g. the balance c/d goes on the smaller side, not the side the money is on…',

@@ -75,7 +75,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 190 hermetic unit + component tests (the CI gate)
+npm test           # 204 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -92,7 +92,7 @@ npm run test:integration   # 10 tests against the live Supabase project
 uptime, and so pushes don't mint throwaway anonymous users. `run.sh` applies
 every migration to a scratch database and asserts the security policies
 (22 RLS + 13 leaderboard + 15 push + 23 roster + 14 avatar + 13 last-wrong +
-16 probe-cleanup checks) — **run it before applying
+19 item-notes + 19 probe-cleanup checks) — **run it before applying
 any new migration to production.**
 
 ## Architecture
@@ -145,8 +145,16 @@ unchanged when Supabase credentials are absent.
   and how many other items drill the same skills. If the explanation is
   the problem, the teacher writes a better one and copies an authoring brief —
   content is data, so the way to act on a miss is to hand the author a brief,
-  not to open a CMS that does not exist. All of it is local: the server only
-  ever sends an item id, and the bank is already in the bundle.
+  not to open a CMS that does not exist. Almost all of it is local: the server
+  only ever sends an item id, and the bank is already in the bundle.
+
+  That better explanation is **kept**, against the item rather than against the
+  learner who happened to miss it — so it is written once and is there the next
+  time anyone gets that question wrong. It is visible only to whoever wrote it:
+  a note is an adult writing frankly about a child's mistake, not feedback
+  addressed to the child, and text authored by one user and rendered to another
+  is a surface a classroom app should not open. The UI never reports a save it
+  has not had confirmed, and says to copy the text out when a save fails.
 - **Gamification.** Session combos (accuracy-based, never timed — a clock would
   fight the self-explanation gate), 20 badges derived from synced data rather
   than stored, and a class leaderboard ranked by items practised in the last 7
@@ -183,4 +191,6 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
 - **Native apps.** A Capacitor wrap for the App Store / Play Store. Deferred
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
-- Stage 7+ content, FSRS scheduling, and the multi-tenant authoring UI.
+- Stage 8+ content — only if the syllabus warrants it; Stages 1–7 cover the
+  Form 5 syllabus in full.
+- FSRS scheduling, and the multi-tenant authoring UI.

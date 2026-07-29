@@ -12,12 +12,15 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 190 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 204 passing, no network
 - Live-backend tests: `npm run test:integration` — 10 passing, hits real Supabase
-  (deliberately excluded from CI so deploys don't depend on Supabase uptime)
+  (deliberately excluded from CI so deploys don't depend on Supabase uptime).
+  An 11th suite, `itemNotes.integration.test.ts`, is written and WILL fail
+  until 0008 is applied.
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
-  Postgres, applies all 7 migrations, runs 22 RLS + 13 leaderboard + 15 push
-  + 23 roster + 14 avatar + 13 last-wrong + 16 probe-cleanup assertions.
+  Postgres, applies all 8 migrations, runs 22 RLS + 13 leaderboard + 15 push
+  + 23 roster + 14 avatar + 13 last-wrong + 19 item-notes + 19 probe-cleanup
+  assertions.
   **Run this before handing Julius any new migration** — and note the
   probe-cleanup suite guards a destructive hand-run script, not a migration.
 - Types: `npm run typecheck`
@@ -53,7 +56,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   and pushed to Supabase as a best effort. The name used to live only in the
   cloud `profiles` table, which meant a learner practising alone could never
   set one.
-- `supabase/migrations/000{1..7}_*.sql` — applied BY HAND via the SQL Editor
+- `supabase/migrations/000{1..8}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
@@ -144,8 +147,8 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     widget on the teacher screen would record attempts against the TEACHER's
     own account while they review someone else's work. A test asserts it
     renders no inputs and no buttons.
-  - The teacher's note is NOT persisted — it is copied out or lost, and the
-    UI says so. Storing it means a table, a policy and a migration.
+  - The teacher's note was NOT persisted at first — copied out or lost, and the
+    UI said so. Migration 0008 changed that; see 2026-07-29 (final) below.
 - **2026-07-29 (later)** — Migration 0007 `learner_last_wrong` APPLIED to prod
   and VERIFIED LIVE (`lastWrong.integration.test.ts`, plus an unauthenticated
   REST probe returning 42501 from inside the function rather than PGRST202).
@@ -166,6 +169,55 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     Julius pastes the SQL. A failing `learner_last_wrong` is swallowed and the
     rest of the report renders. `chosen: undefined` (never told) is
     deliberately distinct from `chosen: null` (attempt predates the sync).
+- **2026-07-29 (last)** — Probe residue swept: 105 empty anonymous accounts
+  removed from prod, `auth.users` 135 -> 30. Confirmed burst-shaped before
+  deleting (bursts of 12/11/7/6/6/6/4/4/3/3/2/2 with sub-30-second spreads
+  from `test:integration`, plus singletons from browser verification on the
+  two heaviest dev days). Every survivor holds data, including a user whose
+  ONLY asset was a class — the guard that catches that earned its place.
+  Prevention: each suite now appends the ids it creates to
+  `.probe-users.local` (gitignored), so the next sweep is an id lookup, not a
+  footprint match.
+- **Ariel's real account is `2a54d678…`** — email, in the class, 32 attempts
+  against 29 reviews. Two OTHER accounts are named "Ariel" and are Claude's
+  probes, not her: `c125f40e…` (186 review rows from **4 attempts**, and a
+  `last_review_sync` identical to `last_answered` — a seeded state pushed by
+  one sync, not practice) and `1f04ec72…` (named, never practised). Both hold
+  data so the sweep spared them, and both sit outside every class so they do
+  not touch the roster. **Do not re-raise this as "the roster is missing her
+  history" — it was checked and it is not.**
+- **2026-07-29 (final)** — The teacher's "better explanation" now survives
+  leaving the page. Migration 0008 `item_notes`, **WRITTEN AND LOCALLY TESTED,
+  NOT YET APPLIED** — hand it to Julius as one block from
+  `supabase/migrations/0008_item_notes.sql`.
+  - **Scoped `(author, item)`, not `(author, learner, item)`.** A better
+    explanation for `dc-006` is a better explanation for it whoever missed it;
+    per-learner scoping would make a teacher write the same sentence once per
+    child. `item_id` carries no FK, like `review_state` and `attempts` — SQL has
+    never known what an item is, so a note survives re-authoring.
+  - **Author-only, and that is a security decision.** Nobody but the writer ever
+    reads a note. Free text written by one user and rendered to another is
+    exactly the surface `profiles.avatar` needed a CHECK allow-list to close in
+    0006; author-only means there is nothing to moderate and no path onto a
+    child's screen. The live integration test's load-bearing assertion is
+    therefore "a second account CANNOT read it", not "a note saves".
+  - **First thing since 0001 with no SECURITY DEFINER function** — plain
+    self-service RLS, so the policy itself is the whole boundary. Verified by
+    breaking it two ways: dropping `with check` lets a teacher author rows under
+    another user's id (blocked count 4 → 2 plus a `FAIL_` line), and widening
+    `using` to true turns 5 assertions false.
+  - `updated_at` is set by a trigger, NOT by the client — the opposite of
+    `review_state`, on purpose. There the client's clock is the input to
+    last-write-wins reconciliation; a note has one writer and no reconcile, so
+    the server clock is both simpler and not falsifiable.
+  - **The status line never claims a save it did not observe.** The upsert asks
+    for the row back and reports `failed` if none returns, because PostgREST
+    answers an RLS-filtered write with 204 rather than 403. On failure the old
+    behaviour returns exactly where it is still true: the text stays on screen
+    and the UI says to copy it out. `src/components/Classes.notes.test.tsx`
+    pins this.
+  - Saves on BLUR, not per keystroke, and not at all when the text is unchanged
+    — reopening a miss to re-read a note must not bump its timestamp.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -231,6 +283,22 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   distinguished "never created" from "created but not visible to the API" →
   hand over a migration as ONE block, never split, and diagnose via pg_proc
   before blaming the cache.
+- 2026-07-29: **"holds data" and "is a real learner" are not the same test.**
+  The probe sweep guarded on owning something, which was right, but it would
+  happily have called a seeded probe a person. The discriminator is the
+  ATTEMPTS-TO-REVIEWS RATIO: genuine practice yields >= 1 attempt per review
+  row (usually more, items get re-answered), while a seeded or synced state
+  yields hundreds of review rows from a handful of attempts. Check the ratio
+  before concluding anything about whose account is whose.
+- 2026-07-29: Julius uses the clipboard for his own work, so `pbcopy` is a
+  BAD handover channel — a script copied for him does not survive the trip.
+  Put SQL in the message, and commit it somewhere under
+  `supabase/maintenance/` so it outlives the chat.
+- 2026-07-29: a guard keyed on a Postgres ROLE (`supabase_auth_admin`) is
+  CLUSTER-wide, so one stray `create role` anywhere on the machine refused
+  every local test run — including the scratch database used to test the
+  guard itself. Key a "is this production?" check on a per-DATABASE fact
+  instead: `auth.users` having an `encrypted_password` column.
 - 2026-07-29: Claude put runnable-looking SQL in a PROSE WARNING — a fenced
   block quoting `create or replace function auth.uid()` and
   `grant select on auth.users to anon` to explain what would be dangerous —
@@ -262,6 +330,17 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   ids; STEP 0 is the footprint fallback for runs from before this, and its
   predicate is tested in `supabase/tests/cleanup_test.sql` — a DELETE against
   prod deserves at least what a migration gets.
+- 2026-07-29: a SQL test that said `set role postgres` to escape RLS failed on
+  this Mac, where the superuser is `julius` — and `\set ON_ERROR_STOP on` made
+  that abort the whole file, so `run.sh` exited non-zero with the suite's own
+  summary line never printed. `reset role` is the portable form AND the better
+  assertion: as the owning role RLS does not apply, so it checks a row is GONE
+  rather than merely invisible.
+- 2026-07-29: `run.sh` guards each suite with a minimum count of `blocked_`
+  lines, because a negative case that stops raising returns no row and so
+  cannot be caught by counting `f`. That minimum must equal the real number of
+  raising cases — set it too high and the suite fails green work; too low and
+  it stops meaning anything.
 - 2026-07-28: verifying against prod by creating a throwaway anonymous learner
   in the browser leaves ORPHAN rows — RLS only lets a user delete their own
   data, and a page reload throws the probe's access token away with it →

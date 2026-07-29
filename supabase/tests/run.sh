@@ -142,6 +142,33 @@ if [ "$LW_FALSE" -gt 0 ] || [ "$LW_ERR" -gt 0 ] || [ "$LW_BLOCKED" -lt 5 ]; then
   exit 1
 fi
 
+# item-notes suite (0008), also on its own database. Unlike 0005/0007 this is
+# plain RLS with no SECURITY DEFINER function, so the policy is the whole
+# boundary and the negative cases are all "the row exists and stays invisible".
+IN_DB="${DB}_itemnotes"
+dropdb --if-exists "$IN_DB"; createdb "$IN_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
+         "$MIG/0007_last_wrong_answer.sql" "$MIG/0008_item_notes.sql"; do
+  psql -q -d "$IN_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+IN=$(psql -qAt -d "$IN_DB" -f "$HERE/item_notes_test.sql" 2>&1)
+IN_FALSE=$(echo "$IN" | tr '|' '\n' | grep -cx 'f' || true)
+IN_TRUE=$(echo "$IN" | tr '|' '\n' | grep -cx 't' || true)
+# a refused write raises, and a missing "blocked_" line means it did NOT —
+# which grep -c 'f' cannot see, because no row is returned either way.
+IN_BLOCKED=$(echo "$IN" | grep -c 'blocked_' || true)
+IN_ERR=$(echo "$IN" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- item notes: $IN_TRUE assertions true, $IN_FALSE false, $IN_BLOCKED blocked, $IN_ERR errors"
+dropdb --if-exists "$IN_DB"
+if [ "$IN_FALSE" -gt 0 ] || [ "$IN_ERR" -gt 0 ] || [ "$IN_BLOCKED" -lt 4 ]; then
+  echo "$IN" | grep -E "FAIL_|ERROR"
+  echo "✗ ITEM NOTES TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
 # probe-cleanup suite — guards a DESTRUCTIVE hand-run script, so it is tested
 # like a migration. Its own database: it deletes auth.users rows.
 CU_DB="${DB}_cleanup"
@@ -149,7 +176,7 @@ dropdb --if-exists "$CU_DB"; createdb "$CU_DB"
 for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
          "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
          "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
-         "$MIG/0007_last_wrong_answer.sql"; do
+         "$MIG/0007_last_wrong_answer.sql" "$MIG/0008_item_notes.sql"; do
   psql -q -d "$CU_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
 done
 CU=$(psql -qAt -d "$CU_DB" -f "$HERE/cleanup_test.sql" 2>&1)

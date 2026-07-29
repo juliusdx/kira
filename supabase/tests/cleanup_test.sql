@@ -10,9 +10,17 @@
 -- ===========================================================================
 do $$
 begin
-  if exists (select 1 from pg_roles where rolname = 'supabase_auth_admin') then
+  -- Per-DATABASE, deliberately: a role check would be cluster-wide, so one
+  -- stray `create role supabase_auth_admin` anywhere on the machine would
+  -- refuse every local test run. Only a real GoTrue auth.users has
+  -- encrypted_password; the harness's fake one never will.
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'auth' and table_name = 'users'
+      and column_name = 'encrypted_password'
+  ) then
     raise exception
-      'REFUSING TO RUN: this is a real Supabase database. This file is a LOCAL TEST fixture — see supabase/tests/run.sh.';
+      'REFUSING TO RUN: this database has a real auth schema. This file is a LOCAL TEST fixture — see supabase/tests/run.sh.';
   end if;
 end $$;
 
@@ -159,3 +167,45 @@ with gone as (
   returning u.id
 )
 select count(*) = 0 as julius_excluded from gone;
+
+\echo ''
+\echo '--- 7. burst-only variant: singletons are spared ---'
+-- The conservative option deletes only accounts minted in a minute that saw
+-- 2+ empty signups (a test run), leaving lone signups alone in case one is a
+-- real person who installed the app and never practised.
+insert into auth.users (id, email, created_at) values
+  ('a0000011-0000-0000-0000-000000000000', null, timestamptz '2026-07-20 10:00:00+00'),
+  ('a0000012-0000-0000-0000-000000000000', null, timestamptz '2026-07-20 10:00:03+00'),
+  ('a0000013-0000-0000-0000-000000000000', null, timestamptz '2026-07-20 11:30:00+00');
+
+with candidates as (
+  select u.id, u.created_at
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where u.email is null
+    and not exists (select 1 from public.review_state       r where r.user_id  = u.id)
+    and not exists (select 1 from public.attempts           a where a.user_id  = u.id)
+    and not exists (select 1 from public.class_members      m where m.user_id  = u.id)
+    and not exists (select 1 from public.classes            c where c.owner_id = u.id)
+    and not exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+    and coalesce(p.display_name, '') = ''
+    and p.avatar is null
+    and u.id <> 'bb520b30-733d-4250-8f5e-8668e2af9df0'
+),
+bursts as (
+  select date_trunc('minute', created_at) as m
+  from candidates group by 1 having count(*) >= 2
+),
+gone as (
+  delete from auth.users u
+  using candidates c
+  where u.id = c.id
+    and date_trunc('minute', c.created_at) in (select m from bursts)
+  returning u.id
+)
+select count(*) = 2 as burst_pair_deleted from gone;
+
+select
+  (select count(*) from auth.users where id = 'a0000013-0000-0000-0000-000000000000') = 1 as singleton_spared,
+  (select count(*) from auth.users where id in ('a0000011-0000-0000-0000-000000000000',
+                                                'a0000012-0000-0000-0000-000000000000')) = 0 as burst_gone;

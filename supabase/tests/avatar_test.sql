@@ -10,9 +10,17 @@
 -- ===========================================================================
 do $$
 begin
-  if exists (select 1 from pg_roles where rolname = 'supabase_auth_admin') then
+  -- Per-DATABASE, deliberately: a role check would be cluster-wide, so one
+  -- stray `create role supabase_auth_admin` anywhere on the machine would
+  -- refuse every local test run. Only a real GoTrue auth.users has
+  -- encrypted_password; the harness's fake one never will.
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'auth' and table_name = 'users'
+      and column_name = 'encrypted_password'
+  ) then
     raise exception
-      'REFUSING TO RUN: this is a real Supabase database. This file is a LOCAL TEST fixture — see supabase/tests/run.sh.';
+      'REFUSING TO RUN: this database has a real auth schema. This file is a LOCAL TEST fixture — see supabase/tests/run.sh.';
   end if;
 end $$;
 

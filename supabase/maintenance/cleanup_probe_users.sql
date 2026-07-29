@@ -123,6 +123,41 @@ where u.email is not null
    or p.avatar is not null
 order by u.created_at;
 
+-- ---------------------------------------------------------------------------
+-- ALTERNATIVE — the conservative delete: BURSTS ONLY.
+--
+-- Deletes only accounts minted in a minute that saw 2+ empty signups, i.e. a
+-- test run. A lone empty signup is left alone, on the grounds that it is the
+-- one shape a real person installing the app and never practising could take.
+-- Tested in supabase/tests/cleanup_test.sql case 7.
+--
+-- begin;
+--   with candidates as (
+--     select u.id, u.created_at
+--     from auth.users u
+--     left join public.profiles p on p.id = u.id
+--     where u.email is null
+--       and not exists (select 1 from public.review_state       r where r.user_id  = u.id)
+--       and not exists (select 1 from public.attempts           a where a.user_id  = u.id)
+--       and not exists (select 1 from public.class_members      m where m.user_id  = u.id)
+--       and not exists (select 1 from public.classes            c where c.owner_id = u.id)
+--       and not exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+--       and coalesce(p.display_name, '') = ''
+--       and p.avatar is null
+--       and u.id <> 'bb520b30-733d-4250-8f5e-8668e2af9df0'
+--   ),
+--   bursts as (
+--     select date_trunc('minute', created_at) as m
+--     from candidates group by 1 having count(*) >= 2
+--   )
+--   delete from auth.users u
+--   using candidates c
+--   where u.id = c.id
+--     and date_trunc('minute', c.created_at) in (select m from bursts)
+--   returning u.id, u.created_at;
+--   -- happy with the count? commit;   not sure? rollback;
+-- rollback;
+
 -- Delete exactly what that listed, with every guard repeated so a stale or
 -- mistyped id cannot widen it. Wrapped so you can inspect the count and roll
 -- back if it is not what you expected.

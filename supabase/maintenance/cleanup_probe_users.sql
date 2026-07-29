@@ -66,6 +66,63 @@ where u.email is null                    -- never an account someone signed up f
   and p.avatar is null                   -- ...so is someone who picked a face
 order by u.created_at desc;
 
+-- ---------------------------------------------------------------------------
+-- STEP 0b — two sanity checks before deleting a large batch. READ-ONLY.
+--
+-- A. Are the candidates BURST-shaped? One `npm run test:integration` mints
+--    about ten accounts within a couple of seconds. A real person installing
+--    the app arrives alone. A row with accounts = 1 or 2 at a time that does
+--    not line up with a run is the one to look at twice.
+-- ---------------------------------------------------------------------------
+with candidates as (
+  select u.id, u.created_at
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where u.email is null
+    and not exists (select 1 from public.review_state       r where r.user_id  = u.id)
+    and not exists (select 1 from public.attempts           a where a.user_id  = u.id)
+    and not exists (select 1 from public.class_members      m where m.user_id  = u.id)
+    and not exists (select 1 from public.classes            c where c.owner_id = u.id)
+    and not exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+    and coalesce(p.display_name, '') = ''
+    and p.avatar is null
+)
+select
+  date_trunc('minute', created_at)  as burst_minute,
+  count(*)                          as accounts,
+  max(created_at) - min(created_at) as spread
+from candidates
+group by 1
+order by 1 desc;
+
+-- ---------------------------------------------------------------------------
+-- B. Who SURVIVES the delete? Everyone it would not touch.
+--    Ariel and Julius MUST both appear here. If either is missing, stop —
+--    it means a guard is not catching what it is supposed to.
+-- ---------------------------------------------------------------------------
+select
+  u.id,
+  u.email is not null as has_email,
+  p.display_name,
+  p.avatar,
+  (select count(*) from public.review_state       r where r.user_id  = u.id) as reviews,
+  (select count(*) from public.attempts           a where a.user_id  = u.id) as attempts,
+  (select count(*) from public.class_members      m where m.user_id  = u.id) as memberships,
+  (select count(*) from public.classes            c where c.owner_id = u.id) as owns_classes,
+  (select count(*) from public.push_subscriptions s where s.user_id  = u.id) as push_subs,
+  u.created_at
+from auth.users u
+left join public.profiles p on p.id = u.id
+where u.email is not null
+   or exists (select 1 from public.review_state       r where r.user_id  = u.id)
+   or exists (select 1 from public.attempts           a where a.user_id  = u.id)
+   or exists (select 1 from public.class_members      m where m.user_id  = u.id)
+   or exists (select 1 from public.classes            c where c.owner_id = u.id)
+   or exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+   or coalesce(p.display_name, '') <> ''
+   or p.avatar is not null
+order by u.created_at;
+
 -- Delete exactly what that listed, with every guard repeated so a stale or
 -- mistyped id cannot widen it. Wrapped so you can inspect the count and roll
 -- back if it is not what you expected.

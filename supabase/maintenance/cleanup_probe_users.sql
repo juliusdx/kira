@@ -15,9 +15,16 @@
 --   review_state, attempts, class_members, push_subscriptions), so removing
 --   the user removes everything they own in one statement.
 --
--- Last used: 2026-07-28, to remove two probe learners left by the roster
--- verification (7 reviews / 13 attempts, and 7 reviews / 35 attempts).
--- Confirmed 0 rows remaining afterwards.
+-- Last used: 2026-07-29 (STEP 0, footprint match) — 105 empty anonymous
+-- accounts accumulated 26–29 July from `npm run test:integration` runs and
+-- browser verification against prod. Confirmed burst-shaped first: bursts of
+-- 12/11/7/6/6/6/4/4/3/3/2/2 with sub-30-second spreads, plus singletons on the
+-- two heaviest development days. auth.users went 135 -> 30, and every one of
+-- the 30 survivors holds data — including BOTH of Ariel's accounts and a user
+-- whose only asset was a class.
+--
+-- Before that: 2026-07-28, two probe learners left by the roster verification
+-- (7 reviews / 13 attempts, and 7 reviews / 35 attempts).
 
 -- ---------------------------------------------------------------------------
 -- STEP 0 — ONLY if you have no ids.

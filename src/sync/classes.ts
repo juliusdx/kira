@@ -1,8 +1,14 @@
 import { getSupabase } from './client'
-import { ALL_ENTRIES, getEntry, topicOf } from '../content/loader'
+import {
+  ALL_ENTRIES,
+  MECHANIC_SKILL_TAGS,
+  getEntry,
+  lessonOf,
+  topicOf,
+} from '../content/loader'
 import { computeProgress, type TopicProgress } from '../app/progress'
 import { masteryWeight, type ReviewState } from '../scheduler/scheduler'
-import type { LocalizedText } from '../content/types'
+import type { Item, LocalizedText } from '../content/types'
 
 // Classroom data access (migration 0002). Everything here is gated by RLS on
 // the server: a teacher only ever receives rows for learners who themselves
@@ -62,6 +68,25 @@ const TOTAL_ITEMS = ALL_ENTRIES.length
 const SKILLS_BY_ITEM = new Map(
   ALL_ENTRIES.map((e) => [e.item.id, e.item.skill_tags ?? []]),
 )
+
+/**
+ * How many OTHER items drill any of this item's teachable skills — the answer
+ * to "is there more practice on this already, or does it need authoring?".
+ * Mechanic tags are ignored: every faded_step shares `faded-step`, which would
+ * make the count say "30 more like this" about the presentation, not the skill.
+ */
+export function siblingCount(itemId: string): number {
+  const tags = (SKILLS_BY_ITEM.get(itemId) ?? []).filter(
+    (tag) => !MECHANIC_SKILL_TAGS.has(tag),
+  )
+  if (!tags.length) return 0
+  let n = 0
+  for (const e of ALL_ENTRIES) {
+    if (e.item.id === itemId) continue
+    if ((e.item.skill_tags ?? []).some((tag) => tags.includes(tag))) n++
+  }
+  return n
+}
 
 /** Classes owned by the signed-in teacher. */
 export async function listMyClasses(): Promise<ClassRow[]> {
@@ -330,6 +355,17 @@ export interface RecentMiss {
   topicTitle: LocalizedText | null
   wrong: number
   lastWrongAt: string
+  /**
+   * The whole authored item, so the teacher can be shown the question the
+   * learner actually saw — the answer, the explanation, the lot. It costs
+   * nothing to carry: content is bundled locally, so a miss only ever needed
+   * the item ID from the server. Null once content is removed after an
+   * attempt.
+   */
+  item: Item | null
+  lessonTitle: LocalizedText | null
+  /** Other items in the bank drilling the same skills — what to practise next. */
+  siblings: number
 }
 
 export interface LearnerDetail {
@@ -473,6 +509,9 @@ export function recentMisses(rows: ItemStatRow[], max = 5): RecentMiss[] {
         topicTitle: topicOf(r.item_id)?.title ?? null,
         wrong: Number(r.wrong),
         lastWrongAt: r.last_wrong_at!,
+        item: entry?.item ?? null,
+        lessonTitle: lessonOf(r.item_id)?.title ?? null,
+        siblings: siblingCount(r.item_id),
       }
     })
 }

@@ -186,6 +186,41 @@ export const UI = {
   },
   notPractised: { en: 'Not practised yet', ms: 'Belum dilatih' },
   timesWrong: { en: '× wrong', ms: '× salah' },
+  // a miss, opened up
+  showQuestion: { en: 'See the question', ms: 'Lihat soalan' },
+  hideQuestion: { en: 'Hide', ms: 'Sembunyi' },
+  previewAsked: { en: '(asked)', ms: '(ditanya)' },
+  previewGivenEntry: { en: 'Entry shown as wrong', ms: 'Catatan yang ditunjuk salah' },
+  explanationSeen: {
+    en: 'What the learner was told',
+    ms: 'Apa yang diberitahu kepada pelajar',
+  },
+  itemMissing: {
+    en: 'This question is no longer in the app.',
+    ms: 'Soalan ini tiada lagi dalam aplikasi.',
+  },
+  siblingsCount: {
+    en: '{n} other items drill these skills',
+    ms: '{n} item lain melatih kemahiran ini',
+  },
+  siblingsNone: {
+    en: 'Nothing else in the bank drills these skills',
+    ms: 'Tiada lagi item yang melatih kemahiran ini',
+  },
+  betterExplanation: { en: 'A better explanation', ms: 'Penjelasan yang lebih baik' },
+  betterExplanationHint: {
+    en: 'Say it the way you would say it to them. This is not saved — copy it out before you leave the page.',
+    ms: 'Tulis seperti anda akan menerangkannya kepada mereka. Ini tidak disimpan — salin sebelum meninggalkan halaman ini.',
+  },
+  betterExplanationPlaceholder: {
+    en: 'e.g. the balance c/d goes on the smaller side, not the side the money is on…',
+    ms: 'cth. baki c/d di sebelah yang lebih kecil, bukan di sebelah wang itu berada…',
+  },
+  copyBrief: { en: 'Copy request for the author', ms: 'Salin permintaan untuk penulis' },
+  copyBriefFailed: {
+    en: "Couldn't copy — select the text and copy it manually.",
+    ms: 'Gagal menyalin — pilih teks dan salin secara manual.',
+  },
   // leaving a class
   leaveClass: { en: 'Leave class', ms: 'Tinggalkan kelas' },
   leaveConfirm: {

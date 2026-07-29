@@ -19,8 +19,11 @@ import { skillLabel, t as tc } from '../content/loader'
 import type { UIKey } from '../i18n/strings'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
+import { buildAuthoringBrief } from '../lib/authoringBrief'
 import { Leaderboard } from './Leaderboard'
+import { ItemPreview } from './ItemPreview'
 import { Avatar } from './play'
+import type { RecentMiss } from '../sync/classes'
 
 // Teacher dashboard + learner join flow. All reads are RLS-gated server-side:
 // a teacher only ever receives rows for learners who joined their class.
@@ -405,6 +408,11 @@ function LearnerDetailView({
   const { t, locale } = useKira()
   const [detail, setDetail] = useState<LearnerDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [openMiss, setOpenMiss] = useState<string | null>(null)
+  // Notes live up here, not inside the row, so collapsing a miss (or opening
+  // another) does not throw away what the teacher has typed. They are still
+  // gone on navigation — the UI says so rather than implying they are saved.
+  const [notes, setNotes] = useState<Record<string, string>>({})
 
   useEffect(() => {
     let alive = true
@@ -497,16 +505,17 @@ function LearnerDetailView({
             ) : (
               <ul className="mt-2 flex flex-col gap-3">
                 {detail.recentMisses.map((m) => (
-                  <li key={m.itemId}>
-                    <p className="text-sm text-slate-800 dark:text-slate-100">
-                      {tc(m.prompt, locale)}
-                    </p>
-                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                      {m.topicTitle ? `${tc(m.topicTitle, locale)} · ` : ''}
-                      {m.wrong}
-                      {t('timesWrong')} · {relativeTime(m.lastWrongAt, t)}
-                    </p>
-                  </li>
+                  <MissRow
+                    key={m.itemId}
+                    miss={m}
+                    learnerName={learner.displayName}
+                    expanded={openMiss === m.itemId}
+                    onToggle={() =>
+                      setOpenMiss(openMiss === m.itemId ? null : m.itemId)
+                    }
+                    note={notes[m.itemId] ?? ''}
+                    onNote={(v) => setNotes((n) => ({ ...n, [m.itemId]: v }))}
+                  />
                 ))}
               </ul>
             )}
@@ -517,3 +526,135 @@ function LearnerDetailView({
   )
 }
 
+
+/**
+ * One recently-missed question, openable.
+ *
+ * Collapsed it is what it always was: the prompt, the topic, how often. Opened
+ * it shows the question the learner actually met, the answer, and the
+ * explanation the app gave them — all of it already available locally, because
+ * content is bundled and the server only ever sent an item id.
+ *
+ * The point of opening it is to be able to act: either the explanation is fine
+ * and the learner needs more practice, or the explanation is the problem, and
+ * the teacher is the person who knows what it should have said. Both come out
+ * as a brief for whoever edits `seed_content.json`.
+ */
+function MissRow({
+  miss,
+  learnerName,
+  expanded,
+  onToggle,
+  note,
+  onNote,
+}: {
+  miss: RecentMiss
+  learnerName: string | null
+  expanded: boolean
+  onToggle: () => void
+  note: string
+  onNote: (v: string) => void
+}) {
+  const { t, locale } = useKira()
+  const [copied, setCopied] = useState<'no' | 'yes' | 'failed'>('no')
+
+  return (
+    <li>
+      <button
+        onClick={onToggle}
+        aria-expanded={expanded}
+        className={`w-full rounded-xl px-1 py-0.5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/60 ${FOCUS}`}
+      >
+        <p className="text-sm text-slate-800 dark:text-slate-100">
+          {tc(miss.prompt, locale)}
+        </p>
+        <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+          {miss.topicTitle ? `${tc(miss.topicTitle, locale)} · ` : ''}
+          {miss.wrong}
+          {t('timesWrong')} · {relativeTime(miss.lastWrongAt, t)} ·{' '}
+          <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+            {expanded ? t('hideQuestion') : t('showQuestion')}
+          </span>
+        </p>
+      </button>
+
+      {expanded && (
+        <div className="mt-2 flex flex-col gap-2.5">
+          {!miss.item ? (
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {t('itemMissing')}
+            </p>
+          ) : (
+            <>
+              <ItemPreview item={miss.item} locale={locale} />
+
+              <div>
+                <p className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+                  {t('explanationSeen')}
+                </p>
+                <p className="mt-0.5 text-sm text-slate-700 dark:text-slate-200">
+                  {tc(miss.item.explanation, locale)}
+                </p>
+              </div>
+
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {miss.siblings > 0
+                  ? t('siblingsCount').replace('{n}', String(miss.siblings))
+                  : t('siblingsNone')}
+              </p>
+
+              <div>
+                <label
+                  htmlFor={`note-${miss.itemId}`}
+                  className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
+                >
+                  {t('betterExplanation')}
+                </label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                  {t('betterExplanationHint')}
+                </p>
+                <textarea
+                  id={`note-${miss.itemId}`}
+                  value={note}
+                  onChange={(e) => onNote(e.target.value)}
+                  rows={3}
+                  placeholder={t('betterExplanationPlaceholder')}
+                  className="mt-1.5 w-full rounded-2xl bg-white p-3 text-sm ring-1 ring-slate-200 outline-none placeholder:text-slate-400 dark:bg-slate-800 dark:text-white dark:ring-slate-700"
+                />
+              </div>
+
+              <Button
+                variant="secondary"
+                onClick={async () => {
+                  const brief = buildAuthoringBrief({
+                    item: miss.item!,
+                    topicTitle: miss.topicTitle,
+                    lessonTitle: miss.lessonTitle,
+                    wrong: miss.wrong,
+                    lastWrongAt: miss.lastWrongAt,
+                    siblings: miss.siblings,
+                    teacherNote: note,
+                    learnerName,
+                    locale,
+                  })
+                  // Never claim success without checking: the clipboard is
+                  // unavailable in an insecure context and fails silently.
+                  const ok = await copyText(brief)
+                  setCopied(ok ? 'yes' : 'failed')
+                  if (ok) setTimeout(() => setCopied('no'), 1500)
+                }}
+              >
+                {copied === 'yes' ? t('copied') : t('copyBrief')}
+              </Button>
+              {copied === 'failed' && (
+                <p className="text-xs text-rose-600 dark:text-rose-400">
+                  {t('copyBriefFailed')}
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </li>
+  )
+}

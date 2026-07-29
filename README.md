@@ -75,7 +75,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 154 hermetic unit + component tests (the CI gate)
+npm test           # 171 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -138,6 +138,13 @@ unchanged when Supabase credentials are absent.
   join themselves. A teacher may READ — never write — the progress of learners
   in their own classes. Classmates can see each other's leaderboard rank but
   *not* each other's answers.
+- **Acting on a miss.** In the teacher's view, a recently-missed question opens
+  up: the question as the learner met it, the answer, the explanation they were
+  shown, and how many other items drill the same skills. If the explanation is
+  the problem, the teacher writes a better one and copies an authoring brief —
+  content is data, so the way to act on a miss is to hand the author a brief,
+  not to open a CMS that does not exist. All of it is local: the server only
+  ever sends an item id, and the bank is already in the bundle.
 - **Gamification.** Session combos (accuracy-based, never timed — a clock would
   fight the self-explanation gate), 20 badges derived from synced data rather
   than stored, and a class leaderboard ranked by items practised in the last 7

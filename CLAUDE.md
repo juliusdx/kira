@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 154 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 171 passing, no network
 - Live-backend tests: `npm run test:integration` — 9 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
@@ -130,6 +130,25 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   on a `numeric` item's data and on a `faded_step` number step. A currency
   leads its figure, a ratio unit trails it, and a WORD unit needs a BM label
   or a BM-first app shows English. All three are guarded in `content.test.ts`.
+- **2026-07-29** — "Recently got wrong" opens up. A miss now expands to the
+  question the learner actually met (`components/ItemPreview.tsx`, a READ-ONLY
+  render of any of the 8 item types with the answer marked), the explanation
+  they were shown, and how many other items already drill those skills. The
+  teacher can type a better explanation and copy an authoring brief
+  (`lib/authoringBrief.ts`) naming the item id, skills, difficulty and both
+  language versions. **Zero backend work:** `recentMisses` already resolved
+  each item from the LOCAL bundle — the server only ever sent an item id — so
+  this needed no RPC, no migration and no RLS change.
+  - The preview is deliberately NOT the interactive renderer: a gradeable
+    widget on the teacher screen would record attempts against the TEACHER's
+    own account while they review someone else's work. A test asserts it
+    renders no inputs and no buttons.
+  - The teacher's note is NOT persisted — it is copied out or lost, and the
+    UI says so. Storing it means a table, a policy and a migration.
+  - **Not built, and asked for:** what the learner actually ANSWERED. That is
+    `attempts.chosen`, which `learner_item_stats` does not return; it needs a
+    migration 0007 with a new owner-guarded RPC. Without it the panel can say
+    what the right answer is but not which wrong one she picked.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

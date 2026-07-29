@@ -3,11 +3,12 @@ import {
   mapRosterRows,
   recentMisses,
   rollUpDetail,
+  siblingCount,
   weakestSkills,
   type ItemStatRow,
   type RosterRow,
 } from './classes'
-import { ALL_ITEMS } from '../content/loader'
+import { ALL_ITEMS, getItem } from '../content/loader'
 
 const NOW = Date.parse('2026-07-28T00:00:00.000Z')
 const day = 86_400_000
@@ -222,5 +223,50 @@ describe('recentMisses', () => {
     ])
     expect(miss.itemId).toBe('deleted-99')
     expect(miss.topicTitle).toBeNull()
+    // The teacher view must render this without the whole card throwing.
+    expect(miss.item).toBeNull()
+    expect(miss.lessonTitle).toBeNull()
+    expect(miss.siblings).toBe(0)
+  })
+
+  // The server only ever sends an item id; the item itself is in the bundle.
+  // Carrying it is what lets a teacher be shown the actual question, its
+  // answer and its explanation with no extra round trip and no new RLS.
+  it('carries the whole item, its lesson and its sibling count', () => {
+    const [miss] = recentMisses([
+      stat({ item_id: 'ap-001', attempts: 1, wrong: 1, last_wrong_at: iso(NOW) }),
+    ])
+    expect(miss.item?.id).toBe('ap-001')
+    expect(miss.item?.explanation.ms.length).toBeGreaterThan(0)
+    expect(miss.lessonTitle?.ms.length).toBeGreaterThan(0)
+    expect(miss.siblings).toBeGreaterThan(0)
+  })
+})
+
+describe('siblingCount', () => {
+  it('counts other items sharing a teachable skill, excluding the item itself', () => {
+    const n = siblingCount('ta-006') // ledger + balancing-off
+    expect(n).toBeGreaterThan(0)
+    const tags = new Set(getItem('ta-006')?.skill_tags ?? [])
+    const expected = ALL_ITEMS.filter(
+      (i) => i.id !== 'ta-006' && (i.skill_tags ?? []).some((tag) => tags.has(tag)),
+    ).length
+    expect(n).toBe(expected)
+  })
+
+  // Every faded_step shares `faded-step`, so counting it would report "30 more
+  // like this" about the PRESENTATION rather than about the skill.
+  it('ignores mechanic tags', () => {
+    const withMechanic = ALL_ITEMS.filter((i) =>
+      (i.skill_tags ?? []).includes('faded-step'),
+    )
+    expect(withMechanic.length).toBeGreaterThan(10)
+    // fd-1001 is ledger + balancing-off + faded-step; the count must match the
+    // real skills only, so it cannot include every other ladder in the bank.
+    expect(siblingCount('fd-1001')).toBeLessThan(withMechanic.length)
+  })
+
+  it('is 0 for an item that is not in the bank', () => {
+    expect(siblingCount('deleted-99')).toBe(0)
   })
 })

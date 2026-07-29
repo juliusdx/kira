@@ -231,16 +231,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   distinguished "never created" from "created but not visible to the API" →
   hand over a migration as ONE block, never split, and diagnose via pg_proc
   before blaming the cache.
+- 2026-07-29: Claude put runnable-looking SQL in a PROSE WARNING — a fenced
+  block quoting `create or replace function auth.uid()` and
+  `grant select on auth.users to anon` to explain what would be dangerous —
+  and Julius pasted it into the SQL Editor, reasonably, because everything
+  else Claude had handed over that day was meant to be pasted. Nothing ran:
+  with no semicolon the two lines parse as ONE malformed statement, so
+  Postgres rejected the batch (`42601 syntax error at or near "grant"`) and
+  executed none of it. Verified by reproducing it against a local database —
+  `auth.uid()` unchanged, zero grants. → **Never quote executable SQL to make
+  a point.** Describe it in words, or defang it. A fenced SQL block in this
+  project is an instruction to paste.
 - 2026-07-29: **`supabase/tests/*.sql` are LOCAL FIXTURES and must never reach
-  the SQL Editor.** `harness.sql` fakes the `auth` schema — on prod its
-  `create or replace function auth.uid()` would replace the real one, breaking
-  every RLS policy in the app, and its `grant select on auth.users to anon`
-  is a live exposure. Supabase's own linter caught it ("creates a table
-  without enabling RLS ... auth.users") because harness.sql is the only file
-  in the repo that creates `auth.users`. Every test file now starts with a
-  hard guard that raises if role `supabase_auth_admin` exists, i.e. if it is
-  running on a real Supabase database. **Only `supabase/migrations/*.sql` and
-  `supabase/maintenance/*.sql` are ever pasted into the SQL Editor.**
+  the SQL Editor** — `harness.sql` fakes the `auth` schema, so on prod its
+  `auth.uid()` replacement would break every RLS policy in the app and its
+  grant on `auth.users` would be a live exposure; the `_test.sql` files insert
+  into `auth.users` and `cleanup_test.sql` deletes from it. This has never
+  actually happened (see above — that was a false alarm), but nothing stopped
+  it either, so every test file now opens with a hard guard that raises if
+  role `supabase_auth_admin` exists, i.e. if it is running on a real Supabase
+  database. **Only `supabase/migrations/*.sql` and `supabase/maintenance/*.sql`
+  are ever pasted into the SQL Editor.**
 - 2026-07-29: `npm run test:integration` signs in ~3 real anonymous users per
   run and can delete its own ROWS but never its own auth USER (that needs the
   admin API, and there is no service_role key here) → the leftovers used to be

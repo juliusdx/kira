@@ -27,6 +27,23 @@ function table() {
     select() {
       return this
     },
+    order() {
+      return this
+    },
+    limit(n: number) {
+      // listMyNotes: RLS already scopes this to the caller, so the query is a
+      // bare select of own rows — the cap is the only thing bounding it.
+      return Promise.resolve(
+        state.missingTable
+          ? { data: null, error: ERR }
+          : {
+              data: state.rows
+                .slice(0, n)
+                .map((r) => ({ ...r, updated_at: '2026-07-29T12:00:00.000Z' })),
+              error: null,
+            },
+      )
+    },
     in(_col: string, ids: string[]) {
       this._ids = ids
       return Promise.resolve(
@@ -83,7 +100,8 @@ vi.mock('./client', () => ({
   getSupabase: () => Promise.resolve({ from: () => table() }),
 }))
 
-const { getItemNotes, saveItemNote, NOTE_MAX } = await import('./notes')
+const { getItemNotes, saveItemNote, listMyNotes, NOTE_MAX, NOTES_PAGE } =
+  await import('./notes')
 
 beforeEach(() => {
   state.rows = []
@@ -157,5 +175,32 @@ describe('getItemNotes', () => {
     // detail screen must still render.
     state.missingTable = true
     await expect(getItemNotes(['a'])).resolves.toEqual(new Map())
+  })
+})
+
+describe('listMyNotes', () => {
+  it('returns everything the teacher has written', async () => {
+    await saveItemNote('u1', 'a', 'note a')
+    await saveItemNote('u1', 'b', 'note b')
+    const { notes, truncated } = await listMyNotes()
+    expect(notes.map((n) => n.itemId)).toEqual(['a', 'b'])
+    expect(notes[0].note).toBe('note a')
+    expect(truncated).toBe(false)
+  })
+
+  it('reports when the cap bit, instead of quietly showing a slice', async () => {
+    // The roster bug was exactly a truncation nobody was told about. A page
+    // that silently shows 200 of 260 reads as "you have written 200".
+    for (let i = 0; i < NOTES_PAGE + 5; i++) {
+      await saveItemNote('u1', `item-${i}`, `note ${i}`)
+    }
+    const { notes, truncated } = await listMyNotes()
+    expect(notes).toHaveLength(NOTES_PAGE)
+    expect(truncated).toBe(true)
+  })
+
+  it('degrades to an empty list when 0008 is absent', async () => {
+    state.missingTable = true
+    await expect(listMyNotes()).resolves.toEqual({ notes: [], truncated: false })
   })
 })

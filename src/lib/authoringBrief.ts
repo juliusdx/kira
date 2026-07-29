@@ -88,3 +88,30 @@ export function buildAuthoringBrief(input: BriefInput): string {
 
   return lines.join('\n')
 }
+
+/**
+ * Every brief for one learner, as a single request.
+ *
+ * One miss per clipboard trip is fine for the miss you were already looking
+ * at, and useless for the actual job — sitting down once and handing over
+ * everything that went wrong this week. The separator is a rule rather than a
+ * blank line so the boundaries survive being pasted into a chat window that
+ * collapses whitespace.
+ */
+export function buildBriefBundle(
+  briefs: BriefInput[],
+  learnerName: string | null,
+): string {
+  if (briefs.length === 0) return ''
+  const header = [
+    `Kira — ${briefs.length} authoring request${briefs.length === 1 ? '' : 's'}` +
+      (learnerName ? ` from ${learnerName}'s recent misses` : ''),
+    // Say what the list IS. An author receiving 5 briefs should not have to
+    // work out whether it is a week, a topic, or everything ever.
+    `The questions this learner got wrong most recently, worst first.`,
+  ].join('\n')
+
+  return [header, ...briefs.map(buildAuthoringBrief)].join(
+    `\n\n${'—'.repeat(60)}\n\n`,
+  )
+}

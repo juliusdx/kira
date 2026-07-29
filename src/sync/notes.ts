@@ -50,6 +50,52 @@ export async function getItemNotes(
   return out
 }
 
+export interface StoredNote {
+  itemId: string
+  note: string
+  updatedAt: string
+}
+
+/**
+ * Every note this teacher has written, newest first.
+ *
+ * Notes were only ever visible inside the miss that prompted them, which meant
+ * a teacher who had written a dozen had nowhere to read them back.
+ *
+ * Explicitly capped. One row per item the author has annotated is naturally
+ * bounded by the size of the bank today, but "naturally bounded" is exactly
+ * what was said about the roster query PostgREST silently truncated — so the
+ * limit is stated here rather than inherited from a server default, and the
+ * caller is told when it bit.
+ */
+export const NOTES_PAGE = 200
+
+export async function listMyNotes(): Promise<{
+  notes: StoredNote[]
+  truncated: boolean
+}> {
+  const pending = getSupabase()
+  if (!pending) return { notes: [], truncated: false }
+  const supabase = await pending
+
+  const { data, error } = await supabase
+    .from('item_notes')
+    .select('item_id, note, updated_at')
+    .order('updated_at', { ascending: false })
+    .limit(NOTES_PAGE)
+  if (error || !data) return { notes: [], truncated: false }
+
+  const rows = data as { item_id: string; note: string; updated_at: string }[]
+  return {
+    notes: rows.map((r) => ({
+      itemId: r.item_id,
+      note: r.note,
+      updatedAt: r.updated_at,
+    })),
+    truncated: rows.length === NOTES_PAGE,
+  }
+}
+
 export type SaveResult = 'saved' | 'cleared' | 'failed'
 
 /**

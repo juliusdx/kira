@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildAuthoringBrief } from './authoringBrief'
+import { buildAuthoringBrief, buildBriefBundle } from './authoringBrief'
 import { getItem } from '../content/loader'
 import type { Item } from '../content/types'
 
@@ -97,5 +97,50 @@ describe('buildAuthoringBrief', () => {
     expect(brief).toContain('ta-008')
     expect(brief).not.toContain('null')
     expect(brief).not.toContain('undefined')
+  })
+})
+
+describe('buildBriefBundle', () => {
+  const second = {
+    ...base,
+    item: getItem('dc-006') as Item,
+    wrong: 5,
+    teacherNote: 'Say which side the money is on FIRST.',
+  }
+
+  it('hands over every miss in one trip, with a header saying what the list is', () => {
+    // One brief per clipboard trip is fine for the miss you happen to be
+    // reading and useless for the job: sitting down once and handing over
+    // everything that went wrong.
+    const bundle = buildBriefBundle([base, second], 'Ariel')
+    expect(bundle).toContain('2 authoring requests')
+    expect(bundle).toContain("Ariel's recent misses")
+    expect(bundle).toContain('ta-008')
+    expect(bundle).toContain('dc-006')
+    expect(bundle).toContain('Say which side the money is on FIRST.')
+  })
+
+  it('separates briefs with a rule, not a blank line', () => {
+    // Blank lines get collapsed by the chat window this is pasted into, and a
+    // bundle whose boundaries vanish is one unreadable brief.
+    const bundle = buildBriefBundle([base, second], 'Ariel')
+    expect(bundle).toMatch(/—{10,}/)
+    // header + 2 briefs = 3 parts, so 2 rules between them
+    expect(bundle.split(/—{10,}/)).toHaveLength(3)
+  })
+
+  it('counts one request in the singular', () => {
+    expect(buildBriefBundle([base], 'Ariel')).toContain('1 authoring request from')
+  })
+
+  it('is empty for no misses, so the caller can hide the control', () => {
+    expect(buildBriefBundle([], 'Ariel')).toBe('')
+  })
+
+  it('works for an unnamed learner', () => {
+    // displayName is null until someone sets one, which is the default.
+    const bundle = buildBriefBundle([base], null)
+    expect(bundle).toContain('1 authoring request')
+    expect(bundle).not.toContain('null')
   })
 })

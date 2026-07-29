@@ -335,6 +335,39 @@ export const UI = {
     en: 'Too many attempts. Wait a while and try again.',
     ms: 'Terlalu banyak percubaan. Tunggu sebentar dan cuba lagi.',
   },
+  // one actionable line per learner (src/app/nextAction.ts)
+  actNotStarted: { en: 'Has not started yet', ms: 'Belum bermula lagi' },
+  actNotStartedHint: {
+    en: 'Check they are signed in on their own device — progress is per device until an email is added.',
+    ms: 'Pastikan mereka telah log masuk pada peranti sendiri — kemajuan adalah mengikut peranti sehingga e-mel ditambah.',
+  },
+  actIdle: { en: 'No practice in {n} days', ms: 'Tiada latihan selama {n} hari' },
+  actDueStale: {
+    en: '{n} reviews due, and slipping',
+    ms: '{n} ulang kaji tertunggak, dan semakin ketinggalan',
+  },
+  actDue: { en: '{n} reviews due today', ms: '{n} ulang kaji perlu dibuat hari ini' },
+  actStruggling: {
+    en: 'Finding it hard — {n}% correct',
+    ms: 'Menghadapi kesukaran — {n}% betul',
+  },
+  actCaughtUp: { en: 'Up to date', ms: 'Sudah terkini' },
+  // notes, gathered in one place
+  myNotes: { en: 'My explanations', ms: 'Penjelasan saya' },
+  myNotesHint: {
+    en: 'Everything you have written, newest first. Only you can see these.',
+    ms: 'Semua yang anda telah tulis, terbaharu dahulu. Hanya anda boleh melihatnya.',
+  },
+  noNotes: {
+    en: 'Nothing yet. Open a missed question and write a better explanation.',
+    ms: 'Belum ada. Buka soalan yang salah dan tulis penjelasan yang lebih baik.',
+  },
+  copyAllBriefs: { en: 'Copy every brief', ms: 'Salin semua permintaan' },
+  copyAllBriefsHint: {
+    en: 'All {n} recent misses as one request for whoever edits the question bank.',
+    ms: 'Kesemua {n} kesilapan terkini sebagai satu permintaan untuk penyunting bank soalan.',
+  },
+  noteDeleted: { en: 'Removed', ms: 'Dibuang' },
   // classroom / roster failures (src/sync/classErrors.ts)
   errOffline: {
     en: 'No connection. Practice works offline — this progress report does not.',

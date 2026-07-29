@@ -75,7 +75,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 222 hermetic unit + component tests (the CI gate)
+npm test           # 238 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -155,6 +155,15 @@ unchanged when Supabase credentials are absent.
   addressed to the child, and text authored by one user and rendered to another
   is a surface a classroom app should not open. The UI never reports a save it
   has not had confirmed, and says to copy the text out when a save fails.
+- **Knowing what to do about it.** Each learner on the roster carries one line
+  saying what to do tonight — reviews due, gone quiet for nine days, finding it
+  hard, or up to date — and the roster sorts by that rather than by who
+  practised last. Going quiet outranks everything, because spaced repetition
+  that is not returned to is just forgetting on a schedule. A learner who
+  joined and never practised is reported as a *cause* rather than a 0%: in this
+  app that is almost always the same thing, an account signed in on a different
+  device. The teacher's saved explanations gather on one screen, and every
+  recent miss can be handed over as a single authoring request.
 - **Gamification.** Session combos (accuracy-based, never timed — a clock would
   fight the self-explanation gate), 20 badges derived from synced data rather
   than stored, and a class leaderboard ranked by items practised in the last 7

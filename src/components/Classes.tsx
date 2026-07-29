@@ -19,11 +19,13 @@ import { skillLabel, t as tc } from '../content/loader'
 import type { UIKey } from '../i18n/strings'
 import { getIdentity } from '../sync/identity'
 import { copyText } from '../lib/clipboard'
-import { buildAuthoringBrief } from '../lib/authoringBrief'
+import { buildAuthoringBrief, buildBriefBundle } from '../lib/authoringBrief'
 import { describeChosen } from '../lib/chosenAnswer'
 import { getItemNotes, saveItemNote, NOTE_MAX, type SaveResult } from '../sync/notes'
 import { friendlyClassError, isOffline } from '../sync/classErrors'
+import { nextAction, TONE_RANK } from '../app/nextAction'
 import { Leaderboard } from './Leaderboard'
+import { MyNotes } from './MyNotes'
 import { ItemPreview } from './ItemPreview'
 import { Avatar } from './play'
 import type { RecentMiss } from '../sync/classes'
@@ -123,6 +125,35 @@ function ReportHeader({
   )
 }
 
+/**
+ * The one line on a roster card that says what to DO. Everything else on the
+ * card is a state; this is the only part a parent can act on tonight, so it
+ * sits directly under the name and carries the only colour on the card.
+ */
+function ActionLine({ learner }: { learner: LearnerSummary }) {
+  const { t } = useKira()
+  const action = nextAction(learner)
+  const tone =
+    action.tone === 'urgent'
+      ? 'text-rose-600 dark:text-rose-400'
+      : action.tone === 'attention'
+        ? 'text-indigo-600 dark:text-indigo-400'
+        : 'text-slate-500 dark:text-slate-400'
+  return (
+    <div className="mt-1">
+      <p className={`text-sm font-semibold ${tone}`}>
+        {t(action.key).replace('{n}', String(action.n ?? ''))}
+      </p>
+      {/* The one case where the cause is more useful than the task. */}
+      {action.key === 'actNotStarted' && (
+        <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+          {t('actNotStartedHint')}
+        </p>
+      )}
+    </div>
+  )
+}
+
 /** Shown while the browser reports no connection, on the one screen that needs it. */
 function OfflineBanner() {
   const { t } = useKira()
@@ -175,6 +206,7 @@ export function Classes({ onBack }: { onBack: () => void }) {
   const [code, setCode] = useState('')
   const [newName, setNewName] = useState('')
   const [busy, setBusy] = useState(false)
+  const [showNotes, setShowNotes] = useState(false)
 
   const refresh = useCallback(async () => {
     setLoading(true)
@@ -230,6 +262,7 @@ export function Classes({ onBack }: { onBack: () => void }) {
   if (open) {
     return <Roster cls={open} onBack={() => { setOpen(null); void refresh() }} />
   }
+  if (showNotes) return <MyNotes onBack={() => setShowNotes(false)} />
 
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col gap-4 px-5 py-6">
@@ -321,6 +354,15 @@ export function Classes({ onBack }: { onBack: () => void }) {
             {t('create')}
           </Button>
         </div>
+
+        {mine.length > 0 && (
+          <button
+            onClick={() => setShowNotes(true)}
+            className={`mt-3 w-full rounded-xl px-2 py-1.5 text-left text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-500/10 ${FOCUS}`}
+          >
+            {t('myNotes')} →
+          </button>
+        )}
 
         {mine.length > 0 && (
           <ul className="mt-4 flex flex-col gap-2">
@@ -455,7 +497,14 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
         </Card>
       )}
 
-      {rows?.map((r) => (
+      {/* Whoever needs something comes first. The server orders by last-active,
+          which is a reasonable default and the wrong one here: the learner who
+          has gone quiet for nine days is exactly the one that ordering buries.
+          Ties keep the server's order, so it stays stable between refreshes. */}
+      {rows
+        ?.map((r, i) => ({ r, i, rank: TONE_RANK[nextAction(r).tone] }))
+        .sort((a, b) => a.rank - b.rank || a.i - b.i)
+        .map(({ r }) => (
         <Card key={r.userId}>
           <div className="flex items-center gap-2.5">
             <Avatar seed={r.userId} chosen={r.avatar} size="sm" />
@@ -466,6 +515,8 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
               {relativeTime(r.lastActiveAt, t)}
             </span>
           </div>
+
+          <ActionLine learner={r} />
 
           <div className="mt-3 flex items-center gap-2">
             <ProgressBar value={r.masteryPct} label={t('mastery')} className="flex-1" />
@@ -521,7 +572,7 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
             </Button>
           </div>
         </Card>
-      ))}
+        ))}
     </div>
   )
 }
@@ -556,6 +607,7 @@ export function LearnerDetailView({
   const [status, setStatus] = useState<Record<string, SaveResult | 'saving'>>({})
   const [loadedAt, setLoadedAt] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
+  const [bundleCopied, setBundleCopied] = useState<'no' | 'yes' | 'failed'>('no')
 
   /**
    * Reload the report. Note what it does NOT touch: `notes`, the teacher's
@@ -693,7 +745,7 @@ export function LearnerDetailView({
             <h2 className="font-semibold">{t('recentMisses')}</h2>
             {detail.recentMisses.length === 0 ? (
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {t('noMisses')}
+                {detail.attempts === 0 ? t('actNotStartedHint') : t('noMisses')}
               </p>
             ) : (
               <ul className="mt-2 flex flex-col gap-3">
@@ -714,6 +766,55 @@ export function LearnerDetailView({
                   />
                 ))}
               </ul>
+            )}
+
+            {/* One brief per clipboard trip is right for the miss you happen to
+                be reading; it is useless for the actual job, which is sitting
+                down once and handing over everything that went wrong. */}
+            {detail.recentMisses.some((m) => m.item) && (
+              <div className="mt-4 border-t border-slate-200 pt-3 dark:border-slate-700">
+                <Button
+                  variant="secondary"
+                  className="w-full text-sm"
+                  onClick={async () => {
+                    const bundle = buildBriefBundle(
+                      detail.recentMisses
+                        .filter((m) => m.item)
+                        .map((m) => ({
+                          item: m.item!,
+                          topicTitle: m.topicTitle,
+                          lessonTitle: m.lessonTitle,
+                          wrong: m.wrong,
+                          lastWrongAt: m.lastWrongAt,
+                          siblings: m.siblings,
+                          // the saved note, not the unsaved draft: the bundle
+                          // should match what the teacher has committed
+                          teacherNote: saved[m.itemId] ?? '',
+                          learnerName: learner.displayName,
+                          locale,
+                          chosen:
+                            m.item && m.chosen !== undefined
+                              ? describeChosen(m.item, m.chosen, locale, t)
+                              : null,
+                        })),
+                      learner.displayName,
+                    )
+                    const ok = await copyText(bundle)
+                    setBundleCopied(ok ? 'yes' : 'failed')
+                    if (ok) setTimeout(() => setBundleCopied('no'), 1500)
+                  }}
+                >
+                  {bundleCopied === 'yes' ? t('copied') : t('copyAllBriefs')}
+                </Button>
+                <p className="mt-1.5 text-center text-xs text-slate-500 dark:text-slate-400">
+                  {bundleCopied === 'failed'
+                    ? t('copyBriefFailed')
+                    : t('copyAllBriefsHint').replace(
+                        '{n}',
+                        String(detail.recentMisses.filter((m) => m.item).length),
+                      )}
+                </p>
+              </div>
             )}
           </Card>
         </>

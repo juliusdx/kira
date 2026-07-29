@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 222 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 238 passing, no network
 - Live-backend tests: `npm run test:integration` — 11 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
@@ -239,6 +239,29 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   - `confirm()` on leave/rotate/remove is knowingly left as-is — browser chrome
     in an installed PWA and off-style, but it works and it is not a robustness
     problem.
+- **2026-07-29 (making the teacher view worth opening)** — no schema change.
+  The observation behind all of it: every number on that screen described a
+  STATE, and none of them told a parent whether to do anything tonight.
+  - **`src/app/nextAction.ts`** — one line per learner saying what to DO,
+    pure and unit-tested because the ORDERING is the editorial judgement and
+    belongs somewhere it can be argued with. Going quiet outranks due reviews
+    (spaced repetition not returned to is forgetting on a schedule); accuracy
+    only becomes the action once nothing is due, since with reviews
+    outstanding the answer is "do the reviews" either way; and an accuracy
+    figure under 10 attempts is ignored as noise. The roster now sorts by that
+    urgency — the server orders by last-active, which buries the learner who
+    has gone quiet for nine days.
+  - **Never practised gets a CAUSE, not a task.** That case names the identity
+    bug (anonymous auth is per device AND per origin) instead of saying 0%.
+  - **`MyNotes.tsx`** — every saved explanation in one place, because a note
+    keyed to an item was only reachable by finding the learner who missed that
+    item. `listMyNotes` is explicitly capped at 200 and REPORTS being capped;
+    "naturally bounded" is exactly what was said about the roster query
+    PostgREST silently truncated.
+  - **`buildBriefBundle`** — every recent miss as one request. One brief per
+    clipboard trip suits the miss you happen to be reading and is useless for
+    the actual job. Separated by a rule, not a blank line, because the chat
+    window it gets pasted into collapses whitespace.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -351,6 +374,14 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   ids; STEP 0 is the footprint fallback for runs from before this, and its
   predicate is tested in `supabase/tests/cleanup_test.sql` — a DELETE against
   prod deserves at least what a migration gets.
+- 2026-07-29: **the teacher screens cannot be browser-verified in `localonly`.**
+  `.env.localonly` blanks the Supabase vars, `SYNC_ENABLED` goes false, and the
+  entire classroom UI is hidden — there is no Classes entry on the Progress
+  screen at all. So the localonly mode that exists to avoid minting prod users
+  cannot exercise the one surface that needs the cloud. Verify teacher UI with
+  component tests against the real component (see `Classes.report.test.tsx`),
+  and treat a browser check of the roster as something that costs a prod
+  account. Do not go looking for the screen and conclude it is broken.
 - 2026-07-29: **a hook that returns a fresh function each render silently turns
   a mount effect into an every-render effect.** A new `useErrorText()` closed
   over `t` from `useKira()`, which is a NEW function on every render, so the

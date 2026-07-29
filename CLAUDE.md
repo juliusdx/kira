@@ -13,10 +13,10 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
 - **Hermetic tests (the CI gate): `npm test`** — 204 passing, no network
-- Live-backend tests: `npm run test:integration` — 10 passing, hits real Supabase
+- Live-backend tests: `npm run test:integration` — 11 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
-  An 11th suite, `itemNotes.integration.test.ts`, is written and WILL fail
-  until 0008 is applied.
+  Each run signs in ~3 anonymous users it cannot delete; their ids land in
+  `.probe-users.local` for the next sweep.
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
   Postgres, applies all 8 migrations, runs 22 RLS + 13 leaderboard + 15 push
   + 23 roster + 14 avatar + 13 last-wrong + 19 item-notes + 19 probe-cleanup
@@ -187,9 +187,8 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   not touch the roster. **Do not re-raise this as "the roster is missing her
   history" — it was checked and it is not.**
 - **2026-07-29 (final)** — The teacher's "better explanation" now survives
-  leaving the page. Migration 0008 `item_notes`, **WRITTEN AND LOCALLY TESTED,
-  NOT YET APPLIED** — hand it to Julius as one block from
-  `supabase/migrations/0008_item_notes.sql`.
+  leaving the page. Migration 0008 `item_notes` **APPLIED to prod and VERIFIED
+  LIVE** (`itemNotes.integration.test.ts`).
   - **Scoped `(author, item)`, not `(author, learner, item)`.** A better
     explanation for `dc-006` is a better explanation for it whoever missed it;
     per-learner scoping would make a teacher write the same sentence once per
@@ -200,7 +199,9 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     exactly the surface `profiles.avatar` needed a CHECK allow-list to close in
     0006; author-only means there is nothing to moderate and no path onto a
     child's screen. The live integration test's load-bearing assertion is
-    therefore "a second account CANNOT read it", not "a note saves".
+    therefore "a second account CANNOT read it", not "a note saves" — a table
+    created without RLS would pass the second and fail the first, while looking
+    like a working feature from the client. It passed against prod.
   - **First thing since 0001 with no SECURITY DEFINER function** — plain
     self-service RLS, so the policy itself is the whole boundary. Verified by
     breaking it two ways: dropping `with check` lets a teacher author rows under

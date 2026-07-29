@@ -352,6 +352,29 @@ export const UI = {
     ms: 'Menghadapi kesukaran — {n}% betul',
   },
   actCaughtUp: { en: 'Up to date', ms: 'Sudah terkini' },
+  // consistency + class-wide weak spots (migration 0009)
+  practiceWeek: { en: 'Last 7 days', ms: '7 hari lepas' },
+  daysPractised: {
+    en: '{n} of the last 7 days',
+    ms: '{n} daripada 7 hari lepas',
+  },
+  classWeakSpots: { en: 'What the class finds hardest', ms: 'Apa yang kelas rasa paling sukar' },
+  classWeakSpotsHint: {
+    en: 'Across everyone in this class — the topic to go over together.',
+    ms: 'Merentas semua dalam kelas ini — topik untuk diulang bersama.',
+  },
+  learnersMissed: {
+    en: '{n} learners got this wrong',
+    ms: '{n} pelajar salah pada ini',
+  },
+  oneLearnerMissed: {
+    en: 'one learner, more than once',
+    ms: 'seorang pelajar, lebih daripada sekali',
+  },
+  noClassWeakSpots: {
+    en: 'Not enough practice yet to say.',
+    ms: 'Belum cukup latihan untuk menentukannya.',
+  },
   // notes, gathered in one place
   myNotes: { en: 'My explanations', ms: 'Penjelasan saya' },
   myNotesHint: {

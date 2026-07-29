@@ -169,6 +169,30 @@ if [ "$IN_FALSE" -gt 0 ] || [ "$IN_ERR" -gt 0 ] || [ "$IN_BLOCKED" -lt 4 ]; then
   exit 1
 fi
 
+# class-insight suite (0009) — consistency strip + class-wide weak items.
+CI_DB="${DB}_insight"
+dropdb --if-exists "$CI_DB"; createdb "$CI_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
+         "$MIG/0007_last_wrong_answer.sql" "$MIG/0008_item_notes.sql" \
+         "$MIG/0009_class_insight.sql"; do
+  psql -q -d "$CI_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+CI=$(psql -qAt -d "$CI_DB" -f "$HERE/class_insight_test.sql" 2>&1)
+CI_FALSE=$(echo "$CI" | tr '|' '\n' | grep -cx 'f' || true)
+CI_TRUE=$(echo "$CI" | tr '|' '\n' | grep -cx 't' || true)
+CI_BLOCKED=$(echo "$CI" | grep -c 'blocked_' || true)
+CI_ERR=$(echo "$CI" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- class insight: $CI_TRUE assertions true, $CI_FALSE false, $CI_BLOCKED blocked, $CI_ERR errors"
+dropdb --if-exists "$CI_DB"
+if [ "$CI_FALSE" -gt 0 ] || [ "$CI_ERR" -gt 0 ] || [ "$CI_BLOCKED" -lt 5 ]; then
+  echo "$CI" | grep -E "FAIL_|ERROR"
+  echo "✗ CLASS INSIGHT TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
 # probe-cleanup suite — guards a DESTRUCTIVE hand-run script, so it is tested
 # like a migration. Its own database: it deletes auth.users rows.
 CU_DB="${DB}_cleanup"
@@ -176,7 +200,8 @@ dropdb --if-exists "$CU_DB"; createdb "$CU_DB"
 for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
          "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
          "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
-         "$MIG/0007_last_wrong_answer.sql" "$MIG/0008_item_notes.sql"; do
+         "$MIG/0007_last_wrong_answer.sql" "$MIG/0008_item_notes.sql" \
+         "$MIG/0009_class_insight.sql"; do
   psql -q -d "$CU_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
 done
 CU=$(psql -qAt -d "$CU_DB" -f "$HERE/cleanup_test.sql" 2>&1)

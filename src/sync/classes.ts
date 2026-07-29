@@ -557,6 +557,130 @@ export function weakestSkills(rows: ItemStatRow[], max = 3): WeakSkill[] {
     .slice(0, max)
 }
 
+// --- the class as a whole (migration 0009) ---------------------------------
+
+/** One row of `class_item_stats` — per ITEM, across every member. */
+export interface ClassItemRow {
+  item_id: string
+  attempts: number
+  wrong: number
+  /** distinct learners who got it wrong — a reteach vs a conversation */
+  learners: number
+}
+
+export interface ClassWeakSpot {
+  tag: string
+  attempts: number
+  wrong: number
+  wrongPct: number
+  /** the most-missed item carrying this skill, and how many learners missed it */
+  worstItemId: string | null
+  learners: number
+}
+
+/**
+ * Did each learner actually come BACK? Seven booleans, oldest first.
+ *
+ * Mastery and accuracy both look healthy on an account nobody has opened in a
+ * fortnight; days practised is the number spaced repetition actually depends
+ * on. The timezone is this browser's, because the strip is read on the
+ * teacher's screen and "today" should mean their today.
+ *
+ * Returns an empty map when 0009 is not applied — same tolerance as 0007/0008,
+ * because a deploy lands before the SQL is pasted.
+ */
+export async function getClassActivity(
+  classId: string,
+): Promise<Map<string, boolean[]>> {
+  const out = new Map<string, boolean[]>()
+  const pending = getSupabase()
+  if (!pending) return out
+  const supabase = await pending
+
+  let tz = 'UTC'
+  try {
+    tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+  } catch {
+    // an environment without a resolvable zone still gets a report
+  }
+
+  const { data, error } = await supabase.rpc('class_activity', {
+    p_class_id: classId,
+    p_tz: tz,
+  })
+  if (error || !data) return out
+  for (const row of data as { user_id: string; days: boolean[] }[]) {
+    out.set(row.user_id, row.days ?? [])
+  }
+  return out
+}
+
+/**
+ * What the whole CLASS is weak at.
+ *
+ * The server returns per-item counts and the roll-up to skills happens here,
+ * through the very same weakestSkills() the per-learner view uses — so there
+ * is one definition of "weak" rather than two that can drift. It is also the
+ * only place it can happen: skill tags live in seed_content.json, and SQL has
+ * never known what an item is.
+ */
+export async function getClassWeakSpots(
+  classId: string,
+  max = 3,
+): Promise<ClassWeakSpot[]> {
+  const pending = getSupabase()
+  if (!pending) return []
+  const supabase = await pending
+  const { data, error } = await supabase.rpc('class_item_stats', {
+    p_class_id: classId,
+  })
+  if (error || !data) return []
+  return rollUpClassWeakSpots(data as ClassItemRow[], max)
+}
+
+/** Pure roll-up, so the judgement is testable without a network. */
+export function rollUpClassWeakSpots(
+  rows: ClassItemRow[],
+  max = 3,
+): ClassWeakSpot[] {
+  // Reuse the per-learner definition verbatim: same minimum attempts, same
+  // minimum error rate, same exclusion of mechanic tags.
+  const asItemStats: ItemStatRow[] = rows.map((r) => ({
+    item_id: r.item_id,
+    box: null,
+    due_at: null,
+    attempts: Number(r.attempts),
+    wrong: Number(r.wrong),
+    last_wrong_at: null,
+    last_at: null,
+  }))
+  const weak = weakestSkills(asItemStats, max)
+
+  return weak.map((w) => {
+    // Name the single item most worth reteaching for this skill: most learners
+    // missing it, then most misses. "Four learners got this one wrong" is a
+    // lesson plan; a percentage is not.
+    let worst: ClassItemRow | null = null
+    for (const r of rows) {
+      if (Number(r.wrong) === 0) continue
+      if (!(SKILLS_BY_ITEM.get(r.item_id) ?? []).includes(w.tag)) continue
+      if (
+        !worst ||
+        Number(r.learners) > Number(worst.learners) ||
+        (Number(r.learners) === Number(worst.learners) &&
+          Number(r.wrong) > Number(worst.wrong))
+      ) {
+        worst = r
+      }
+    }
+    return {
+      ...w,
+      worstItemId: worst?.item_id ?? null,
+      learners: worst ? Number(worst.learners) : 0,
+    }
+  })
+}
+
 /** The items most recently got wrong — what to actually sit down and go over. */
 export function recentMisses(
   rows: ItemStatRow[],

@@ -11,7 +11,10 @@ import {
   listMyClasses,
   removeMember,
   rotateJoinCode,
+  getClassActivity,
+  getClassWeakSpots,
   type ClassRow,
+  type ClassWeakSpot,
   type LearnerDetail,
   type LearnerSummary,
 } from '../sync/classes'
@@ -151,6 +154,86 @@ function ActionLine({ learner }: { learner: LearnerSummary }) {
         </p>
       )}
     </div>
+  )
+}
+
+/**
+ * Seven dots: did they come back?
+ *
+ * Mastery and accuracy both look healthy on an account nobody has opened in a
+ * fortnight. This is the number spaced repetition actually depends on, and it
+ * is the one the roster never showed.
+ */
+function PracticeStrip({ days }: { days: boolean[] }) {
+  const { t } = useKira()
+  const n = days.filter(Boolean).length
+  return (
+    <div className="mt-2 flex items-center gap-2">
+      <div
+        className="flex gap-1"
+        role="img"
+        aria-label={t('daysPractised').replace('{n}', String(n))}
+      >
+        {days.map((on, i) => (
+          <span
+            key={i}
+            className={`h-2 w-2 rounded-full ${
+              on ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'
+            }`}
+          />
+        ))}
+      </div>
+      <span className="text-xs text-slate-500 dark:text-slate-400">
+        {t('daysPractised').replace('{n}', String(n))}
+      </span>
+    </div>
+  )
+}
+
+/**
+ * What the whole class is weakest at.
+ *
+ * Per-learner drilling stops scaling at about one child: a teacher with a class
+ * needs the topic to reteach, not six separate reading exercises. The learner
+ * COUNT is the part that matters — one learner missing an item six times is a
+ * conversation with that learner, four learners missing it once each is a
+ * lesson, and a percentage cannot tell them apart.
+ */
+function ClassWeakSpots({ spots }: { spots: ClassWeakSpot[] | null }) {
+  const { t, locale } = useKira()
+  if (spots === null) return null
+  return (
+    <Card>
+      <h2 className="font-semibold">{t('classWeakSpots')}</h2>
+      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+        {t('classWeakSpotsHint')}
+      </p>
+      {spots.length === 0 ? (
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          {t('noClassWeakSpots')}
+        </p>
+      ) : (
+        <ul className="mt-2 flex flex-col gap-2">
+          {spots.map((s) => (
+            <li key={s.tag}>
+              <div className="flex items-baseline justify-between gap-3 text-sm">
+                <span className="truncate font-medium">
+                  {skillLabel(s.tag, locale)}
+                </span>
+                <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
+                  {s.wrong}/{s.attempts} {t('wrongLabel')}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {s.learners > 1
+                  ? t('learnersMissed').replace('{n}', String(s.learners))
+                  : t('oneLearnerMissed')}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Card>
   )
 }
 
@@ -396,11 +479,23 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
   const [detailOf, setDetailOf] = useState<LearnerSummary | null>(null)
   const [loadedAt, setLoadedAt] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
+  const [activity, setActivity] = useState<Map<string, boolean[]>>(new Map())
+  const [weakSpots, setWeakSpots] = useState<ClassWeakSpot[] | null>(null)
 
   const refresh = useCallback(async () => {
     setBusy(true)
     try {
-      setRows(await getClassRoster(cls.id))
+      // The roster is the report; the other two are additions to it. They come
+      // from 0009, which may not be applied yet, so each swallows its own
+      // absence rather than taking the roster down with it.
+      const [roster, days, spots] = await Promise.all([
+        getClassRoster(cls.id),
+        getClassActivity(cls.id),
+        getClassWeakSpots(cls.id),
+      ])
+      setRows(roster)
+      setActivity(days)
+      setWeakSpots(days.size === 0 && spots.length === 0 ? null : spots)
       setLoadedAt(Date.now())
       setError(null)
     } catch (e) {
@@ -488,6 +583,8 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
 
       <Leaderboard classId={cls.id} />
 
+      <ClassWeakSpots spots={weakSpots} />
+
       <h2 className="px-1 font-semibold">{t('learners')}</h2>
 
       {rows === null && <p className="px-1 text-sm text-slate-500">{t('loading')}</p>}
@@ -517,6 +614,9 @@ function Roster({ cls, onBack }: { cls: ClassRow; onBack: () => void }) {
           </div>
 
           <ActionLine learner={r} />
+          {activity.get(r.userId)?.length ? (
+            <PracticeStrip days={activity.get(r.userId)!} />
+          ) : null}
 
           <div className="mt-3 flex items-center gap-2">
             <ProgressBar value={r.masteryPct} label={t('mastery')} className="flex-1" />

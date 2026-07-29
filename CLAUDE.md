@@ -12,15 +12,15 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 238 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 243 passing, no network
 - Live-backend tests: `npm run test:integration` — 11 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
   `.probe-users.local` for the next sweep.
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
-  Postgres, applies all 8 migrations, runs 22 RLS + 13 leaderboard + 15 push
-  + 23 roster + 14 avatar + 13 last-wrong + 19 item-notes + 19 probe-cleanup
-  assertions.
+  Postgres, applies all 9 migrations, runs 22 RLS + 13 leaderboard + 15 push
+  + 23 roster + 14 avatar + 13 last-wrong + 19 item-notes + 22 class-insight
+  + 19 probe-cleanup assertions.
   **Run this before handing Julius any new migration** — and note the
   probe-cleanup suite guards a destructive hand-run script, not a migration.
 - Types: `npm run typecheck`
@@ -56,7 +56,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   and pushed to Supabase as a best effort. The name used to live only in the
   cloud `profiles` table, which meant a learner practising alone could never
   set one.
-- `supabase/migrations/000{1..8}_*.sql` — applied BY HAND via the SQL Editor
+- `supabase/migrations/000{1..9}_*.sql` — applied BY HAND via the SQL Editor
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
@@ -262,6 +262,34 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     clipboard trip suits the miss you happen to be reading and is useless for
     the actual job. Separated by a rule, not a blank line, because the chat
     window it gets pasted into collapses whitespace.
+- **2026-07-29 (class insight)** — Migration 0009 `class_activity` +
+  `class_item_stats`, **WRITTEN AND LOCALLY TESTED, NOT YET APPLIED.** Hand it
+  over as ONE block from `supabase/migrations/0009_class_insight.sql`; verify
+  after with `npx vitest run src/sync/classInsight.integration.test.ts`.
+  - **`class_activity` answers "did she come back", which mastery cannot.**
+    Seven booleans per member, oldest first. It counts DAYS, not attempts —
+    a strip counting sessions would make one long evening look like a week of
+    steady work. The timezone comes from the BROWSER, because the strip is read
+    on the teacher's screen and "today" should mean their today; an
+    unrecognised zone falls back to UTC rather than raising, since a progress
+    report should not fail to load over a locale string.
+  - **`class_item_stats` returns ITEMS, not skills, on purpose.** Skill tags
+    live in `seed_content.json` — client data — so the roll-up happens in TS
+    through the SAME `weakestSkills()` the per-learner view uses. One
+    definition of "weak" rather than two that drift. This is the same rule that
+    keeps `chosen` opaque in 0007 and `item_id` FK-free in 0008: SQL has never
+    known what an item is.
+  - It also returns a DISTINCT LEARNER count per item, which is the number that
+    turns a statistic into a plan: one learner missing an item six times is a
+    conversation with that learner; four learners missing it once each is a
+    reteach, and totals alone cannot tell them apart.
+  - Both are owner-only — unlike `learner_item_stats` there is no per-learner
+    argument, because the answer covers the whole class. Verified by breaking
+    them: dropping `owns_class` produces 3 `FAIL_` lines and drops blocked 5→2;
+    dropping the `class_members` join turns 5 assertions false, including the
+    one asserting an outsider's answers never reach the class figures.
+  - The client tolerates 0009 being absent, like 0007 and 0008 — the strip and
+    the weak-spots card simply do not render, and the roster is unaffected.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

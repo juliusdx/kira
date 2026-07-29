@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { fromRemote, toRemote, type LocalReviewRow, type RemoteReviewRow } from './merge'
+import { recordProbeUser } from './probeUsers'
 
 // Integration test against a REAL Supabase project. Validates that the wire
 // mapping in merge.ts matches the deployed schema — column names, types and
@@ -40,6 +41,7 @@ describe.skipIf(!configured)('sync ⇄ live Supabase schema', () => {
     const body = await res.json()
     jwt = body.access_token
     uid = body.user?.id
+    if (uid) recordProbeUser(uid, 'merge')
     expect(jwt, 'anonymous sign-in must be enabled').toBeTruthy()
   })
 
@@ -109,6 +111,7 @@ describe.skipIf(!configured)('sync ⇄ live Supabase schema', () => {
       headers: { apikey: key!, 'Content-Type': 'application/json' },
       body: '{}',
     }).then((r) => r.json())
+    if (other.user?.id) recordProbeUser(other.user.id, 'merge-other')
 
     const res = await fetch(`${url}/rest/v1/review_state?select=item_id`, {
       headers: { apikey: key!, Authorization: `Bearer ${other.access_token}` },

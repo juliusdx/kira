@@ -12,13 +12,14 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 188 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 190 passing, no network
 - Live-backend tests: `npm run test:integration` — 10 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime)
 - RLS / SQL policy tests: `./supabase/tests/run.sh` — spins up throwaway local
   Postgres, applies all 7 migrations, runs 22 RLS + 13 leaderboard + 15 push
-  + 23 roster + 14 avatar + 13 last-wrong assertions. **Run this before
-  handing Julius any new migration.**
+  + 23 roster + 14 avatar + 13 last-wrong + 16 probe-cleanup assertions.
+  **Run this before handing Julius any new migration** — and note the
+  probe-cleanup suite guards a destructive hand-run script, not a migration.
 - Types: `npm run typecheck`
 - Build: `npm run build`
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
@@ -230,6 +231,16 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   distinguished "never created" from "created but not visible to the API" →
   hand over a migration as ONE block, never split, and diagnose via pg_proc
   before blaming the cache.
+- 2026-07-29: `npm run test:integration` signs in ~3 real anonymous users per
+  run and can delete its own ROWS but never its own auth USER (that needs the
+  admin API, and there is no service_role key here) → the leftovers used to be
+  anonymous litter, findable only by footprint, which a real learner who has
+  installed the app but not practised yet matches EXACTLY → every suite now
+  appends the ids it creates to `.probe-users.local` (gitignored), so cleanup
+  is a lookup. `supabase/maintenance/cleanup_probe_users.sql` STEP 1 takes
+  ids; STEP 0 is the footprint fallback for runs from before this, and its
+  predicate is tested in `supabase/tests/cleanup_test.sql` — a DELETE against
+  prod deserves at least what a migration gets.
 - 2026-07-28: verifying against prod by creating a throwaway anonymous learner
   in the browser leaves ORPHAN rows — RLS only lets a user delete their own
   data, and a page reload throws the probe's access token away with it →

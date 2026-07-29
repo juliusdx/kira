@@ -1,6 +1,7 @@
 import { describe, it, expect, afterAll } from 'vitest'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { mapRosterRows, rollUpDetail, type ItemStatRow, type RosterRow } from './classes'
+import { recordProbeUser } from './probeUsers'
 
 // Exercises migration 0005 against the LIVE Supabase project: two independent
 // anonymous users (a teacher and a learner), a real class, real progress rows,
@@ -24,8 +25,11 @@ async function anonClient(tag: string): Promise<SupabaseClient> {
   const c = createClient(url!, key!, {
     auth: { persistSession: false, autoRefreshToken: false, storageKey: `probe-${tag}` },
   })
-  const { error } = await c.auth.signInAnonymously()
+  const { data, error } = await c.auth.signInAnonymously()
   if (error) throw new Error(`${tag}: ${error.message}`)
+  // The auth user outlives this test — only a service_role key can delete it.
+  // Record the id so cleanup is a lookup rather than a guess.
+  if (data.user) recordProbeUser(data.user.id, tag)
   return c
 }
 

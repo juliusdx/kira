@@ -142,6 +142,29 @@ if [ "$LW_FALSE" -gt 0 ] || [ "$LW_ERR" -gt 0 ] || [ "$LW_BLOCKED" -lt 5 ]; then
   exit 1
 fi
 
+# probe-cleanup suite — guards a DESTRUCTIVE hand-run script, so it is tested
+# like a migration. Its own database: it deletes auth.users rows.
+CU_DB="${DB}_cleanup"
+dropdb --if-exists "$CU_DB"; createdb "$CU_DB"
+for f in "$HERE/harness.sql" "$MIG/0001_init.sql" "$MIG/0002_classes.sql" \
+         "$MIG/0003_leaderboard.sql" "$MIG/0004_push_reminders.sql" \
+         "$MIG/0005_roster_rollup.sql" "$MIG/0006_avatars.sql" \
+         "$MIG/0007_last_wrong_answer.sql"; do
+  psql -q -d "$CU_DB" -v ON_ERROR_STOP=1 -f "$f" > /dev/null 2>&1
+done
+CU=$(psql -qAt -d "$CU_DB" -f "$HERE/cleanup_test.sql" 2>&1)
+CU_FALSE=$(echo "$CU" | tr '|' '\n' | grep -cx 'f' || true)
+CU_TRUE=$(echo "$CU" | tr '|' '\n' | grep -cx 't' || true)
+CU_ERR=$(echo "$CU" | grep -cE 'FAIL_|ERROR' || true)
+echo "--- probe cleanup: $CU_TRUE assertions true, $CU_FALSE false, $CU_ERR errors"
+dropdb --if-exists "$CU_DB"
+if [ "$CU_FALSE" -gt 0 ] || [ "$CU_ERR" -gt 0 ]; then
+  echo "$CU" | grep -E "FAIL_|ERROR|^f$"
+  echo "✗ PROBE CLEANUP TESTS FAILED"
+  dropdb --if-exists "$DB"
+  exit 1
+fi
+
 FAILS=$(echo "$OUT" | grep -c "FAIL" || true)
 ERRS=$(echo "$OUT"  | grep -c "^psql.*ERROR" || true)
 PASSES=$(echo "$OUT" | grep -c "PASS" || true)

@@ -5,9 +5,14 @@ create extension if not exists pgcrypto;
 
 create schema if not exists auth;
 
+-- Only the columns the migrations and maintenance scripts actually touch.
+-- created_at / last_sign_in_at are here because the probe-cleanup script reads
+-- them, and a destructive script has to be testable.
 create table if not exists auth.users (
   id uuid primary key default gen_random_uuid(),
-  email text
+  email text,
+  created_at timestamptz not null default now(),
+  last_sign_in_at timestamptz
 );
 
 -- Supabase exposes the caller's uid from the request JWT. Here we emulate it

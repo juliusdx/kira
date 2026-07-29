@@ -20,6 +20,74 @@
 -- Confirmed 0 rows remaining afterwards.
 
 -- ---------------------------------------------------------------------------
+-- STEP 0 — ONLY if you have no ids.
+--
+-- `npm run test:integration` signs in ~3 real anonymous users per run and can
+-- delete its own rows but not its own auth users. Since 2026-07-29 each run
+-- appends the ids it created to `.probe-users.local` (gitignored) — if that
+-- file covers the run you are cleaning, use those ids with STEP 1 and skip
+-- this section entirely. Ids are the safe path.
+--
+-- This section is for the runs from BEFORE that, where nothing was recorded.
+-- It finds users by FOOTPRINT instead: no email, and nothing to their name.
+--
+-- ⚠️ READ THIS BEFORE RUNNING THE DELETE.
+--   A real learner who installed the app and has not practised yet has EXACTLY
+--   the same footprint as a probe. There is no way to tell them apart from the
+--   data alone. What makes this tolerable rather than reckless is that such a
+--   user owns nothing: deleting them costs them no progress, and their next
+--   launch mints a fresh anonymous id (which the app does per-device and
+--   per-origin anyway). If that is not a trade you want, delete nothing and
+--   wait until every remaining probe is one you have an id for.
+--
+--   Cross-check `created_at` against when you actually ran the suite. Probes
+--   arrive in bursts of about three within the same few seconds.
+-- ---------------------------------------------------------------------------
+select
+  u.id,
+  u.created_at,
+  u.last_sign_in_at,
+  p.display_name,
+  p.avatar,
+  (select count(*) from public.review_state       r where r.user_id  = u.id) as reviews,
+  (select count(*) from public.attempts           a where a.user_id  = u.id) as attempts,
+  (select count(*) from public.class_members      m where m.user_id  = u.id) as memberships,
+  (select count(*) from public.classes            c where c.owner_id = u.id) as owns_classes,
+  (select count(*) from public.push_subscriptions s where s.user_id  = u.id) as push_subs
+from auth.users u
+left join public.profiles p on p.id = u.id
+where u.email is null                    -- never an account someone signed up for
+  and not exists (select 1 from public.review_state       r where r.user_id  = u.id)
+  and not exists (select 1 from public.attempts           a where a.user_id  = u.id)
+  and not exists (select 1 from public.class_members      m where m.user_id  = u.id)
+  and not exists (select 1 from public.classes            c where c.owner_id = u.id)
+  and not exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+  and coalesce(p.display_name, '') = ''  -- someone who named themselves is a person
+  and p.avatar is null                   -- ...so is someone who picked a face
+order by u.created_at desc;
+
+-- Delete exactly what that listed, with every guard repeated so a stale or
+-- mistyped id cannot widen it. Wrapped so you can inspect the count and roll
+-- back if it is not what you expected.
+--
+-- begin;
+--   delete from auth.users u
+--   where u.email is null
+--     and not exists (select 1 from public.review_state       r where r.user_id  = u.id)
+--     and not exists (select 1 from public.attempts           a where a.user_id  = u.id)
+--     and not exists (select 1 from public.class_members      m where m.user_id  = u.id)
+--     and not exists (select 1 from public.classes            c where c.owner_id = u.id)
+--     and not exists (select 1 from public.push_subscriptions s where s.user_id  = u.id)
+--     and not exists (select 1 from public.profiles pr
+--                     where pr.id = u.id
+--                       and (coalesce(pr.display_name, '') <> '' or pr.avatar is not null))
+--     -- belt and braces: never you
+--     and u.id <> 'bb520b30-733d-4250-8f5e-8668e2af9df0'
+--   returning u.id, u.created_at;
+--   -- happy with the count? commit;   not sure? rollback;
+-- rollback;
+
+-- ---------------------------------------------------------------------------
 -- STEP 1 — find the probe, and LOOK before deleting anything.
 --
 -- Prefer matching on the user id you already know. Match on display_name only

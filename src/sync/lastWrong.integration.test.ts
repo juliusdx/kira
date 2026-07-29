@@ -4,6 +4,7 @@ import { recentMisses, type ItemStatRow, type LastWrongRow } from './classes'
 import { describeChosen } from '../lib/chosenAnswer'
 import { getItem } from '../content/loader'
 import type { Item } from '../content/types'
+import { recordProbeUser } from './probeUsers'
 
 // Exercises migration 0007 (`learner_last_wrong`) against the LIVE Supabase
 // project.
@@ -28,8 +29,11 @@ async function anonClient(tag: string): Promise<SupabaseClient> {
   const c = createClient(url!, key!, {
     auth: { persistSession: false, autoRefreshToken: false, storageKey: `lw-${tag}` },
   })
-  const { error } = await c.auth.signInAnonymously()
+  const { data, error } = await c.auth.signInAnonymously()
   if (error) throw new Error(`${tag}: ${error.message}`)
+  // The auth user outlives this test — only a service_role key can delete it.
+  // Record the id so cleanup is a lookup rather than a guess.
+  if (data.user) recordProbeUser(data.user.id, tag)
   return c
 }
 

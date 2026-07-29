@@ -3,6 +3,7 @@ import { db } from '../db/db'
 import { getMeta, setMeta } from '../db/data'
 import { syncNow } from './sync'
 import { ensureSession, getSupabase } from './client'
+import { recordProbeUser } from './probeUsers'
 
 // Exercises the real sync ORCHESTRATION — push, pull, merge, IndexedDB write —
 // against a live Supabase project, using fake-indexeddb for Dexie.
@@ -33,6 +34,7 @@ describe.skipIf(!configured)('syncNow — round trip against live Supabase', () 
   afterAll(async () => {
     // remove the probe rows from the cloud
     const uid = await ensureSession()
+    if (uid) recordProbeUser(uid, 'sync')
     const jwt = (await (await import('./client')).getSupabase()!)
     if (uid) {
       await jwt.from('review_state').delete().eq('item_id', ITEM)
@@ -122,6 +124,7 @@ describe.skipIf(!configured)('syncNow — round trip against live Supabase', () 
     await supabase.auth.signOut()
     await supabase.auth.signInAnonymously()
     const userB = (await supabase.auth.getUser()).data.user!.id
+    recordProbeUser(userB, 'sync-switched')
     expect(userB).not.toBe(userA)
 
     const second = await syncNow()

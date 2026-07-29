@@ -1,3 +1,21 @@
+-- ===========================================================================
+-- LOCAL TEST FILE — NEVER RUN THIS IN THE SUPABASE SQL EDITOR.
+-- It writes fixture rows into auth.users, and the harness it depends on
+-- replaces auth.uid(). Against production that breaks every RLS policy in the
+-- app. It is only ever run by ./supabase/tests/run.sh against a throwaway
+-- local Postgres.
+--
+-- The guard below is a hard stop, not a comment: `supabase_auth_admin` exists
+-- only on a real Supabase database.
+-- ===========================================================================
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'supabase_auth_admin') then
+    raise exception
+      'REFUSING TO RUN: this is a real Supabase database. This file is a LOCAL TEST fixture — see supabase/tests/run.sh.';
+  end if;
+end $$;
+
 -- Probe-cleanup tests (supabase/maintenance/cleanup_probe_users.sql, STEP 0).
 --
 -- That script is a DELETE run by hand against production, matching on a

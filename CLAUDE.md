@@ -231,6 +231,16 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   distinguished "never created" from "created but not visible to the API" →
   hand over a migration as ONE block, never split, and diagnose via pg_proc
   before blaming the cache.
+- 2026-07-29: **`supabase/tests/*.sql` are LOCAL FIXTURES and must never reach
+  the SQL Editor.** `harness.sql` fakes the `auth` schema — on prod its
+  `create or replace function auth.uid()` would replace the real one, breaking
+  every RLS policy in the app, and its `grant select on auth.users to anon`
+  is a live exposure. Supabase's own linter caught it ("creates a table
+  without enabling RLS ... auth.users") because harness.sql is the only file
+  in the repo that creates `auth.users`. Every test file now starts with a
+  hard guard that raises if role `supabase_auth_admin` exists, i.e. if it is
+  running on a real Supabase database. **Only `supabase/migrations/*.sql` and
+  `supabase/maintenance/*.sql` are ever pasted into the SQL Editor.**
 - 2026-07-29: `npm run test:integration` signs in ~3 real anonymous users per
   run and can delete its own ROWS but never its own auth USER (that needs the
   admin API, and there is no service_role key here) → the leftovers used to be

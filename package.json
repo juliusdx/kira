@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "icons": "node scripts/gen-icons.mjs",
-    "test:integration": "vitest run integration"
+    "test:integration": "vitest run integration",
+    "bm-review": "node scripts/bm-review.mjs"
   },
   "keywords": [],
   "author": "",

@@ -303,6 +303,18 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   balancing-off lessons has never been read against the syllabus — by now that
   is the MAJORITY of the bank (151 of 253 items). It is the part Claude
   authored rather than ported, and it is in front of Ariel.
+  **`BM_REVIEW.md` now exists to make that review finite** — run
+  `npm run bm-review` to regenerate it from `seed_content.json`. It is
+  GENERATED: never edit the content there, edit the JSON. Three sections, in
+  descending order of leverage — mechanical inconsistencies (no Malay needed),
+  240 distinct TERMS most-used first (check a term once, fix it everywhere),
+  then the full prose. `scripts/bm-review.mjs` also holds the only record of
+  WHICH content Claude authored (`CLAUDE_TOPICS` / `CLAUDE_LESSONS`); extend it
+  when authoring more.
+  - The inconsistency check is deliberately split: Malay marks neither plural
+    nor articles, so one BM string covering "Assets" and "An asset" is correct
+    Malay and is reported separately as an ENGLISH inconsistency instead. Left
+    together, that noise buried the one real finding.
 - **Also open:** Stage 8+ content if the syllabus warrants it, FSRS
   scheduling, multi-tenant authoring UI.
 

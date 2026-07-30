@@ -13,7 +13,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
 - **Hermetic tests (the CI gate): `npm test`** — 243 passing, no network
-- Live-backend tests: `npm run test:integration` — 11 passing, hits real Supabase
+- Live-backend tests: `npm run test:integration` — 12 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
   `.probe-users.local` for the next sweep.
@@ -263,9 +263,9 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     the actual job. Separated by a rule, not a blank line, because the chat
     window it gets pasted into collapses whitespace.
 - **2026-07-29 (class insight)** — Migration 0009 `class_activity` +
-  `class_item_stats`, **WRITTEN AND LOCALLY TESTED, NOT YET APPLIED.** Hand it
-  over as ONE block from `supabase/migrations/0009_class_insight.sql`; verify
-  after with `npx vitest run src/sync/classInsight.integration.test.ts`.
+  `class_item_stats` **APPLIED to prod and VERIFIED LIVE on 2026-07-30**
+  (`classInsight.integration.test.ts` — including that a member cannot read the
+  class figures and that owning some other class grants nothing here).
   - **`class_activity` answers "did she come back", which mastery cannot.**
     Seven booleans per member, oldest first. It counts DAYS, not attempts —
     a strip counting sessions would make one long evening look like a week of
@@ -290,6 +290,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     one asserting an outsider's answers never reach the class figures.
   - The client tolerates 0009 being absent, like 0007 and 0008 — the strip and
     the weak-spots card simply do not render, and the roster is unaffected.
+    That tolerance is now moot on prod but still correct for a fresh project.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

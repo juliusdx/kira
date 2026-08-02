@@ -4404,7 +4404,7 @@
           "worked_example": {
             "prompt": {
               "en": "Depreciation spreads the cost of a non-current asset over its useful life. Straight line = (Cost − Residual value) ÷ Useful life. The year's charge goes to the Income Statement; accumulated depreciation builds up and is deducted from the asset. Carrying amount = Cost − Accumulated depreciation.",
-              "ms": "Susut nilai menyebarkan kos aset bukan semasa sepanjang hayat bergunanya. Garis lurus = (Kos − Nilai baki) ÷ Hayat berguna. Caj tahun ini ke Penyata Pendapatan; susut nilai terkumpul bertambah dan ditolak daripada aset. Amaun bawaan = Kos − Susut nilai terkumpul."
+              "ms": "Susut nilai menyebarkan kos aset bukan semasa sepanjang hayat bergunanya. Garis lurus = (Kos − Nilai baki) ÷ Hayat berguna. Caj tahun ini ke Penyata Pendapatan; susut nilai terkumpul bertambah dan ditolak daripada aset. Nilai buku = Kos − Susut nilai terkumpul."
             }
           },
           "items": [
@@ -4457,7 +4457,7 @@
               ],
               "prompt": {
                 "en": "Equipment cost RM40,000 and accumulated depreciation is RM15,000. What is the carrying amount?",
-                "ms": "Peralatan berkos RM40,000 dan susut nilai terkumpul RM15,000. Berapakah amaun bawaan?"
+                "ms": "Peralatan berkos RM40,000 dan susut nilai terkumpul RM15,000. Berapakah nilai buku?"
               },
               "data": {
                 "unit": "RM"
@@ -4465,7 +4465,7 @@
               "answer": 25000,
               "explanation": {
                 "en": "Carrying amount = Cost − Accumulated depreciation = 40,000 − 15,000 = 25,000.",
-                "ms": "Amaun bawaan = Kos − Susut nilai terkumpul = 40,000 − 15,000 = 25,000."
+                "ms": "Nilai buku = Kos − Susut nilai terkumpul = 40,000 − 15,000 = 25,000."
               }
             },
             {
@@ -4990,7 +4990,7 @@
           "worked_example": {
             "prompt": {
               "en": "Reducing balance charges the rate on what the asset is still worth in the books — the carrying amount — not on its cost. So the first year's charge is the largest and every year after it is smaller. Year 1: rate × cost (there is no accumulated depreciation yet). Year 2 onwards: rate × (cost − accumulated depreciation to date). The trap is applying the rate to cost every year: that is the straight-line answer wearing a reducing-balance question.",
-              "ms": "Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — amaun bawaan — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan."
+              "ms": "Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — nilai buku — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan."
             }
           },
           "items": [
@@ -5012,7 +5012,7 @@
               "answer": 2000,
               "explanation": {
                 "en": "In year 1 there is no accumulated depreciation yet, so the carrying amount IS the cost: 10% × 20,000 = 2,000. Year 1 is the one year both methods agree.",
-                "ms": "Pada tahun 1 belum ada susut nilai terkumpul, jadi amaun bawaan IALAH kos: 10% × 20,000 = 2,000. Tahun 1 ialah satu-satunya tahun kedua-dua kaedah sama."
+                "ms": "Pada tahun 1 belum ada susut nilai terkumpul, jadi nilai buku IALAH kos: 10% × 20,000 = 2,000. Tahun 1 ialah satu-satunya tahun kedua-dua kaedah sama."
               }
             },
             {
@@ -5033,7 +5033,7 @@
               "answer": 1800,
               "explanation": {
                 "en": "The carrying amount is now 20,000 − 2,000 = 18,000, so 10% × 18,000 = 1,800. The charge falls because the base fell.",
-                "ms": "Amaun bawaan kini 20,000 − 2,000 = 18,000, jadi 10% × 18,000 = 1,800. Caj berkurang kerana asasnya berkurang."
+                "ms": "Nilai buku kini 20,000 − 2,000 = 18,000, jadi 10% × 18,000 = 1,800. Caj berkurang kerana asasnya berkurang."
               }
             },
             {
@@ -5088,7 +5088,7 @@
               ],
               "prompt": {
                 "en": "Equipment cost RM20,000, depreciated at 10% per year on the reducing balance. What is the carrying amount after two years?",
-                "ms": "Peralatan berkos RM20,000, disusutnilaikan 10% setahun atas baki berkurangan. Berapakah amaun bawaan selepas dua tahun?"
+                "ms": "Peralatan berkos RM20,000, disusutnilaikan 10% setahun atas baki berkurangan. Berapakah nilai buku selepas dua tahun?"
               },
               "data": {
                 "unit": "RM"
@@ -5118,7 +5118,7 @@
                   "Residual value"
                 ],
                 "options_ms": [
-                  "Amaun bawaan",
+                  "Nilai buku",
                   "Kos asal",
                   "Nilai baki"
                 ]
@@ -5229,7 +5229,7 @@
           "worked_example": {
             "prompt": {
               "en": "When an asset is sold, ask one question: did it fetch more or less than it was still worth in the books? Carrying amount = cost − accumulated depreciation. Proceeds above that is a profit on disposal; below it is a loss. Both go to the Income Statement. In the ledger a Disposal account collects three things — the cost (debit), the accumulated depreciation (credit) and the sale proceeds (credit) — and whatever is left over is the profit or the loss.",
-              "ms": "Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Amaun bawaan = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu."
+              "ms": "Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Nilai buku = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu."
             }
           },
           "items": [
@@ -5243,7 +5243,7 @@
               ],
               "prompt": {
                 "en": "A van cost RM30,000 and accumulated depreciation on it is RM18,000. What is its carrying amount?",
-                "ms": "Sebuah van berkos RM30,000 dan susut nilai terkumpulnya ialah RM18,000. Berapakah amaun bawaannya?"
+                "ms": "Sebuah van berkos RM30,000 dan susut nilai terkumpulnya ialah RM18,000. Berapakah nilai bukunya?"
               },
               "data": {
                 "unit": "RM"
@@ -5264,7 +5264,7 @@
               ],
               "prompt": {
                 "en": "A van with a carrying amount of RM12,000 is sold for RM15,000. How much is the profit on disposal?",
-                "ms": "Sebuah van dengan amaun bawaan RM12,000 dijual pada harga RM15,000. Berapakah untung atas pelupusan?"
+                "ms": "Sebuah van dengan nilai buku RM12,000 dijual pada harga RM15,000. Berapakah untung atas pelupusan?"
               },
               "data": {
                 "unit": "RM"
@@ -5285,7 +5285,7 @@
               ],
               "prompt": {
                 "en": "A machine with a carrying amount of RM5,800 is sold for RM4,000. How much is the LOSS on disposal?",
-                "ms": "Sebuah mesin dengan amaun bawaan RM5,800 dijual pada harga RM4,000. Berapakah RUGI atas pelupusan?"
+                "ms": "Sebuah mesin dengan nilai buku RM5,800 dijual pada harga RM4,000. Berapakah RUGI atas pelupusan?"
               },
               "data": {
                 "unit": "RM"
@@ -5314,7 +5314,7 @@
               "answer": 3000,
               "explanation": {
                 "en": "Carrying amount is 40,000 − 25,000 = 15,000. Sold for 12,000, so the loss is 3,000. Comparing the proceeds with the COST instead would give 28,000, which ignores every year of depreciation already charged.",
-                "ms": "Amaun bawaan ialah 40,000 − 25,000 = 15,000. Dijual pada 12,000, jadi ruginya 3,000. Membandingkan hasil jualan dengan KOS pula memberi 28,000, yang mengabaikan setiap tahun susut nilai yang telah dicaj."
+                "ms": "Nilai buku ialah 40,000 − 25,000 = 15,000. Dijual pada 12,000, jadi ruginya 3,000. Membandingkan hasil jualan dengan KOS pula memberi 28,000, yang mengabaikan setiap tahun susut nilai yang telah dicaj."
               }
             },
             {
@@ -5327,7 +5327,7 @@
               ],
               "prompt": {
                 "en": "An asset is sold for more than its carrying amount. What is the result?",
-                "ms": "Sesuatu aset dijual melebihi amaun bawaannya. Apakah hasilnya?"
+                "ms": "Sesuatu aset dijual melebihi nilai bukunya. Apakah hasilnya?"
               },
               "data": {
                 "options": [
@@ -5455,7 +5455,7 @@
               },
               "explanation": {
                 "en": "Accumulated Depreciation normally sits on the credit side, so clearing it means debiting it. The credit reduces the cost sitting in Disposal down towards the carrying amount.",
-                "ms": "Susut Nilai Terkumpul biasanya berada di sebelah kredit, jadi mengosongkannya bermakna mendebitkannya. Kredit itu mengurangkan kos dalam Akaun Pelupusan menghampiri amaun bawaan."
+                "ms": "Susut Nilai Terkumpul biasanya berada di sebelah kredit, jadi mengosongkannya bermakna mendebitkannya. Kredit itu mengurangkan kos dalam Akaun Pelupusan menghampiri nilai buku."
               }
             },
             {
@@ -5593,7 +5593,7 @@
           "worked_example": {
             "prompt": {
               "en": "The disposal workings run in a fixed order: cost, less accumulated depreciation, carrying amount, sale proceeds, and the difference between the last two. Only then does the entry follow — a profit is credited, a loss is debited.",
-              "ms": "Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, amaun bawaan, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan."
+              "ms": "Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, nilai buku, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan."
             }
           },
           "items": [
@@ -5638,7 +5638,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Carrying amount",
-                      "ms": "Amaun bawaan"
+                      "ms": "Nilai buku"
                     },
                     "value": 12000,
                     "unit": "RM"
@@ -5742,7 +5742,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Carrying amount",
-                      "ms": "Amaun bawaan"
+                      "ms": "Nilai buku"
                     },
                     "value": 12000,
                     "unit": "RM"
@@ -5848,7 +5848,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Carrying amount",
-                      "ms": "Amaun bawaan"
+                      "ms": "Nilai buku"
                     },
                     "value": 12000,
                     "unit": "RM",
@@ -5912,7 +5912,7 @@
               },
               "explanation": {
                 "en": "Carrying amount 30,000 − 18,000 = 12,000; sold for 15,000; profit 3,000, credited.",
-                "ms": "Amaun bawaan 30,000 − 18,000 = 12,000; dijual pada 15,000; untung 3,000, dikreditkan."
+                "ms": "Nilai buku 30,000 − 18,000 = 12,000; dijual pada 15,000; untung 3,000, dikreditkan."
               }
             }
           ]

@@ -423,6 +423,18 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     (`boleh|membayar|menuntut|yang pasti`) plus actually reading it.
   - `BM_REVIEW.md` still reports those 5 as a clash, which is right — they are
     visible for Julius to overrule rather than hidden by an exception list.
+- **2026-07-30 (Amaun bawaan → Nilai buku)** — Julius's call, same reason: both
+  2024 papers say `Nilai buku` and we were using BOTH terms (20 vs 4), so it
+  was wrong twice over. 20 occurrences switched, case preserved.
+  `Amaun boleh susut` (depreciable amount) is a DIFFERENT term and was left
+  alone — the word boundary is what keeps them apart.
+  - **This exposed a limit of the section-0 checker: it only compares short
+    LABELS, so a term living in prose is invisible to it.** The English side
+    now says "carrying amount" 21× and "book value" 4× (all five of the latter
+    in `l52-dissolution`, which was authored separately), and nothing in the
+    review doc flags it, because neither appears as an option or a step label.
+    Worth fixing in `scripts/bm-review.mjs` if another prose-level clash turns
+    up; noted here so the next session does not trust section 1 to be complete.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

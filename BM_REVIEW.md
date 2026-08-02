@@ -20,13 +20,10 @@ Write corrections on the `→` line under anything wrong. Leave the rest untouch
 
 Transcribed from 3756/1 and 3756/2. This is the one section that needs no Malay to act on: where our word differs from the exam board's, the board wins.
 
-### 5 clashes — we use a different word from the paper
+### 4 clashes — we use a different word from the paper
 
 - **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (5×)
   - paper: K1 Q4, Q10, Q25; K2 Q2, Q4 · we also use the paper's term 19×
-  - → 
-- **Carrying amount / book value** — paper says `Nilai buku`, we say `Amaun bawaan` (17×)
-  - paper: K1 Q17; K2 Q5(ii) · we also use the paper's term 5×
   - → 
 - **Ordinary shares** — paper says `Syer Biasa`, we say `Saham Biasa` (4×)
   - paper: K1 Q33, Q34 · we also use the paper's term 4×
@@ -194,7 +191,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Akaun Modal` ← **Capital Account** · 4×
   - pa-001, pa-002, pa-003, pd-001
   - → 
-- `Amaun bawaan` ← **Carrying amount** · 4×
+- `Nilai buku` ← **Carrying amount** · 4×
   - rb-101, fd-1501, fd-1502, fd-1503
   - → 
 - `Akaun Semasa` ← **Current Account** · 4×
@@ -1067,7 +1064,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Baki berkurangan mencaj lebih` ← **Reducing balance charges more** · 1×
   - rb-104
   - → 
-- `Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — amaun bawaan — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan.` ← **Reducing balance charges the rate on what the asset is still worth in the books — the carrying amount — not on its cost. So the first year's charge is the largest and every year after it is smaller. Year 1: rate × cost (there is no accumulated depreciation yet). Year 2 onwards: rate × (cost − accumulated depreciation to date). The trap is applying the rate to cost every year: that is the straight-line answer wearing a reducing-balance question.** · 1×
+- `Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — nilai buku — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan.` ← **Reducing balance charges the rate on what the asset is still worth in the books — the carrying amount — not on its cost. So the first year's charge is the largest and every year after it is smaller. Year 1: rate × cost (there is no accumulated depreciation yet). Year 2 onwards: rate × (cost − accumulated depreciation to date). The trap is applying the rate to cost every year: that is the straight-line answer wearing a reducing-balance question.** · 1×
   - l44-reducing-balance
   - → 
 - `Sewa` ← **Rent** · 1×
@@ -1148,7 +1145,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Syarikat menyimpannya sebagai untung` ← **The company keeps it as profit** · 1×
   - si-002
   - → 
-- `Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, amaun bawaan, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan.` ← **The disposal workings run in a fixed order: cost, less accumulated depreciation, carrying amount, sale proceeds, and the difference between the last two. Only then does the entry follow — a profit is credited, a loss is debited.** · 1×
+- `Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, nilai buku, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan.` ← **The disposal workings run in a fixed order: cost, less accumulated depreciation, carrying amount, sale proceeds, and the difference between the last two. Only then does the entry follow — a profit is credited, a loss is debited.** · 1×
   - l46-faded-disposal
   - → 
 - `Kerajaan` ← **The government** · 1×
@@ -1214,7 +1211,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Apabila perkongsian dibubarkan, aset dijual, pemiutang dibayar, dan bakinya diberikan kepada pekongsi. AKAUN REALISASI melakukan pengiraannya. Debitkan ia dengan nilai buku setiap aset yang dijual dan dengan belanja pembubaran; kreditkan ia dengan hasil sebenar jualan aset dan dengan mana-mana aset yang diambil alih oleh pekongsi pada nilai yang dipersetujui. Bakinya ialah untung atau rugi atas realisasi, dan ia dikongsi antara pekongsi mengikut nisbah perkongsian untung — itulah maksudnya: tiada siapa tahu harga sesuatu aset sehingga ia dijual, jadi lebihan atau kekurangan itu milik pekongsi, bukan milik perniagaan.` ← **When a partnership is dissolved, the assets are sold, the creditors are paid, and whatever is left goes to the partners. A REALISATION ACCOUNT does the arithmetic. Debit it with the book value of every asset being sold and with the expenses of winding up; credit it with what the assets actually fetched and with any asset a partner takes over at an agreed value. The balance is the profit or loss on realisation, and it is shared between the partners in their profit-sharing ratio — which is the point: nobody knows what an asset will fetch until it is sold, so the gain or shortfall belongs to the partners, not to the business.** · 1×
   - l52-dissolution
   - → 
-- `Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Amaun bawaan = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu.` ← **When an asset is sold, ask one question: did it fetch more or less than it was still worth in the books? Carrying amount = cost − accumulated depreciation. Proceeds above that is a profit on disposal; below it is a loss. Both go to the Income Statement. In the ledger a Disposal account collects three things — the cost (debit), the accumulated depreciation (credit) and the sale proceeds (credit) — and whatever is left over is the profit or the loss.** · 1×
+- `Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Nilai buku = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu.` ← **When an asset is sold, ask one question: did it fetch more or less than it was still worth in the books? Carrying amount = cost − accumulated depreciation. Proceeds above that is a profit on disposal; below it is a loss. Both go to the Income Statement. In the ledger a Disposal account collects three things — the cost (debit), the accumulated depreciation (credit) and the sale proceeds (credit) — and whatever is left over is the profit or the loss.** · 1×
   - l45-disposal
   - → 
 - `Apabila imbangan duga tidak seimbang, perbezaannya diletakkan dalam akaun penyelesaian supaya buku boleh diteruskan. Setiap kesilapan sebelah yang dijumpai kemudian dibetulkan dengan catatan jurnal: akaun sebenar mendapat catatan yang sepatutnya, dan akaun penyelesaian mengambil sebelah lagi. Apabila semua kesilapan dijumpai, akaun penyelesaian menjadi kosong.` ← **When the trial balance will not agree, the difference is parked in a suspense account so the books can carry on. Each one-sided error found is then corrected with a journal entry: the real account gets the entry it should have had, and the suspense account takes the other side. When every error has been found, the suspense account is empty.** · 1×
@@ -1741,7 +1738,7 @@ Every short label the learner sees: account names, options, step values, section
 `l44-reducing-balance` · BM title: `Baki Berkurangan`
 
 > **Worked example (EN)** Reducing balance charges the rate on what the asset is still worth in the books — the carrying amount — not on its cost. So the first year's charge is the largest and every year after it is smaller. Year 1: rate × cost (there is no accumulated depreciation yet). Year 2 onwards: rate × (cost − accumulated depreciation to date). The trap is applying the rate to cost every year: that is the straight-line answer wearing a reducing-balance question.
-> **(BM)** Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — amaun bawaan — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan.
+> **(BM)** Baki berkurangan mengenakan kadar ke atas nilai aset yang masih tinggal dalam buku — nilai buku — bukan ke atas kosnya. Jadi caj tahun pertama adalah yang terbesar dan setiap tahun selepasnya lebih kecil. Tahun 1: kadar × kos (belum ada susut nilai terkumpul). Tahun 2 dan seterusnya: kadar × (kos − susut nilai terkumpul setakat ini). Perangkapnya ialah mengenakan kadar ke atas kos setiap tahun: itu jawapan garis lurus dalam soalan baki berkurangan.
 - → 
 
 **`rb-001`** · numeric · difficulty 2 · depreciation, reducing-balance
@@ -1749,7 +1746,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* A machine cost RM20,000. Depreciation is 10% per year on the reducing balance. What is the charge for year 1?
 - *Question (BM)* **Sebuah mesin berkos RM20,000. Susut nilai ialah 10% setahun atas baki berkurangan. Berapakah caj bagi tahun 1?**
 - *Why (EN)* In year 1 there is no accumulated depreciation yet, so the carrying amount IS the cost: 10% × 20,000 = 2,000. Year 1 is the one year both methods agree.
-- *Why (BM)* **Pada tahun 1 belum ada susut nilai terkumpul, jadi amaun bawaan IALAH kos: 10% × 20,000 = 2,000. Tahun 1 ialah satu-satunya tahun kedua-dua kaedah sama.**
+- *Why (BM)* **Pada tahun 1 belum ada susut nilai terkumpul, jadi nilai buku IALAH kos: 10% × 20,000 = 2,000. Tahun 1 ialah satu-satunya tahun kedua-dua kaedah sama.**
 - → 
 
 **`rb-002`** · numeric · difficulty 3 · depreciation, reducing-balance
@@ -1757,7 +1754,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* The same machine cost RM20,000 and was charged RM2,000 in year 1. At 10% on the reducing balance, what is the charge for year 2?
 - *Question (BM)* **Mesin yang sama berkos RM20,000 dan dicaj RM2,000 pada tahun 1. Pada 10% atas baki berkurangan, berapakah caj bagi tahun 2?**
 - *Why (EN)* The carrying amount is now 20,000 − 2,000 = 18,000, so 10% × 18,000 = 1,800. The charge falls because the base fell.
-- *Why (BM)* **Amaun bawaan kini 20,000 − 2,000 = 18,000, jadi 10% × 18,000 = 1,800. Caj berkurang kerana asasnya berkurang.**
+- *Why (BM)* **Nilai buku kini 20,000 − 2,000 = 18,000, jadi 10% × 18,000 = 1,800. Caj berkurang kerana asasnya berkurang.**
 - → 
 
 **`rb-003`** · numeric · difficulty 4 · depreciation, reducing-balance
@@ -1779,7 +1776,7 @@ Every short label the learner sees: account names, options, step values, section
 **`rb-005`** · numeric · difficulty 4 · depreciation, reducing-balance
 
 - *Question (EN)* Equipment cost RM20,000, depreciated at 10% per year on the reducing balance. What is the carrying amount after two years?
-- *Question (BM)* **Peralatan berkos RM20,000, disusutnilaikan 10% setahun atas baki berkurangan. Berapakah amaun bawaan selepas dua tahun?**
+- *Question (BM)* **Peralatan berkos RM20,000, disusutnilaikan 10% setahun atas baki berkurangan. Berapakah nilai buku selepas dua tahun?**
 - *Why (EN)* 20,000 − 2,000 = 18,000 after year 1; 18,000 − 1,800 = 16,200 after year 2.
 - *Why (BM)* **20,000 − 2,000 = 18,000 selepas tahun 1; 18,000 − 1,800 = 16,200 selepas tahun 2.**
 - → 
@@ -1788,7 +1785,7 @@ Every short label the learner sees: account names, options, step values, section
 
 - *Question (EN)* Under the reducing balance method, the rate is applied to which figure?
 - *Question (BM)* **Di bawah kaedah baki berkurangan, kadar dikenakan ke atas angka yang mana?**
-- *Choices* Carrying amount → **Amaun bawaan** · Original cost → **Kos asal** · Residual value → **Nilai baki**
+- *Choices* Carrying amount → **Nilai buku** · Original cost → **Kos asal** · Residual value → **Nilai baki**
 - *Why (EN)* Cost less accumulated depreciation — what the asset is still worth in the books.
 - *Why (BM)* **Kos tolak susut nilai terkumpul — nilai aset yang masih tinggal dalam buku.**
 - → 
@@ -1825,13 +1822,13 @@ Every short label the learner sees: account names, options, step values, section
 `l45-disposal` · BM title: `Menjual Aset`
 
 > **Worked example (EN)** When an asset is sold, ask one question: did it fetch more or less than it was still worth in the books? Carrying amount = cost − accumulated depreciation. Proceeds above that is a profit on disposal; below it is a loss. Both go to the Income Statement. In the ledger a Disposal account collects three things — the cost (debit), the accumulated depreciation (credit) and the sale proceeds (credit) — and whatever is left over is the profit or the loss.
-> **(BM)** Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Amaun bawaan = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu.
+> **(BM)** Apabila sesuatu aset dijual, tanya satu soalan: adakah ia laku lebih atau kurang daripada nilai yang masih tinggal dalam buku? Nilai buku = kos − susut nilai terkumpul. Hasil jualan melebihi itu ialah untung atas pelupusan; kurang daripadanya ialah rugi. Kedua-duanya masuk ke Penyata Pendapatan. Dalam lejar, Akaun Pelupusan mengumpul tiga perkara — kos (debit), susut nilai terkumpul (kredit) dan hasil jualan (kredit) — dan bakinya ialah untung atau rugi itu.
 - → 
 
 **`ds-001`** · numeric · difficulty 2 · depreciation, disposal
 
 - *Question (EN)* A van cost RM30,000 and accumulated depreciation on it is RM18,000. What is its carrying amount?
-- *Question (BM)* **Sebuah van berkos RM30,000 dan susut nilai terkumpulnya ialah RM18,000. Berapakah amaun bawaannya?**
+- *Question (BM)* **Sebuah van berkos RM30,000 dan susut nilai terkumpulnya ialah RM18,000. Berapakah nilai bukunya?**
 - *Why (EN)* 30,000 − 18,000 = 12,000. This is the figure the sale price has to beat.
 - *Why (BM)* **30,000 − 18,000 = 12,000. Inilah angka yang perlu diatasi oleh harga jualan.**
 - → 
@@ -1839,7 +1836,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ds-002`** · numeric · difficulty 3 · depreciation, disposal
 
 - *Question (EN)* A van with a carrying amount of RM12,000 is sold for RM15,000. How much is the profit on disposal?
-- *Question (BM)* **Sebuah van dengan amaun bawaan RM12,000 dijual pada harga RM15,000. Berapakah untung atas pelupusan?**
+- *Question (BM)* **Sebuah van dengan nilai buku RM12,000 dijual pada harga RM15,000. Berapakah untung atas pelupusan?**
 - *Why (EN)* 15,000 − 12,000 = 3,000. It sold for more than the books said it was worth.
 - *Why (BM)* **15,000 − 12,000 = 3,000. Ia dijual lebih daripada nilai yang dinyatakan dalam buku.**
 - → 
@@ -1847,7 +1844,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ds-003`** · numeric · difficulty 3 · depreciation, disposal
 
 - *Question (EN)* A machine with a carrying amount of RM5,800 is sold for RM4,000. How much is the LOSS on disposal?
-- *Question (BM)* **Sebuah mesin dengan amaun bawaan RM5,800 dijual pada harga RM4,000. Berapakah RUGI atas pelupusan?**
+- *Question (BM)* **Sebuah mesin dengan nilai buku RM5,800 dijual pada harga RM4,000. Berapakah RUGI atas pelupusan?**
 - *Why (EN)* 5,800 − 4,000 = 1,800. Give the size of the loss as a positive figure; the word "loss" already carries the direction.
 - *Why (BM)* **5,800 − 4,000 = 1,800. Nyatakan saiz rugi sebagai angka positif; perkataan "rugi" sudah membawa arahnya.**
 - → 
@@ -1857,13 +1854,13 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* Equipment cost RM40,000 with accumulated depreciation of RM25,000. It is sold for RM12,000. How much is the LOSS on disposal?
 - *Question (BM)* **Peralatan berkos RM40,000 dengan susut nilai terkumpul RM25,000. Ia dijual pada harga RM12,000. Berapakah RUGI atas pelupusan?**
 - *Why (EN)* Carrying amount is 40,000 − 25,000 = 15,000. Sold for 12,000, so the loss is 3,000. Comparing the proceeds with the COST instead would give 28,000, which ignores every year of depreciation already charged.
-- *Why (BM)* **Amaun bawaan ialah 40,000 − 25,000 = 15,000. Dijual pada 12,000, jadi ruginya 3,000. Membandingkan hasil jualan dengan KOS pula memberi 28,000, yang mengabaikan setiap tahun susut nilai yang telah dicaj.**
+- *Why (BM)* **Nilai buku ialah 40,000 − 25,000 = 15,000. Dijual pada 12,000, jadi ruginya 3,000. Membandingkan hasil jualan dengan KOS pula memberi 28,000, yang mengabaikan setiap tahun susut nilai yang telah dicaj.**
 - → 
 
 **`ds-101`** · classify · difficulty 2 · depreciation, disposal
 
 - *Question (EN)* An asset is sold for more than its carrying amount. What is the result?
-- *Question (BM)* **Sesuatu aset dijual melebihi amaun bawaannya. Apakah hasilnya?**
+- *Question (BM)* **Sesuatu aset dijual melebihi nilai bukunya. Apakah hasilnya?**
 - *Choices* Profit on disposal → **Untung atas pelupusan** · Loss on disposal → **Rugi atas pelupusan**
 - *Why (EN)* It was worth more than the books said, so the earlier depreciation charges were slightly too heavy.
 - *Why (BM)* **Ia bernilai lebih daripada yang dinyatakan dalam buku, jadi caj susut nilai terdahulu agak terlebih.**
@@ -1893,7 +1890,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Susut nilai terkumpul RM18,000 atas van yang dilupuskan itu perlu dipindahkan keluar.**
 - *Accounts offered* Accumulated Depreciation → **Susut Nilai Terkumpul** · Disposal → **Pelupusan** · Motor Vehicles → **Kenderaan Bermotor** · Depreciation Expense → **Belanja Susut Nilai**
 - *Why (EN)* Accumulated Depreciation normally sits on the credit side, so clearing it means debiting it. The credit reduces the cost sitting in Disposal down towards the carrying amount.
-- *Why (BM)* **Susut Nilai Terkumpul biasanya berada di sebelah kredit, jadi mengosongkannya bermakna mendebitkannya. Kredit itu mengurangkan kos dalam Akaun Pelupusan menghampiri amaun bawaan.**
+- *Why (BM)* **Susut Nilai Terkumpul biasanya berada di sebelah kredit, jadi mengosongkannya bermakna mendebitkannya. Kredit itu mengurangkan kos dalam Akaun Pelupusan menghampiri nilai buku.**
 - → 
 
 **`ds-203`** · journal_entry · difficulty 4 · depreciation, disposal, double-entry
@@ -1928,7 +1925,7 @@ Every short label the learner sees: account names, options, step values, section
 `l46-faded-disposal` · BM title: `Melunturkan Pelupusan`
 
 > **Worked example (EN)** The disposal workings run in a fixed order: cost, less accumulated depreciation, carrying amount, sale proceeds, and the difference between the last two. Only then does the entry follow — a profit is credited, a loss is debited.
-> **(BM)** Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, amaun bawaan, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan.
+> **(BM)** Kerja kira pelupusan berjalan dalam susunan tetap: kos, tolak susut nilai terkumpul, nilai buku, hasil jualan, dan beza antara dua yang terakhir. Barulah catatan menyusul — untung dikreditkan, rugi didebitkan.
 - → 
 
 **`fd-1501`** · faded_step · difficulty 2 · depreciation, disposal, faded-step
@@ -1940,7 +1937,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Worked steps* (␣ marks a step the learner must supply)
   - Cost → **Kos** · unit: RM → **(none)**
   - Less: accumulated depreciation → **Tolak: susut nilai terkumpul** · unit: RM → **(none)**
-  - Carrying amount → **Amaun bawaan** · unit: RM → **(none)**
+  - Carrying amount → **Nilai buku** · unit: RM → **(none)**
   - Sale proceeds → **Hasil jualan** · unit: RM → **(none)**
   - Profit on disposal → **Untung atas pelupusan** · unit: RM → **(none)**
   - Account to debit → **Akaun untuk didebit** · answer: Disposal → **Pelupusan**
@@ -1959,7 +1956,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Worked steps* (␣ marks a step the learner must supply)
   - Cost → **Kos** · unit: RM → **(none)**
   - Less: accumulated depreciation → **Tolak: susut nilai terkumpul** · unit: RM → **(none)**
-  - Carrying amount → **Amaun bawaan** · unit: RM → **(none)**
+  - Carrying amount → **Nilai buku** · unit: RM → **(none)**
   - Sale proceeds → **Hasil jualan** · unit: RM → **(none)**
   - ␣ Profit on disposal → **Untung atas pelupusan** · unit: RM → **(none)**
   - ␣ Account to debit → **Akaun untuk didebit** · answer: Disposal → **Pelupusan**
@@ -1978,14 +1975,14 @@ Every short label the learner sees: account names, options, step values, section
 - *Worked steps* (␣ marks a step the learner must supply)
   - Cost → **Kos** · unit: RM → **(none)**
   - Less: accumulated depreciation → **Tolak: susut nilai terkumpul** · unit: RM → **(none)**
-  - ␣ Carrying amount → **Amaun bawaan** · unit: RM → **(none)**
+  - ␣ Carrying amount → **Nilai buku** · unit: RM → **(none)**
   - ␣ Sale proceeds → **Hasil jualan** · unit: RM → **(none)**
   - ␣ Profit on disposal → **Untung atas pelupusan** · unit: RM → **(none)**
   - ␣ Account to debit → **Akaun untuk didebit** · answer: Disposal → **Pelupusan**
   - ␣ Account to credit → **Akaun untuk dikredit** · answer: Profit on Disposal → **Untung atas Pelupusan**
 - *Wrong options offered* Motor Vehicles → **Kenderaan Bermotor** · Loss on Disposal → **Rugi atas Pelupusan** · Accumulated Depreciation → **Susut Nilai Terkumpul**
 - *Why (EN)* Carrying amount 30,000 − 18,000 = 12,000; sold for 15,000; profit 3,000, credited.
-- *Why (BM)* **Amaun bawaan 30,000 − 18,000 = 12,000; dijual pada 15,000; untung 3,000, dikreditkan.**
+- *Why (BM)* **Nilai buku 30,000 − 18,000 = 12,000; dijual pada 15,000; untung 3,000, dikreditkan.**
 - → 
 
 #### Depreciation by Revaluation

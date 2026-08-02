@@ -20,6 +20,7 @@ import { SessionScreen, type SessionResult } from '../components/SessionScreen'
 import { SessionComplete } from '../components/SessionComplete'
 import { Account } from '../components/Account'
 import { Classes } from '../components/Classes'
+import { Exam } from '../components/Exam'
 import { Badges } from '../components/Badges'
 import { ProfileSheet } from '../components/ProfileSheet'
 import { getProfile, pullProfile, type LocalProfile } from './profile'
@@ -34,6 +35,7 @@ type Screen =
   | 'classes'
   | 'badges'
   | 'profile'
+  | 'exam'
 
 export function App() {
   const { ready } = useKira()
@@ -155,6 +157,7 @@ export function App() {
           onStart={startSession}
           onOpenProgress={() => setScreen('progress')}
           onOpenBadges={() => setScreen('badges')}
+          onOpenExam={() => setScreen('exam')}
           onEditProfile={() => setScreen('profile')}
         />
       )}
@@ -200,6 +203,17 @@ export function App() {
       )}
 
       {screen === 'classes' && <Classes onBack={() => setScreen('progress')} />}
+
+      {/* Leaving the exam reloads home so a mock's effect on the schedule and
+          the badges is visible immediately — it wrote real attempts. */}
+      {screen === 'exam' && (
+        <Exam
+          onExit={() => {
+            setScreen('home')
+            void reload()
+          }}
+        />
+      )}
 
       {screen === 'badges' && (
         <Badges badges={badges} onBack={() => setScreen('home')} />

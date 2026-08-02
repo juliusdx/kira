@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 245 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 276 passing, no network
 - Live-backend tests: `npm run test:integration` — 12 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
@@ -374,6 +374,36 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   - New skill tags `revaluation-method`, `dissolution`, `break-even`.
     `BM_REVIEW.md` scope is now **236 items** — the majority of the bank, all
     of it Claude's BM and still unread against the syllabus.
+- **2026-07-30 (mock exam shell)** — a Kertas 1-shaped paper: 40 MCQ, 75
+  minutes, nothing marked until it is handed in. `src/exam/paper.ts` is pure
+  (blueprint, seeded selection, scoring); `src/components/Exam.tsx` is the
+  shell; Dexie goes to **version 2** with an `examRuns` store.
+  - **MCQ only.** `classify` + `debit_credit` are the single-answer types; a
+    T-account in a 75-minute 40-question paper would wreck the time budget and
+    stop it being a Kertas 1. Consequence: `t3-journal` and `t4-errors` CANNOT
+    appear — they hold only journal_entry/spot_error items — and the real paper
+    does examine both. That is a content job, not a code one.
+  - **`BLUEPRINT` is modelled on the 2024 paper, not on what Kira happens to
+    hold**, and a test asserts it sums to 40 and that every named topic can
+    actually supply its allocation. A shortfall is redistributed so a paper is
+    never quietly 37 questions long.
+  - **The paper is rebuilt from its seed rather than stored.** `buildPaper` is
+    deterministic (mulberry32, never Math.random), so the review screen
+    regenerates the same 40 questions. Storing both would let them disagree.
+  - **NOT SessionScreen with a flag, and NOT ItemRenderer.** A session has a
+    combo, worked examples, a self-explanation gate and re-queues misses —
+    all meaningless or wrong under exam conditions. And choice items commit on
+    tap, which is right for drilling and wrong here: a real paper lets you
+    change your mind. `ExamChoices` is selection-only, and tapping the chosen
+    option again clears it.
+  - **Answers become ordinary attempts; blanks do not.** A mock is retrieval
+    practice under the hardest conditions, so it should move the schedule and
+    it reaches the teacher's roster for free. But an unanswered question is a
+    fact about the CLOCK, and dropping that item to box 1 would punish the
+    wrong thing. Verified in the browser: 30 answers, 10 blanks, 30 attempts.
+  - Exam runs are **local-only** — the answers sync as attempts, the paper as
+    an event does not. That needs a table and a migration, worth doing once a
+    mock has actually been sat.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

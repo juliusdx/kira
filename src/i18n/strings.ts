@@ -335,6 +335,59 @@ export const UI = {
     en: 'Too many attempts. Wait a while and try again.',
     ms: 'Terlalu banyak percubaan. Tunggu sebentar dan cuba lagi.',
   },
+  // mock exam (src/components/Exam.tsx)
+  mockExam: { en: 'Mock exam', ms: 'Peperiksaan percubaan' },
+  mockExamHint: {
+    en: '40 questions, {n} minutes, no help',
+    ms: '40 soalan, {n} minit, tiada bantuan',
+  },
+  mockExamIntro: {
+    en: 'A paper shaped like SPM Kertas 1: 40 multiple-choice questions drawn from across the whole syllabus.',
+    ms: 'Kertas berbentuk seperti SPM Kertas 1: 40 soalan aneka pilihan diambil daripada keseluruhan sukatan.',
+  },
+  mockExamRule1: {
+    en: 'You have {n} minutes. The clock does not stop.',
+    ms: 'Anda ada {n} minit. Jam tidak berhenti.',
+  },
+  mockExamRule2: {
+    en: 'No marking until you hand in. You can go back and change any answer.',
+    ms: 'Tiada pemarkahan sehingga anda menyerahkannya. Anda boleh kembali dan menukar mana-mana jawapan.',
+  },
+  mockExamRule3: {
+    en: 'Every answer still counts towards your practice, so what you get wrong comes back.',
+    ms: 'Setiap jawapan tetap dikira dalam latihan anda, jadi apa yang salah akan kembali.',
+  },
+  mockExamStart: { en: 'Start the paper', ms: 'Mulakan kertas' },
+  mockExamResult: { en: 'Your paper', ms: 'Kertas anda' },
+  mockExamRevise: {
+    en: 'Weakest first — this is what to go over.',
+    ms: 'Paling lemah dahulu — inilah yang perlu diulang kaji.',
+  },
+  mockExamFooter: {
+    en: 'Modelled on SPM Kertas 1: 40 questions in {n} minutes.',
+    ms: 'Berdasarkan SPM Kertas 1: 40 soalan dalam {n} minit.',
+  },
+  timeLeft: { en: 'Time left', ms: 'Masa berbaki' },
+  previous: { en: 'Back', ms: 'Sebelum' },
+  nextQuestion: { en: 'Next', ms: 'Seterusnya' },
+  handIn: { en: 'Hand in', ms: 'Serahkan' },
+  handInAll: {
+    en: 'All 40 answered. Hand the paper in?',
+    ms: 'Kesemua 40 telah dijawab. Serahkan kertas?',
+  },
+  handInBlanks: {
+    en: '{n} questions are still blank. A blank scores nothing — hand in anyway?',
+    ms: '{n} soalan masih kosong. Jawapan kosong tiada markah — serahkan juga?',
+  },
+  keepGoing: { en: 'Keep going', ms: 'Teruskan' },
+  everyQuestion: { en: 'Every question', ms: 'Setiap soalan' },
+  youPut: { en: 'You put', ms: 'Anda jawab' },
+  theAnswer: { en: 'Answer', ms: 'Jawapan' },
+  correctLabel: { en: 'Correct', ms: 'Betul' },
+  blank: { en: '(blank)', ms: '(kosong)' },
+  leftBlank: { en: '{n} left blank', ms: '{n} dibiarkan kosong' },
+  inMinutes: { en: 'in {n} min', ms: 'dalam {n} minit' },
+  done: { en: 'Done', ms: 'Selesai' },
   // one actionable line per learner (src/app/nextAction.ts)
   actNotStarted: { en: 'Has not started yet', ms: 'Belum bermula lagi' },
   actNotStartedHint: {

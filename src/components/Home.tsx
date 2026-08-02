@@ -1,6 +1,7 @@
 import type { ProgressSummary } from '../app/progress'
 import type { Badge } from '../app/badges'
 import { useKira } from '../app/KiraContext'
+import { EXAM_MINUTES } from '../exam/paper'
 import { t as tc } from '../content/loader'
 import { Card, FOCUS } from './ui'
 import { Avatar, BigButton, CountUp, PlayCard, Ring } from './play'
@@ -22,6 +23,7 @@ export function Home({
   onStart,
   onOpenProgress,
   onOpenBadges,
+  onOpenExam,
   onEditProfile,
 }: {
   summary: ProgressSummary
@@ -33,6 +35,7 @@ export function Home({
   onStart: () => void
   onOpenProgress: () => void
   onOpenBadges: () => void
+  onOpenExam: () => void
   onEditProfile: () => void
 }) {
   const { locale, t } = useKira()
@@ -169,6 +172,25 @@ export function Home({
               </div>
             )}
           </PlayCard>
+        </button>
+
+        {/* Sits BELOW the daily session on purpose. A mock is worth sitting
+            once in a while; practice is what to do today, and putting the exam
+            first would invite grinding papers instead of reviewing. */}
+        <button
+          onClick={onOpenExam}
+          className={`flex w-full items-center gap-3 rounded-2xl bg-white px-4 py-3 text-left ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-800/60 dark:ring-slate-700 dark:hover:bg-slate-800 ${FOCUS}`}
+        >
+          <span className="text-2xl" aria-hidden>📝</span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold text-slate-900 dark:text-white">
+              {t('mockExam')}
+            </span>
+            <span className="block text-xs text-slate-500 dark:text-slate-400">
+              {t('mockExamHint').replace('{n}', String(EXAM_MINUTES))}
+            </span>
+          </span>
+          <span className="shrink-0 text-slate-400" aria-hidden>→</span>
         </button>
 
         <button

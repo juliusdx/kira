@@ -1,4 +1,4 @@
-import { db, type ReviewRow } from './db'
+import { db, type ExamRunRow, type ReviewRow } from './db'
 import type { Item, Locale } from '../content/types'
 import { schedule, type ReviewState } from '../scheduler/scheduler'
 
@@ -55,6 +55,39 @@ export async function recordAttempt(
 function stripId(row: ReviewRow): ReviewState {
   const { itemId: _itemId, ...state } = row
   return state
+}
+
+// --- mock exam runs --------------------------------------------------------
+
+/**
+ * Save a finished paper and fold every answer into the learner's schedule.
+ *
+ * The answers are recorded as ordinary attempts on purpose. A mock is
+ * retrieval practice under the hardest conditions the learner will ever meet,
+ * so what it reveals about an item is at least as good as what a practice
+ * session reveals — pretending it did not happen would leave the scheduler
+ * believing something the learner has just disproved. It also means the mock
+ * shows up in the teacher's roster and accuracy for free, with no new table.
+ *
+ * Blanks are NOT recorded. An unanswered question is a fact about the clock,
+ * not about whether the learner knows the item, and dropping an item to box 1
+ * because time ran out would punish them for the wrong thing.
+ */
+export async function saveExamRun(
+  run: Omit<ExamRunRow, 'id'>,
+  graded: { item: Item; correct: boolean; chosen: string | null; msTaken: number }[],
+): Promise<number> {
+  const id = await db.examRuns.add(run as ExamRunRow)
+  for (const g of graded) {
+    if (g.chosen === null) continue
+    await recordAttempt(g.item, g.correct, g.chosen, g.msTaken, run.finishedAt)
+  }
+  return id
+}
+
+/** Past papers, newest first. Bounded by `limit` — a learner can sit many. */
+export async function listExamRuns(limit = 10): Promise<ExamRunRow[]> {
+  return db.examRuns.orderBy('finishedAt').reverse().limit(limit).toArray()
 }
 
 // --- meta (locale, streak) -------------------------------------------------
@@ -121,9 +154,10 @@ export async function getStreak(now: number): Promise<number> {
 
 // --- reset (settings / testing) -------------------------------------------
 export async function resetAllProgress(): Promise<void> {
-  await db.transaction('rw', db.reviewState, db.attempts, db.meta, async () => {
+  await db.transaction('rw', db.reviewState, db.attempts, db.examRuns, db.meta, async () => {
     await db.reviewState.clear()
     await db.attempts.clear()
+    await db.examRuns.clear()
     // keep locale, drop streak
     await db.meta.delete('streak')
   })

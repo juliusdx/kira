@@ -82,7 +82,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 245 hermetic unit + component tests (the CI gate)
+npm test           # 276 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -126,6 +126,23 @@ Two design languages, deliberately. Learner screens (home, session end, badges,
 profile) use `components/play.tsx` — rings, count-ups, celebration bursts.
 Teacher and parent screens stay on the sober `components/ui.tsx`: a progress
 report should look like a report, not like a game.
+
+## Mock exam
+
+A paper shaped like SPM Kertas 1: **40 multiple-choice questions in 75 minutes**,
+drawn across the syllabus to a blueprint modelled on the real 2024 paper rather
+than on whatever the bank happens to hold most of.
+
+Nothing is marked until the paper is handed in, and every answer stays
+revisable until then — tapping the chosen option again rubs it out. The clock
+does not stop, and hands the paper in itself when it runs out. The result opens
+on the score and then on a topic breakdown, weakest first, because the useful
+output of a mock is "revise these two", not a number.
+
+Answers count as ordinary practice: they move the spaced-repetition schedule
+and reach the teacher's report like any other attempt. Questions left blank do
+not — an unanswered question is a fact about the clock, not about whether the
+learner knows the item.
 
 ## Cloud features
 
@@ -207,8 +224,13 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
 - **Native apps.** A Capacitor wrap for the App Store / Play Store. Deferred
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
-- **A mock exam.** SPM Prinsip Perakaunan is two papers: 3756/1 is 40 multiple
-  choice in 1h15, 3756/2 is 2h30 of prepared statements and written
-  justification. The first is a good fit for this app; the second mostly is
-  not, and pretending otherwise would be the wrong kind of practice.
+- **Kertas 2.** SPM Prinsip Perakaunan is two papers. 3756/1 — 40 multiple
+  choice in 1h15 — now has a mock (see below). 3756/2 is 2h30 of prepared
+  statements and written justification: partial credit across a 13-mark
+  statement, the own-figure rule, and "which business would you invest in, and
+  why". None of that is gradeable by a pure function, and a version that only
+  checked the final figure would teach the wrong lesson about how it is marked.
+- **Multiple-choice items for journal entries and spot-the-error**, so those
+  two topics can appear in a mock paper. They currently hold only
+  `journal_entry` and `spot_error` items, which are not multiple choice.
 - FSRS scheduling, and the multi-tenant authoring UI.

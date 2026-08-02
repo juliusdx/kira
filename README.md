@@ -24,17 +24,21 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**302 items across 22 topics**, Stages 1–7:
+**338 items across 22 topics**, Stages 1–7:
 
-1–2. The accounting equation · debits & credits · source documents · books of
-   first entry · petty cash & the imprest · journal entries · spot the error
+1–2. The accounting equation · forms of business & who sets the rules · debits &
+   credits · source documents · books of first entry · petty cash & the
+   imprest · journal entries · spot the error
 3. Ledger & T-accounts · balancing off · the trial balance
 4. Income statement · valuing closing inventory · statement of financial position
-5. Year-end adjustments — accruals & prepayments · depreciation (straight line
-   and reducing balance) · disposal of an asset · bad debts & provisions
+5. Year-end adjustments — accruals & prepayments · depreciation (straight line,
+   reducing balance, revaluation) · disposal of an asset · bad debts &
+   provisions
 6. Bank reconciliation · control accounts · correction of errors & suspense ·
-   incomplete records · club & society accounts · partnership accounts
-7. Limited company accounts · manufacturing accounts · ratio analysis · cash budgets
+   incomplete records · club & society accounts · partnership accounts,
+   including section 26 and dissolution
+7. Limited company accounts including share issues · manufacturing accounts &
+   break-even · ratio analysis · cash budgets
 
 Eight interaction types: `classify`, `debit_credit`, `numeric`,
 `journal_entry`, `t_account`, `spot_error`, `statement_build`, `faded_step`.
@@ -203,13 +207,6 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
 - **Native apps.** A Capacitor wrap for the App Store / Play Store. Deferred
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
-- **The rest of the syllabus.** Stages 1–7 cover most of it but not all: checked
-  against the SPM 2024 papers, the bank has nothing on break-even, petty cash,
-  source documents, books of first entry, reducing-balance depreciation,
-  disposal of a non-current asset, partnership dissolution, inventory at the
-  lower of cost and market, or cooperatives. Reducing balance and disposal are
-  the sharpest omissions — both are heavily examined and both sit inside topics
-  Kira already teaches.
 - **A mock exam.** SPM Prinsip Perakaunan is two papers: 3756/1 is 40 multiple
   choice in 1h15, 3756/2 is 2h30 of prepared statements and written
   justification. The first is a good fit for this app; the second mostly is

@@ -54,6 +54,9 @@ const CLAUDE_LESSONS = new Set([
   'l45-disposal',
   'l46-faded-disposal',
   'l50-inventory-valuation',
+  // t10 and t1 are otherwise ported topics; these two lessons are not.
+  'l54-revaluation-method',
+  'l56-entities-and-bodies',
 ])
 
 const inScope = (topic, lesson) =>

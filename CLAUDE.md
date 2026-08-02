@@ -28,7 +28,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 302 items / 22 topics / 50 lessons.
+- `seed_content.json` (repo ROOT) — all 338 items / 22 topics / 56 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -353,9 +353,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     cb-*). Both look right in their own context and a learner never meets both
     in one question, so this is an ambiguity in the ENGLISH rather than a BM
     error. Left as-is deliberately.
-  - **Still open on the gap list:** partnership dissolution / realisation
-    account, break-even, cooperatives, Partnership Act 1961 s.26, the
-    accounting bodies, share oversubscription, loose tools by revaluation.
+- **2026-07-30 (gap list, batch 3 — the list is CLOSED)** — 36 items / 6
+  lessons, bank now **338**. Content-only. All 13 gaps the SPM 2024 papers
+  exposed are now taught; re-probed and every one comes back present.
+  - `l51-no-agreement` + `l52-dissolution` into `t17-partnership` — section 26
+    (equal shares however unequal the capitals, no salary, no interest on
+    capital, 5% only on a LOAN) and the realisation account. The s.26 item
+    with unequal capitals is the trap: splitting 3:1 by capital is the
+    tempting wrong answer.
+  - `l53-break-even` into `t19-manufacturing` — contribution per unit, fixed
+    costs ÷ contribution, and what moves the point. Its numeric answers are
+    UNIT counts, so they carry `unit`/`unit_ms`/`unitAfter` (`4000 unit`).
+  - `l54-revaluation-method` into `t10-depreciation` — opening + purchases −
+    closing, the third depreciation method and the one used for loose tools.
+  - `l55-share-issue` into `t18-limited-companies` — oversubscription, the
+    refund, and why preference ranks before ordinary.
+  - `l56-entities-and-bodies` into `t1-equation` — sole trader / partnership /
+    company / cooperative by ownership and liability, one-member-one-vote, and
+    MASB (writes the standards) against MIA (regulates the accountants).
+  - New skill tags `revaluation-method`, `dissolution`, `break-even`.
+    `BM_REVIEW.md` scope is now **236 items** — the majority of the bank, all
+    of it Claude's BM and still unread against the syllabus.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

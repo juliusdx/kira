@@ -197,6 +197,15 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
     ms: 'Susut nilai baki berkurangan',
   },
   disposal: { en: 'Disposal of an asset', ms: 'Pelupusan aset' },
+  'revaluation-method': {
+    en: 'Depreciation by revaluation',
+    ms: 'Susut nilai secara penilaian semula',
+  },
+  dissolution: {
+    en: 'Dissolving a partnership',
+    ms: 'Membubarkan perkongsian',
+  },
+  'break-even': { en: 'Break-even point', ms: 'Titik pulang modal' },
   'bad-debts': { en: 'Bad debts', ms: 'Hutang lapuk' },
   provision: {
     en: 'Provision for doubtful debts',

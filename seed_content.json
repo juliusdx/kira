@@ -260,7 +260,7 @@
               "answer": "Asset",
               "explanation": {
                 "en": "Trade receivables are money owed TO you — an asset.",
-                "ms": "Penghutang perdagangan ialah wang yang dihutang KEPADA anda — aset."
+                "ms": "Akaun Belum Terima ialah wang yang dihutang KEPADA anda — aset."
               }
             }
           ]
@@ -670,7 +670,7 @@
               ],
               "prompt": {
                 "en": "The business pays a supplier the money it owed. The Trade Payables account is...",
-                "ms": "Perniagaan membayar pembekal wang yang dihutang. Akaun Pemiutang Perdagangan ialah..."
+                "ms": "Perniagaan membayar pembekal wang yang dihutang. Akaun Belum Bayar ialah..."
               },
               "data": {
                 "options": [
@@ -1412,7 +1412,7 @@
                 "accounts_ms": [
                   "Inventori",
                   "Tunai",
-                  "Pemiutang Perdagangan",
+                  "Akaun Belum Bayar",
                   "Jualan"
                 ]
               },
@@ -1428,7 +1428,7 @@
               },
               "explanation": {
                 "en": "Bought on credit: inventory up = debit; a payable is created = credit.",
-                "ms": "Dibeli secara kredit: inventori naik = debit; pemiutang terhasil = kredit."
+                "ms": "Dibeli secara kredit: inventori naik = debit; Akaun Belum Bayar terhasil = kredit."
               }
             },
             {
@@ -1491,10 +1491,10 @@
                   "Trade Payables"
                 ],
                 "accounts_ms": [
-                  "Penghutang Perdagangan",
+                  "Akaun Belum Terima",
                   "Tunai",
                   "Jualan",
-                  "Pemiutang Perdagangan"
+                  "Akaun Belum Bayar"
                 ]
               },
               "answer": {
@@ -1509,7 +1509,7 @@
               },
               "explanation": {
                 "en": "Sold on credit: a receivable is created = debit; Sales = credit.",
-                "ms": "Dijual secara kredit: penghutang terhasil = debit; Jualan = kredit."
+                "ms": "Dijual secara kredit: Akaun Belum Terima terhasil = debit; Jualan = kredit."
               }
             }
           ]
@@ -1570,7 +1570,7 @@
                       "ms": "Akaun untuk dikredit"
                     },
                     "value": "Trade Payables",
-                    "value_ms": "Pemiutang Perdagangan",
+                    "value_ms": "Akaun Belum Bayar",
                     "blank": true
                   }
                 ],
@@ -1587,7 +1587,7 @@
               },
               "explanation": {
                 "en": "Bought on credit, so nothing leaves the business yet — a payable is created. Cr Trade Payables 1,800.",
-                "ms": "Dibeli secara kredit, jadi tiada apa keluar lagi — pemiutang terhasil. Kt Pemiutang Perdagangan 1,800."
+                "ms": "Dibeli secara kredit, jadi tiada apa keluar lagi — Akaun Belum Bayar terhasil. Kt Akaun Belum Bayar 1,800."
               }
             },
             {
@@ -1644,7 +1644,7 @@
                   },
                   {
                     "value": "Trade Payables",
-                    "value_ms": "Pemiutang Perdagangan"
+                    "value_ms": "Akaun Belum Bayar"
                   }
                 ]
               },
@@ -1698,7 +1698,7 @@
                       "ms": "Akaun untuk dikredit"
                     },
                     "value": "Trade Receivables",
-                    "value_ms": "Penghutang Perdagangan",
+                    "value_ms": "Akaun Belum Terima",
                     "blank": true
                   }
                 ],
@@ -1709,13 +1709,13 @@
                   },
                   {
                     "value": "Trade Payables",
-                    "value_ms": "Pemiutang Perdagangan"
+                    "value_ms": "Akaun Belum Bayar"
                   }
                 ]
               },
               "explanation": {
                 "en": "Money in the bank goes up = debit Bank. The customer no longer owes it, so the receivable goes down = credit Trade Receivables. This is not a new sale — the sale was recorded when the goods went out.",
-                "ms": "Wang dalam bank bertambah = debit Bank. Pelanggan tidak lagi berhutang, jadi penghutang berkurang = kredit Penghutang Perdagangan. Ini bukan jualan baharu — jualan telah direkod semasa barang dihantar."
+                "ms": "Wang dalam bank bertambah = debit Bank. Pelanggan tidak lagi berhutang, jadi Akaun Belum Terima berkurang = kredit Akaun Belum Terima. Ini bukan jualan baharu — jualan telah direkod semasa barang dihantar."
               }
             }
           ]
@@ -1939,11 +1939,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Payables account, then find the closing balance.",
-                "ms": "Catat ini ke akaun Pemiutang Perdagangan, kemudian cari baki penutup."
+                "ms": "Catat ini ke Akaun Belum Bayar, kemudian cari baki penutup."
               },
               "data": {
                 "account": "Trade Payables",
-                "account_ms": "Pemiutang Perdagangan",
+                "account_ms": "Akaun Belum Bayar",
                 "entries": [
                   {
                     "label": {
@@ -1982,11 +1982,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Receivables account, then find the closing balance.",
-                "ms": "Catat ini ke akaun Penghutang Perdagangan, kemudian cari baki penutup."
+                "ms": "Catat ini ke Akaun Belum Terima, kemudian cari baki penutup."
               },
               "data": {
                 "account": "Trade Receivables",
-                "account_ms": "Penghutang Perdagangan",
+                "account_ms": "Akaun Belum Terima",
                 "entries": [
                   {
                     "label": {
@@ -2137,7 +2137,7 @@
           "worked_example": {
             "prompt": {
               "en": "Closing an account has two halves that sit on OPPOSITE sides. The balance c/d is written on the smaller side, because its job is to make the two totals equal. The balance b/d then comes down on the larger side — and that is the side the account really has its balance on. Trade Receivables normally ends with a debit balance and Trade Payables with a credit one, but the entry that closes each of them is written on the other side.",
-              "ms": "Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Penghutang Perdagangan biasanya berakhir dengan baki debit dan Pemiutang Perdagangan dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi."
+              "ms": "Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Akaun Belum Terima biasanya berakhir dengan baki debit dan Akaun Belum Bayar dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi."
             }
           },
           "items": [
@@ -2152,7 +2152,7 @@
               ],
               "prompt": {
                 "en": "A Trade Receivables account has debits of RM5,000 and credits of RM3,200. On which side is the balance c/d written?",
-                "ms": "Akaun Penghutang Perdagangan mempunyai debit RM5,000 dan kredit RM3,200. Di sebelah mana baki c/d dicatat?"
+                "ms": "Akaun Belum Terima mempunyai debit RM5,000 dan kredit RM3,200. Di sebelah mana baki c/d dicatat?"
               },
               "data": {
                 "options": [
@@ -2196,7 +2196,7 @@
               "answer": "Debit",
               "explanation": {
                 "en": "The balance b/d comes down on the opposite side to the c/d — the LARGER side. A receivables account with a debit balance means customers still owe the business RM1,800.",
-                "ms": "Baki b/d dibawa turun di sebelah bertentangan dengan c/d — sebelah yang LEBIH BESAR. Akaun penghutang berbaki debit bermakna pelanggan masih berhutang RM1,800 kepada perniagaan."
+                "ms": "Baki b/d dibawa turun di sebelah bertentangan dengan c/d — sebelah yang LEBIH BESAR. Akaun Belum Terima berbaki debit bermakna pelanggan masih berhutang RM1,800 kepada perniagaan."
               }
             },
             {
@@ -2210,7 +2210,7 @@
               ],
               "prompt": {
                 "en": "A Trade Payables account has credits of RM7,000 and debits of RM4,500. On which side is the balance c/d written?",
-                "ms": "Akaun Pemiutang Perdagangan mempunyai kredit RM7,000 dan debit RM4,500. Di sebelah mana baki c/d dicatat?"
+                "ms": "Akaun Belum Bayar mempunyai kredit RM7,000 dan debit RM4,500. Di sebelah mana baki c/d dicatat?"
               },
               "data": {
                 "options": [
@@ -2239,11 +2239,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Receivables account, then find the closing balance.",
-                "ms": "Catat ini ke akaun Penghutang Perdagangan, kemudian cari baki penutup."
+                "ms": "Catat ini ke Akaun Belum Terima, kemudian cari baki penutup."
               },
               "data": {
                 "account": "Trade Receivables",
-                "account_ms": "Penghutang Perdagangan",
+                "account_ms": "Akaun Belum Terima",
                 "entries": [
                   {
                     "label": {
@@ -2299,11 +2299,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Payables account, then find the closing balance.",
-                "ms": "Catat ini ke akaun Pemiutang Perdagangan, kemudian cari baki penutup."
+                "ms": "Catat ini ke Akaun Belum Bayar, kemudian cari baki penutup."
               },
               "data": {
                 "account": "Trade Payables",
-                "account_ms": "Pemiutang Perdagangan",
+                "account_ms": "Akaun Belum Bayar",
                 "entries": [
                   {
                     "label": {
@@ -2359,11 +2359,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Receivables account, then find the closing balance. Check the side carefully.",
-                "ms": "Catat ini ke akaun Penghutang Perdagangan, kemudian cari baki penutup. Semak sebelahnya dengan teliti."
+                "ms": "Catat ini ke Akaun Belum Terima, kemudian cari baki penutup. Semak sebelahnya dengan teliti."
               },
               "data": {
                 "account": "Trade Receivables",
-                "account_ms": "Penghutang Perdagangan",
+                "account_ms": "Akaun Belum Terima",
                 "entries": [
                   {
                     "label": {
@@ -2397,7 +2397,7 @@
               },
               "explanation": {
                 "en": "Debits 1,800, credits 2,300. The balance is 500 on the CREDIT side. A receivables account usually has a debit balance, but not always: the customer has paid for goods they then returned, so the business now owes them 500.",
-                "ms": "Debit 1,800, kredit 2,300. Baki ialah 500 di sebelah KREDIT. Akaun penghutang biasanya berbaki debit, tetapi bukan selalu: pelanggan telah membayar untuk barang yang kemudiannya dipulangkan, jadi kini perniagaan yang berhutang 500 kepadanya."
+                "ms": "Debit 1,800, kredit 2,300. Baki ialah 500 di sebelah KREDIT. Akaun Belum Terima biasanya berbaki debit, tetapi bukan selalu: pelanggan telah membayar untuk barang yang kemudiannya dipulangkan, jadi kini perniagaan yang berhutang 500 kepadanya."
               }
             },
             {
@@ -2471,11 +2471,11 @@
               ],
               "prompt": {
                 "en": "Post these to the Trade Payables account, then find the closing balance.",
-                "ms": "Catat ini ke akaun Pemiutang Perdagangan, kemudian cari baki penutup."
+                "ms": "Catat ini ke Akaun Belum Bayar, kemudian cari baki penutup."
               },
               "data": {
                 "account": "Trade Payables",
-                "account_ms": "Pemiutang Perdagangan",
+                "account_ms": "Akaun Belum Bayar",
                 "entries": [
                   {
                     "label": {
@@ -2552,7 +2552,7 @@
               "data": {
                 "scenario": {
                   "en": "Trade Receivables. Debit side: balance b/d RM3,000, credit sales RM8,500. Credit side: cash received RM6,000, discount allowed RM400, returns inwards RM300.",
-                  "ms": "Penghutang Perdagangan. Sebelah debit: baki b/d RM3,000, jualan kredit RM8,500. Sebelah kredit: tunai diterima RM6,000, diskaun diberi RM400, pulangan masuk RM300."
+                  "ms": "Akaun Belum Terima. Sebelah debit: baki b/d RM3,000, jualan kredit RM8,500. Sebelah kredit: tunai diterima RM6,000, diskaun diberi RM400, pulangan masuk RM300."
                 },
                 "steps": [
                   {
@@ -2630,7 +2630,7 @@
               "data": {
                 "scenario": {
                   "en": "Trade Payables. Credit side: balance b/d RM2,400, credit purchases RM9,000. Debit side: paid supplier RM5,200, discount received RM300, returns outwards RM500.",
-                  "ms": "Pemiutang Perdagangan. Sebelah kredit: baki b/d RM2,400, belian kredit RM9,000. Sebelah debit: bayar pembekal RM5,200, diskaun diterima RM300, pulangan keluar RM500."
+                  "ms": "Akaun Belum Bayar. Sebelah kredit: baki b/d RM2,400, belian kredit RM9,000. Sebelah debit: bayar pembekal RM5,200, diskaun diterima RM300, pulangan keluar RM500."
                 },
                 "steps": [
                   {
@@ -2691,7 +2691,7 @@
               },
               "explanation": {
                 "en": "11,400 − 6,000 = 5,400. On a payables account the smaller side is the debit side, so the c/d goes there and the b/d comes down as a CREDIT balance — 5,400 still owed to suppliers.",
-                "ms": "11,400 − 6,000 = 5,400. Dalam akaun pemiutang, sebelah yang lebih kecil ialah sebelah debit, jadi c/d dicatat di situ dan b/d dibawa turun sebagai baki KREDIT — 5,400 masih terhutang kepada pembekal."
+                "ms": "11,400 − 6,000 = 5,400. Dalam Akaun Belum Bayar, sebelah yang lebih kecil ialah sebelah debit, jadi c/d dicatat di situ dan b/d dibawa turun sebagai baki KREDIT — 5,400 masih terhutang kepada pembekal."
               }
             },
             {
@@ -2710,7 +2710,7 @@
               "data": {
                 "scenario": {
                   "en": "Trade Receivables. Debit side: balance b/d RM1,500, credit sales RM2,600. Credit side: cash received RM4,300, returns inwards RM200.",
-                  "ms": "Penghutang Perdagangan. Sebelah debit: baki b/d RM1,500, jualan kredit RM2,600. Sebelah kredit: tunai diterima RM4,300, pulangan masuk RM200."
+                  "ms": "Akaun Belum Terima. Sebelah debit: baki b/d RM1,500, jualan kredit RM2,600. Sebelah kredit: tunai diterima RM4,300, pulangan masuk RM200."
                 },
                 "steps": [
                   {
@@ -2840,7 +2840,7 @@
               ],
               "prompt": {
                 "en": "In the trial balance, Trade Payables appears in the...",
-                "ms": "Dalam imbangan duga, Pemiutang Perdagangan berada di lajur..."
+                "ms": "Dalam imbangan duga, Akaun Belum Bayar berada di lajur..."
               },
               "data": {
                 "options": [
@@ -3065,7 +3065,7 @@
               ],
               "prompt": {
                 "en": "Balances: Cash RM5,000 Dr, Inventory RM8,000 Dr, Trade Payables RM4,000 Cr, Capital RM9,000 Cr. What is the total of the Debit column?",
-                "ms": "Baki: Tunai RM5,000 Dt, Inventori RM8,000 Dt, Pemiutang Perdagangan RM4,000 Kt, Modal RM9,000 Kt. Berapakah jumlah lajur Debit?"
+                "ms": "Baki: Tunai RM5,000 Dt, Inventori RM8,000 Dt, Akaun Belum Bayar RM4,000 Kt, Modal RM9,000 Kt. Berapakah jumlah lajur Debit?"
               },
               "data": {
                 "unit": "RM"
@@ -3105,7 +3105,7 @@
               ],
               "prompt": {
                 "en": "Bought goods on credit RM2,000, recorded as: Dr Trade Payables 2,000 / Cr Purchases 2,000. Fix it.",
-                "ms": "Beli barang secara kredit RM2,000, direkod sebagai: Dt Pemiutang Perdagangan 2,000 / Kt Belian 2,000. Betulkan."
+                "ms": "Beli barang secara kredit RM2,000, direkod sebagai: Dt Akaun Belum Bayar 2,000 / Kt Belian 2,000. Betulkan."
               },
               "data": {
                 "given": {
@@ -3705,7 +3705,7 @@
               ],
               "prompt": {
                 "en": "Trade payables",
-                "ms": "Pemiutang perdagangan"
+                "ms": "Akaun Belum Bayar"
               },
               "data": {
                 "options": [
@@ -3860,7 +3860,7 @@
               ],
               "prompt": {
                 "en": "Trade receivables",
-                "ms": "Penghutang perdagangan"
+                "ms": "Akaun Belum Terima"
               },
               "data": {
                 "options": [
@@ -4005,7 +4005,7 @@
                   {
                     "label": {
                       "en": "Trade payables",
-                      "ms": "Pemiutang perdagangan"
+                      "ms": "Akaun Belum Bayar"
                     },
                     "amount": 3000,
                     "section": "liability"
@@ -6057,7 +6057,7 @@
           "worked_example": {
             "prompt": {
               "en": "A bad debt is a receivable you know you will not collect — write it off FIRST: Dr Bad Debts, Cr Trade Receivables. The provision for doubtful debts is then estimated on what REMAINS after the write-off. Only the change in the provision goes to the Income Statement.",
-              "ms": "Hutang lapuk ialah penghutang yang pasti tidak dapat dikutip — hapus kira DAHULU: Dt Hutang Lapuk, Kt Penghutang Perdagangan. Peruntukan hutang ragu kemudian dianggarkan atas BAKI selepas hapus kira. Hanya perubahan peruntukan masuk ke Penyata Pendapatan."
+              "ms": "Hutang lapuk ialah hutang yang pasti tidak dapat dikutip — hapus kira DAHULU: Dt Hutang Lapuk, Kt Akaun Belum Terima. Peruntukan hutang ragu kemudian dianggarkan atas BAKI selepas hapus kira. Hanya perubahan peruntukan masuk ke Penyata Pendapatan."
             }
           },
           "items": [
@@ -6081,7 +6081,7 @@
                 ],
                 "accounts_ms": [
                   "Hutang Lapuk",
-                  "Penghutang Perdagangan",
+                  "Akaun Belum Terima",
                   "Tunai",
                   "Peruntukan Hutang Ragu"
                 ]
@@ -6098,7 +6098,7 @@
               },
               "explanation": {
                 "en": "The loss is an expense (debit) and the amount owed is removed from receivables (credit).",
-                "ms": "Kerugian itu belanja (debit) dan amaun terhutang dikeluarkan daripada penghutang (kredit)."
+                "ms": "Kerugian itu belanja (debit) dan amaun terhutang dikeluarkan daripada Akaun Belum Terima (kredit)."
               }
             },
             {
@@ -6111,7 +6111,7 @@
               ],
               "prompt": {
                 "en": "Trade receivables are RM50,000 before writing off a bad debt of RM2,000. A provision for doubtful debts of 5% is then required. What is the provision?",
-                "ms": "Penghutang perdagangan RM50,000 sebelum menghapus kira hutang lapuk RM2,000. Peruntukan hutang ragu 5% kemudian diperlukan. Berapakah peruntukan itu?"
+                "ms": "Akaun Belum Terima RM50,000 sebelum menghapus kira hutang lapuk RM2,000. Peruntukan hutang ragu 5% kemudian diperlukan. Berapakah peruntukan itu?"
               },
               "data": {
                 "unit": "RM"
@@ -6131,7 +6131,7 @@
               ],
               "prompt": {
                 "en": "Trade receivables after write-offs are RM40,000 and a provision for doubtful debts of 2.5% is required. What is the provision?",
-                "ms": "Penghutang perdagangan selepas hapus kira ialah RM40,000 dan peruntukan hutang ragu 2.5% diperlukan. Berapakah peruntukan itu?"
+                "ms": "Akaun Belum Terima selepas hapus kira ialah RM40,000 dan peruntukan hutang ragu 2.5% diperlukan. Berapakah peruntukan itu?"
               },
               "data": {
                 "unit": "RM"
@@ -6172,7 +6172,7 @@
               ],
               "prompt": {
                 "en": "Trade receivables are RM60,000 before writing off RM1,000 of bad debts. A provision of 3% is required. What is the provision?",
-                "ms": "Penghutang perdagangan RM60,000 sebelum menghapus kira hutang lapuk RM1,000. Peruntukan 3% diperlukan. Berapakah peruntukan itu?"
+                "ms": "Akaun Belum Terima RM60,000 sebelum menghapus kira hutang lapuk RM1,000. Peruntukan 3% diperlukan. Berapakah peruntukan itu?"
               },
               "data": {
                 "unit": "RM"
@@ -6193,7 +6193,7 @@
               ],
               "prompt": {
                 "en": "When a debt is written off as bad, the Trade Receivables account is...",
-                "ms": "Apabila hutang dihapus kira sebagai lapuk, akaun Penghutang Perdagangan ialah..."
+                "ms": "Apabila hutang dihapus kira sebagai lapuk, Akaun Belum Terima ialah..."
               },
               "data": {
                 "options": [
@@ -6236,7 +6236,7 @@
               "answer": "Credit",
               "explanation": {
                 "en": "The provision is a credit balance set against receivables, so increasing it means crediting it.",
-                "ms": "Peruntukan ialah baki kredit yang ditolak daripada penghutang, jadi menambahnya bermakna mengkreditkannya."
+                "ms": "Peruntukan ialah baki kredit yang ditolak daripada Akaun Belum Terima, jadi menambahnya bermakna mengkreditkannya."
               }
             },
             {
@@ -6292,7 +6292,7 @@
               "answer": "Statement of Financial Position",
               "explanation": {
                 "en": "The balance is deducted from trade receivables. Only the CHANGE in it goes to the Income Statement.",
-                "ms": "Baki itu ditolak daripada penghutang perdagangan. Hanya PERUBAHANnya masuk ke Penyata Pendapatan."
+                "ms": "Baki itu ditolak daripada Akaun Belum Terima. Hanya PERUBAHANnya masuk ke Penyata Pendapatan."
               }
             }
           ]
@@ -6307,7 +6307,7 @@
           "worked_example": {
             "prompt": {
               "en": "The order matters and it never changes: take the bad debt out of receivables FIRST, then work the provision on what is left. Provide on the original figure and the provision is always too big. The workings below are started for you, and each time one more line is taken away.",
-              "ms": "Susunan penting dan ia tidak pernah berubah: keluarkan hutang lapuk daripada penghutang DAHULU, kemudian kira peruntukan atas baki yang tinggal. Jika diperuntukkan atas angka asal, peruntukan sentiasa terlalu besar. Kerja kira di bawah sudah dimulakan, dan setiap kali satu baris lagi ditanggalkan."
+              "ms": "Susunan penting dan ia tidak pernah berubah: keluarkan hutang lapuk daripada Akaun Belum Terima DAHULU, kemudian kira peruntukan atas baki yang tinggal. Jika diperuntukkan atas angka asal, peruntukan sentiasa terlalu besar. Kerja kira di bawah sudah dimulakan, dan setiap kali satu baris lagi ditanggalkan."
             }
           },
           "items": [
@@ -6327,14 +6327,14 @@
               "data": {
                 "scenario": {
                   "en": "Trade receivables are RM50,000. A debt of RM2,000 is written off. A provision for doubtful debts of 5% is then required.",
-                  "ms": "Penghutang perdagangan RM50,000. Hutang RM2,000 dihapus kira. Peruntukan hutang ragu 5% kemudian diperlukan."
+                  "ms": "Akaun Belum Terima RM50,000. Hutang RM2,000 dihapus kira. Peruntukan hutang ragu 5% kemudian diperlukan."
                 },
                 "steps": [
                   {
                     "kind": "number",
                     "label": {
                       "en": "Trade receivables before adjustment",
-                      "ms": "Penghutang perdagangan sebelum pelarasan"
+                      "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 50000
                   },
@@ -6353,13 +6353,13 @@
                       "ms": "Akaun dikredit untuk mengeluarkan hutang"
                     },
                     "value": "Trade Receivables",
-                    "value_ms": "Penghutang Perdagangan"
+                    "value_ms": "Akaun Belum Terima"
                   },
                   {
                     "kind": "number",
                     "label": {
                       "en": "Receivables after write-off",
-                      "ms": "Penghutang selepas hapus kira"
+                      "ms": "Akaun Belum Terima selepas hapus kira"
                     },
                     "value": 48000
                   },
@@ -6405,14 +6405,14 @@
               "data": {
                 "scenario": {
                   "en": "Trade receivables are RM80,000. A debt of RM4,000 is written off. A provision for doubtful debts of 5% is then required.",
-                  "ms": "Penghutang perdagangan RM80,000. Hutang RM4,000 dihapus kira. Peruntukan hutang ragu 5% kemudian diperlukan."
+                  "ms": "Akaun Belum Terima RM80,000. Hutang RM4,000 dihapus kira. Peruntukan hutang ragu 5% kemudian diperlukan."
                 },
                 "steps": [
                   {
                     "kind": "number",
                     "label": {
                       "en": "Trade receivables before adjustment",
-                      "ms": "Penghutang perdagangan sebelum pelarasan"
+                      "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 80000
                   },
@@ -6431,13 +6431,13 @@
                       "ms": "Akaun dikredit untuk mengeluarkan hutang"
                     },
                     "value": "Trade Receivables",
-                    "value_ms": "Penghutang Perdagangan"
+                    "value_ms": "Akaun Belum Terima"
                   },
                   {
                     "kind": "number",
                     "label": {
                       "en": "Receivables after write-off",
-                      "ms": "Penghutang selepas hapus kira"
+                      "ms": "Akaun Belum Terima selepas hapus kira"
                     },
                     "value": 76000,
                     "blank": true
@@ -6465,7 +6465,7 @@
               },
               "explanation": {
                 "en": "80,000 − 4,000 = 76,000, then 5% × 76,000 = 3,800. Reduce the receivables first; the provision follows from what is left.",
-                "ms": "80,000 − 4,000 = 76,000, kemudian 5% × 76,000 = 3,800. Kurangkan penghutang dahulu; peruntukan mengikut baki yang tinggal."
+                "ms": "80,000 − 4,000 = 76,000, kemudian 5% × 76,000 = 3,800. Kurangkan Akaun Belum Terima dahulu; peruntukan mengikut baki yang tinggal."
               }
             },
             {
@@ -6484,14 +6484,14 @@
               "data": {
                 "scenario": {
                   "en": "Trade receivables are RM60,000. A debt of RM1,500 is written off. A provision for doubtful debts of 4% is then required.",
-                  "ms": "Penghutang perdagangan RM60,000. Hutang RM1,500 dihapus kira. Peruntukan hutang ragu 4% kemudian diperlukan."
+                  "ms": "Akaun Belum Terima RM60,000. Hutang RM1,500 dihapus kira. Peruntukan hutang ragu 4% kemudian diperlukan."
                 },
                 "steps": [
                   {
                     "kind": "number",
                     "label": {
                       "en": "Trade receivables before adjustment",
-                      "ms": "Penghutang perdagangan sebelum pelarasan"
+                      "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 60000
                   },
@@ -6511,14 +6511,14 @@
                       "ms": "Akaun dikredit untuk mengeluarkan hutang"
                     },
                     "value": "Trade Receivables",
-                    "value_ms": "Penghutang Perdagangan",
+                    "value_ms": "Akaun Belum Terima",
                     "blank": true
                   },
                   {
                     "kind": "number",
                     "label": {
                       "en": "Receivables after write-off",
-                      "ms": "Penghutang selepas hapus kira"
+                      "ms": "Akaun Belum Terima selepas hapus kira"
                     },
                     "value": 58500,
                     "blank": true
@@ -6546,7 +6546,7 @@
               },
               "explanation": {
                 "en": "Write off against Trade Receivables: 60,000 − 1,500 = 58,500. Then 4% × 58,500 = 2,340. Same order every time, whatever the percentage.",
-                "ms": "Hapus kira terhadap Penghutang Perdagangan: 60,000 − 1,500 = 58,500. Kemudian 4% × 58,500 = 2,340. Susunan yang sama setiap kali, apa pun peratusannya."
+                "ms": "Hapus kira terhadap Akaun Belum Terima: 60,000 − 1,500 = 58,500. Kemudian 4% × 58,500 = 2,340. Susunan yang sama setiap kali, apa pun peratusannya."
               }
             }
           ]
@@ -7197,7 +7197,7 @@
           "worked_example": {
             "prompt": {
               "en": "A control account squeezes a whole ledger into one T-account, so its total can be checked against the individual accounts. The Sales Ledger Control Account behaves like one giant debtor: it is DEBITED with opening balance, credit sales and dishonoured cheques, and CREDITED with anything that reduces what customers owe — money received, discount allowed, returns inwards, bad debts, and contra set-offs. The Purchases Ledger Control Account is the mirror image: credited with credit purchases, debited with payments, discount received and returns outwards.",
-              "ms": "Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu penghutang gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar."
+              "ms": "Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu Akaun Belum Terima gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar."
             }
           },
           "items": [
@@ -7226,7 +7226,7 @@
               "answer": "Debit",
               "explanation": {
                 "en": "A credit sale increases what customers owe you, and debtors are an asset.",
-                "ms": "Jualan kredit menambah hutang pelanggan kepada anda, dan penghutang ialah aset."
+                "ms": "Jualan kredit menambah hutang pelanggan kepada anda, dan Akaun Belum Terima ialah aset."
               }
             },
             {
@@ -7254,7 +7254,7 @@
               "answer": "Credit",
               "explanation": {
                 "en": "Giving a discount reduces what the customer has to pay, so debtors fall.",
-                "ms": "Memberi diskaun mengurangkan bayaran pelanggan, jadi penghutang berkurang."
+                "ms": "Memberi diskaun mengurangkan bayaran pelanggan, jadi Akaun Belum Terima berkurang."
               }
             },
             {
@@ -7282,7 +7282,7 @@
               "answer": "Credit",
               "explanation": {
                 "en": "Goods coming back cancel part of the sale, so the debtor owes less.",
-                "ms": "Barang yang dipulangkan membatalkan sebahagian jualan, jadi penghutang berhutang kurang."
+                "ms": "Barang yang dipulangkan membatalkan sebahagian jualan, jadi Akaun Belum Terima berhutang kurang."
               }
             },
             {
@@ -7311,7 +7311,7 @@
               "answer": "Credit",
               "explanation": {
                 "en": "Writing the debt off removes it from debtors — the same credit side as a receipt.",
-                "ms": "Menghapus kira hutang mengeluarkannya daripada penghutang — sebelah kredit yang sama seperti terimaan."
+                "ms": "Menghapus kira hutang mengeluarkannya daripada Akaun Belum Terima — sebelah kredit yang sama seperti terimaan."
               }
             },
             {
@@ -7339,7 +7339,7 @@
               "answer": "Debit",
               "explanation": {
                 "en": "The payment failed, so the customer owes it again — debtors go back up.",
-                "ms": "Bayaran gagal, jadi pelanggan berhutang semula — penghutang naik kembali."
+                "ms": "Bayaran gagal, jadi pelanggan berhutang semula — Akaun Belum Terima naik kembali."
               }
             },
             {
@@ -7367,7 +7367,7 @@
               "answer": "Credit",
               "explanation": {
                 "en": "Buying on credit increases what you owe, and creditors are a liability.",
-                "ms": "Membeli secara kredit menambah hutang anda, dan pemiutang ialah liabiliti."
+                "ms": "Membeli secara kredit menambah hutang anda, dan Akaun Belum Bayar ialah liabiliti."
               }
             },
             {
@@ -7395,7 +7395,7 @@
               "answer": "Debit",
               "explanation": {
                 "en": "The discount reduces what you must pay the supplier, so creditors fall — the mirror of discount allowed.",
-                "ms": "Diskaun mengurangkan bayaran kepada pembekal, jadi pemiutang berkurang — cerminan diskaun diberi."
+                "ms": "Diskaun mengurangkan bayaran kepada pembekal, jadi Akaun Belum Bayar berkurang — cerminan diskaun diberi."
               }
             },
             {
@@ -7422,7 +7422,7 @@
               "answer": "Purchases Ledger Control Account",
               "explanation": {
                 "en": "Returns OUTWARDS go back to your supplier, so they belong with creditors.",
-                "ms": "Pulangan KELUAR dikembalikan kepada pembekal anda, jadi ia bersama pemiutang."
+                "ms": "Pulangan KELUAR dikembalikan kepada pembekal anda, jadi ia bersama Akaun Belum Bayar."
               }
             },
             {
@@ -7449,7 +7449,7 @@
               "answer": "Sales Ledger Control Account",
               "explanation": {
                 "en": "You ALLOW a discount to a customer, so it sits with debtors.",
-                "ms": "Anda MEMBERI diskaun kepada pelanggan, jadi ia bersama penghutang."
+                "ms": "Anda MEMBERI diskaun kepada pelanggan, jadi ia bersama Akaun Belum Terima."
               }
             },
             {
@@ -7524,7 +7524,7 @@
               },
               "explanation": {
                 "en": "Debits 12,000 + 45,000 = 57,000. Credits 38,000 + 1,200 + 800 + 500 = 40,500. Closing debtors 16,500 on the debit side.",
-                "ms": "Debit 12,000 + 45,000 = 57,000. Kredit 38,000 + 1,200 + 800 + 500 = 40,500. Penghutang penutup 16,500 di sebelah debit."
+                "ms": "Debit 12,000 + 45,000 = 57,000. Kredit 38,000 + 1,200 + 800 + 500 = 40,500. Akaun Belum Terima penutup 16,500 di sebelah debit."
               }
             },
             {
@@ -7591,7 +7591,7 @@
               },
               "explanation": {
                 "en": "Credits 8,000 + 26,000 = 34,000. Debits 22,000 + 900 + 600 = 23,500. Closing creditors 10,500 on the credit side.",
-                "ms": "Kredit 8,000 + 26,000 = 34,000. Debit 22,000 + 900 + 600 = 23,500. Pemiutang penutup 10,500 di sebelah kredit."
+                "ms": "Kredit 8,000 + 26,000 = 34,000. Debit 22,000 + 900 + 600 = 23,500. Akaun Belum Bayar penutup 10,500 di sebelah kredit."
               }
             },
             {
@@ -7645,7 +7645,7 @@
               "data": {
                 "scenario": {
                   "en": "Opening debtors RM12,000. Credit sales RM45,000. Cash received RM38,000. Discount allowed RM1,200. Returns inwards RM800. Bad debts written off RM500.",
-                  "ms": "Penghutang awal RM12,000. Jualan kredit RM45,000. Tunai diterima RM38,000. Diskaun diberi RM1,200. Pulangan masuk RM800. Hutang lapuk dihapus kira RM500."
+                  "ms": "Akaun Belum Terima awal RM12,000. Jualan kredit RM45,000. Tunai diterima RM38,000. Diskaun diberi RM1,200. Pulangan masuk RM800. Hutang lapuk dihapus kira RM500."
                 },
                 "steps": [
                   {
@@ -7700,7 +7700,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Closing balance (debtors)",
-                      "ms": "Baki penutup (penghutang)"
+                      "ms": "Baki penutup (Akaun Belum Terima)"
                     },
                     "value": 16500,
                     "blank": true
@@ -7727,7 +7727,7 @@
               "data": {
                 "scenario": {
                   "en": "Opening debtors RM9,000. Credit sales RM52,000. Cash received RM44,000. Discount allowed RM1,500. Returns inwards RM1,000. Bad debts written off RM800.",
-                  "ms": "Penghutang awal RM9,000. Jualan kredit RM52,000. Tunai diterima RM44,000. Diskaun diberi RM1,500. Pulangan masuk RM1,000. Hutang lapuk dihapus kira RM800."
+                  "ms": "Akaun Belum Terima awal RM9,000. Jualan kredit RM52,000. Tunai diterima RM44,000. Diskaun diberi RM1,500. Pulangan masuk RM1,000. Hutang lapuk dihapus kira RM800."
                 },
                 "steps": [
                   {
@@ -7784,7 +7784,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Closing balance (debtors)",
-                      "ms": "Baki penutup (penghutang)"
+                      "ms": "Baki penutup (Akaun Belum Terima)"
                     },
                     "value": 13700,
                     "blank": true
@@ -7811,7 +7811,7 @@
               "data": {
                 "scenario": {
                   "en": "Opening creditors RM8,000. Credit purchases RM26,000. Payments to suppliers RM22,000. Discount received RM900. Returns outwards RM600.",
-                  "ms": "Pemiutang awal RM8,000. Belian kredit RM26,000. Bayaran kepada pembekal RM22,000. Diskaun diterima RM900. Pulangan keluar RM600."
+                  "ms": "Akaun Belum Bayar awal RM8,000. Belian kredit RM26,000. Bayaran kepada pembekal RM22,000. Diskaun diterima RM900. Pulangan keluar RM600."
                 },
                 "steps": [
                   {
@@ -7862,7 +7862,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Closing balance (creditors)",
-                      "ms": "Baki penutup (pemiutang)"
+                      "ms": "Baki penutup (Akaun Belum Bayar)"
                     },
                     "value": 10500,
                     "blank": true
@@ -7871,7 +7871,7 @@
               },
               "explanation": {
                 "en": "8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. The creditors account runs the same shape as the debtors one — only the meaning of each line flips.",
-                "ms": "8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. Akaun pemiutang berjalan dengan bentuk yang sama seperti penghutang — hanya maksud setiap baris yang berbalik."
+                "ms": "8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. Akaun Belum Bayar berjalan dengan bentuk yang sama seperti Akaun Belum Terima — hanya maksud setiap baris yang berbalik."
               }
             }
           ]
@@ -7967,7 +7967,7 @@
               "answer": "Error of commission",
               "explanation": {
                 "en": "The right TYPE of account was used — a debtor — just the wrong person. That is commission, not principle.",
-                "ms": "JENIS akaun yang betul digunakan — penghutang — cuma orang yang salah. Itu komisen, bukan prinsip."
+                "ms": "JENIS akaun yang betul digunakan — Akaun Belum Terima — cuma orang yang salah. Itu komisen, bukan prinsip."
               }
             },
             {
@@ -8768,7 +8768,7 @@
                   {
                     "label": {
                       "en": "Trade receivables",
-                      "ms": "Penghutang perdagangan"
+                      "ms": "Akaun Belum Terima"
                     },
                     "amount": 5000,
                     "section": "assets"
@@ -8784,7 +8784,7 @@
                   {
                     "label": {
                       "en": "Trade payables",
-                      "ms": "Pemiutang perdagangan"
+                      "ms": "Akaun Belum Bayar"
                     },
                     "amount": 7000,
                     "section": "liabilities"
@@ -8821,7 +8821,7 @@
               ],
               "prompt": {
                 "en": "Opening debtors RM9,000, closing debtors RM11,000, cash received from customers RM50,000. What were the credit sales?",
-                "ms": "Penghutang awal RM9,000, penghutang akhir RM11,000, tunai diterima daripada pelanggan RM50,000. Berapakah jualan kredit?"
+                "ms": "Akaun Belum Terima awal RM9,000, Akaun Belum Terima akhir RM11,000, tunai diterima daripada pelanggan RM50,000. Berapakah jualan kredit?"
               },
               "data": {
                 "unit": "RM"
@@ -8842,7 +8842,7 @@
               ],
               "prompt": {
                 "en": "Opening creditors RM6,000, closing creditors RM8,000, payments to suppliers RM31,000. What were the credit purchases?",
-                "ms": "Pemiutang awal RM6,000, pemiutang akhir RM8,000, bayaran kepada pembekal RM31,000. Berapakah belian kredit?"
+                "ms": "Akaun Belum Bayar awal RM6,000, Akaun Belum Bayar akhir RM8,000, bayaran kepada pembekal RM31,000. Berapakah belian kredit?"
               },
               "data": {
                 "unit": "RM"
@@ -8850,7 +8850,7 @@
               "answer": 33000,
               "explanation": {
                 "en": "31,000 + 8,000 − 6,000 = 33,000 — the same reconstruction, run on the creditors side.",
-                "ms": "31,000 + 8,000 − 6,000 = 33,000 — pembinaan semula yang sama, dijalankan di sebelah pemiutang."
+                "ms": "31,000 + 8,000 − 6,000 = 33,000 — pembinaan semula yang sama, dijalankan di sebelah Akaun Belum Bayar."
               }
             }
           ]
@@ -9285,7 +9285,7 @@
               "answer": "An asset",
               "explanation": {
                 "en": "The club is owed money — arrears are accrued income, exactly like a receivable.",
-                "ms": "Kelab dihutang wang — tunggakan ialah pendapatan terakru, sama seperti penghutang."
+                "ms": "Kelab dihutang wang — tunggakan ialah pendapatan terakru, sama seperti Akaun Belum Terima."
               }
             },
             {
@@ -12445,7 +12445,7 @@
               ],
               "prompt": {
                 "en": "Trade receivables RM30,000 and credit sales RM365,000. What is the debtors collection period, in days?",
-                "ms": "Penghutang perdagangan RM30,000 dan jualan kredit RM365,000. Berapakah tempoh kutipan penghutang, dalam hari?"
+                "ms": "Akaun Belum Terima RM30,000 dan jualan kredit RM365,000. Berapakah tempoh kutipan Akaun Belum Terima, dalam hari?"
               },
               "data": {
                 "unit": "days",
@@ -12525,7 +12525,7 @@
               ],
               "prompt": {
                 "en": "A firm's debtors collection period rose from 30 days to 60 days. What does this mean?",
-                "ms": "Tempoh kutipan penghutang sebuah firma meningkat dari 30 hari kepada 60 hari. Apakah maksudnya?"
+                "ms": "Tempoh kutipan Akaun Belum Terima sebuah firma meningkat dari 30 hari kepada 60 hari. Apakah maksudnya?"
               },
               "data": {
                 "options": [
@@ -13058,7 +13058,7 @@
               ],
               "prompt": {
                 "en": "Customers pay one month after the sale. Credit sales were January RM20,000, February RM24,000, March RM30,000. How much is received from debtors in March?",
-                "ms": "Pelanggan membayar sebulan selepas jualan. Jualan kredit ialah Januari RM20,000, Februari RM24,000, Mac RM30,000. Berapakah yang diterima daripada penghutang pada bulan Mac?"
+                "ms": "Pelanggan membayar sebulan selepas jualan. Jualan kredit ialah Januari RM20,000, Februari RM24,000, Mac RM30,000. Berapakah yang diterima daripada Akaun Belum Terima pada bulan Mac?"
               },
               "data": {},
               "answer": 24000,
@@ -13076,7 +13076,7 @@
               ],
               "prompt": {
                 "en": "In March, cash sales are RM12,000 and receipts from debtors are RM24,000. What are the total receipts for March?",
-                "ms": "Pada bulan Mac, jualan tunai ialah RM12,000 dan terimaan daripada penghutang RM24,000. Berapakah jumlah terimaan bagi bulan Mac?"
+                "ms": "Pada bulan Mac, jualan tunai ialah RM12,000 dan terimaan daripada Akaun Belum Terima RM24,000. Berapakah jumlah terimaan bagi bulan Mac?"
               },
               "data": {},
               "answer": 36000,
@@ -13170,7 +13170,7 @@
               "data": {
                 "scenario": {
                   "en": "March. Opening cash RM5,000. Cash sales RM12,000. Received from debtors RM24,000. Paid suppliers RM18,000. Wages RM7,000. Rent RM3,000.",
-                  "ms": "Mac. Tunai awal RM5,000. Jualan tunai RM12,000. Terimaan daripada penghutang RM24,000. Bayaran kepada pembekal RM18,000. Gaji RM7,000. Sewa RM3,000."
+                  "ms": "Mac. Tunai awal RM5,000. Jualan tunai RM12,000. Terimaan daripada Akaun Belum Terima RM24,000. Bayaran kepada pembekal RM18,000. Gaji RM7,000. Sewa RM3,000."
                 },
                 "steps": [
                   {
@@ -13193,7 +13193,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Add: receipts from debtors",
-                      "ms": "Tambah: terimaan daripada penghutang"
+                      "ms": "Tambah: terimaan daripada Akaun Belum Terima"
                     },
                     "value": 24000
                   },
@@ -13252,7 +13252,7 @@
               "data": {
                 "scenario": {
                   "en": "April. Opening cash RM8,000. Cash sales RM15,000. Received from debtors RM20,000. Paid suppliers RM22,000. Wages RM9,000. Rent RM4,000.",
-                  "ms": "April. Tunai awal RM8,000. Jualan tunai RM15,000. Terimaan daripada penghutang RM20,000. Bayaran kepada pembekal RM22,000. Gaji RM9,000. Sewa RM4,000."
+                  "ms": "April. Tunai awal RM8,000. Jualan tunai RM15,000. Terimaan daripada Akaun Belum Terima RM20,000. Bayaran kepada pembekal RM22,000. Gaji RM9,000. Sewa RM4,000."
                 },
                 "steps": [
                   {
@@ -13275,7 +13275,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Add: receipts from debtors",
-                      "ms": "Tambah: terimaan daripada penghutang"
+                      "ms": "Tambah: terimaan daripada Akaun Belum Terima"
                     },
                     "value": 20000
                   },
@@ -13336,7 +13336,7 @@
               "data": {
                 "scenario": {
                   "en": "May. Opening cash RM3,000. Cash sales RM18,000. Received from debtors RM26,000. Paid suppliers RM25,000. Wages RM11,000. Rent RM5,000.",
-                  "ms": "Mei. Tunai awal RM3,000. Jualan tunai RM18,000. Terimaan daripada penghutang RM26,000. Bayaran kepada pembekal RM25,000. Gaji RM11,000. Sewa RM5,000."
+                  "ms": "Mei. Tunai awal RM3,000. Jualan tunai RM18,000. Terimaan daripada Akaun Belum Terima RM26,000. Bayaran kepada pembekal RM25,000. Gaji RM11,000. Sewa RM5,000."
                 },
                 "steps": [
                   {
@@ -13360,7 +13360,7 @@
                     "kind": "number",
                     "label": {
                       "en": "Add: receipts from debtors",
-                      "ms": "Tambah: terimaan daripada penghutang"
+                      "ms": "Tambah: terimaan daripada Akaun Belum Terima"
                     },
                     "value": 26000,
                     "blank": true
@@ -13405,7 +13405,7 @@
               },
               "explanation": {
                 "en": "3,000 + 44,000 − 41,000 = 6,000. The business is solvent all month, but only because the debtors paid: without that RM26,000 it would have run out of cash.",
-                "ms": "3,000 + 44,000 − 41,000 = 6,000. Perniagaan mampu bertahan sepanjang bulan, tetapi hanya kerana penghutang membayar: tanpa RM26,000 itu ia akan kehabisan tunai."
+                "ms": "3,000 + 44,000 − 41,000 = 6,000. Perniagaan mampu bertahan sepanjang bulan, tetapi hanya kerana pelanggan membayar: tanpa RM26,000 itu ia akan kehabisan tunai."
               }
             }
           ]

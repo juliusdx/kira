@@ -73,6 +73,6 @@ describe('ItemPreview', () => {
   it('reads in BM when the teacher is reading in BM', () => {
     render(<ItemPreview item={item('ta-008')} locale="ms" />)
     expect(screen.getByText(item('ta-008').prompt.ms)).toBeTruthy()
-    expect(screen.getByText('Penghutang Perdagangan')).toBeTruthy()
+    expect(screen.getByText('Akaun Belum Terima')).toBeTruthy()
   })
 })

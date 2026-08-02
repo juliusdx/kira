@@ -20,13 +20,10 @@ Write corrections on the `→` line under anything wrong. Leave the rest untouch
 
 Transcribed from 3756/1 and 3756/2. This is the one section that needs no Malay to act on: where our word differs from the exam board's, the board wins.
 
-### 6 clashes — we use a different word from the paper
+### 5 clashes — we use a different word from the paper
 
-- **Receivables** — paper says `Akaun Belum Terima`, we say `Penghutang` (40×)
-  - paper: K1 Q22, Q25, Q28; K2 Q2, Q4
-  - → 
-- **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (24×)
-  - paper: K1 Q4, Q10, Q25; K2 Q2, Q4
+- **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (5×)
+  - paper: K1 Q4, Q10, Q25; K2 Q2, Q4 · we also use the paper's term 19×
   - → 
 - **Carrying amount / book value** — paper says `Nilai buku`, we say `Amaun bawaan` (17×)
   - paper: K1 Q17; K2 Q5(ii) · we also use the paper's term 5×
@@ -77,7 +74,9 @@ At most one of each group is right.
 
 Malay marks neither plural nor articles, so one BM string covering both of these is correct. What it exposes is the English side: the same concept is offered under two different canonical labels, in an app that can also be read in English.
 
+- `Akaun Belum Terima` ← **Trade Receivables** / **Trade receivables** (ta-006, ta-008, ir-201)
 - `Tunai diterima daripada pelanggan` ← **Cash received from customer** / **Cash received from customers** (ta-006, ta-008, ca-201)
+- `Akaun Belum Bayar` ← **Trade Payables** / **Trade payables** (ta-007, ta-010, ir-201)
 - `Aset` ← **Assets** / **An asset** (ir-201, cl-201, cl-202)
 - `Liabiliti` ← **Liabilities** / **A liability** (ir-201, cl-201, cl-202)
 - `Bahan langsung` ← **Direct material** / **Direct materials** (mf-001, mf-002, mf-003, mf-004, mf-005, mf-006, be-002)
@@ -264,7 +263,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Tambah: kerja dalam proses awal` ← **Add: opening work in progress** · 3×
   - fd-1201, fd-1202, fd-1203
   - → 
-- `Tambah: terimaan daripada penghutang` ← **Add: receipts from debtors** · 3×
+- `Tambah: terimaan daripada Akaun Belum Terima` ← **Add: receipts from debtors** · 3×
   - fd-1401, fd-1402, fd-1403
   - → 
 - `Tambah: untung tertahan dibawa ke hadapan` ← **Add: retained profit brought forward** · 3×
@@ -492,7 +491,7 @@ Every short label the learner sees: account names, options, step values, section
 - `CIMA` ← **CIMA** · 2×
   - en-005, en-006
   - → 
-- `Baki penutup (penghutang)` ← **Closing balance (debtors)** · 2×
+- `Baki penutup (Akaun Belum Terima)` ← **Closing balance (debtors)** · 2×
   - fd-501, fd-502
   - → 
 - `Akaun Kelab dan Persatuan` ← **Club & Society Accounts** · 2×
@@ -588,10 +587,10 @@ Every short label the learner sees: account names, options, step values, section
 - `Lebihan` ← **Surplus** · 2×
   - cl-102, cl-401
   - → 
-- `Pemiutang Perdagangan` ← **Trade Payables** · 2×
+- `Akaun Belum Bayar` ← **Trade Payables** · 2×
   - ta-007, ta-010
   - → 
-- `Penghutang Perdagangan` ← **Trade Receivables** · 2×
+- `Akaun Belum Terima` ← **Trade Receivables** · 2×
   - ta-006, ta-008
   - → 
 - `unit` ← **units** · 2×
@@ -615,7 +614,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Syarikat dimiliki oleh pemegang sahamnya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal saham dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak.` ← **A company is owned by its shareholders and financed partly by lenders. Share capital and every reserve belong to the owners, so they are equity. A debenture is a loan: the holder is a lender, not an owner, and must be paid interest whether or not the company makes a profit.** · 1×
   - l32-company-capital
   - → 
-- `Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu penghutang gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar.` ← **A control account squeezes a whole ledger into one T-account, so its total can be checked against the individual accounts. The Sales Ledger Control Account behaves like one giant debtor: it is DEBITED with opening balance, credit sales and dishonoured cheques, and CREDITED with anything that reduces what customers owe — money received, discount allowed, returns inwards, bad debts, and contra set-offs. The Purchases Ledger Control Account is the mirror image: credited with credit purchases, debited with payments, discount received and returns outwards.** · 1×
+- `Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu Akaun Belum Terima gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar.` ← **A control account squeezes a whole ledger into one T-account, so its total can be checked against the individual accounts. The Sales Ledger Control Account behaves like one giant debtor: it is DEBITED with opening balance, credit sales and dishonoured cheques, and CREDITED with anything that reduces what customers owe — money received, discount allowed, returns inwards, bad debts, and contra set-offs. The Purchases Ledger Control Account is the mirror image: credited with credit purchases, debited with payments, discount received and returns outwards.** · 1×
   - l19-control-sides
   - → 
 - `Anggota koperasi` ← **A cooperative member’s** · 1×
@@ -738,13 +737,13 @@ Every short label the learner sees: account names, options, step values, section
 - `Menyelesaikan Akaun Penyelesaian` ← **Clearing the Suspense Account** · 1×
   - l22-suspense-corrections
   - → 
-- `Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Penghutang Perdagangan biasanya berakhir dengan baki debit dan Pemiutang Perdagangan dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi.` ← **Closing an account has two halves that sit on OPPOSITE sides. The balance c/d is written on the smaller side, because its job is to make the two totals equal. The balance b/d then comes down on the larger side — and that is the side the account really has its balance on. Trade Receivables normally ends with a debit balance and Trade Payables with a credit one, but the entry that closes each of them is written on the other side.** · 1×
+- `Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Akaun Belum Terima biasanya berakhir dengan baki debit dan Akaun Belum Bayar dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi.` ← **Closing an account has two halves that sit on OPPOSITE sides. The balance c/d is written on the smaller side, because its job is to make the two totals equal. The balance b/d then comes down on the larger side — and that is the side the account really has its balance on. Trade Receivables normally ends with a debit balance and Trade Payables with a credit one, but the entry that closes each of them is written on the other side.** · 1×
   - l30-balance-off
   - → 
 - `Menutup mana-mana akaun mengikut empat langkah yang sama: jumlahkan setiap sebelah, letakkan bezanya di sebelah yang lebih kecil sebagai baki c/d, kemudian bawa turun di sebelah yang lebih besar sebagai baki b/d. Setiap anak tangga di bawah memberi anda kurang daripadanya.` ← **Closing any account runs the same four moves: total each side, put the difference on the smaller side as the balance c/d, then bring it down on the larger side as the balance b/d. Each rung below hands you less of it.** · 1×
   - l31-faded-balancing
   - → 
-- `Baki penutup (pemiutang)` ← **Closing balance (creditors)** · 1×
+- `Baki penutup (Akaun Belum Bayar)` ← **Closing balance (creditors)** · 1×
   - fd-503
   - → 
 - `Inventori akhir dinilai pada nilai yang LEBIH RENDAH antara kosnya dan harga ia boleh dijual. Bandingkan kedua-dua angka baris demi baris — bukan pada jumlahnya — dan ambil yang lebih rendah setiap kali. Sebabnya ialah berhemat: sesuatu aset tidak boleh dibawa pada nilai melebihi harga sebenar yang boleh diperoleh, dan kerana inventori akhir ditolak dalam akaun perdagangan, menyatakan lebih akan menyatakan kurang kos jualan dan menyatakan lebih untung. Itulah sebab peraturan ini wujud, dan sebab ia dikenakan setiap produk dan bukan pada jumlahnya, di mana kenaikan pada satu baris boleh menyembunyikan penurunan pada baris lain.` ← **Closing inventory is valued at the LOWER of what it cost and what it can be sold for. Compare the two figures line by line — not on the totals — and take the lower one each time. The reason is prudence: an asset must never be carried at more than it can actually fetch, and since closing inventory is deducted in the trading account, overstating it understates cost of sales and overstates profit. That is why the rule exists, and why it is applied per product rather than to the total, where a gain on one line could hide a fall on another.** · 1×
@@ -1188,10 +1187,10 @@ Every short label the learner sees: account names, options, step values, section
 - `Ia biasanya membawa hak mengundi` ← **They usually carry voting rights** · 1×
   - si-005
   - → 
-- `Pemiutang perdagangan` ← **Trade payables** · 1×
+- `Akaun Belum Bayar` ← **Trade payables** · 1×
   - ir-201
   - → 
-- `Penghutang perdagangan` ← **Trade receivables** · 1×
+- `Akaun Belum Terima` ← **Trade receivables** · 1×
   - ir-201
   - → 
 - `Dua Akaun Berbeza` ← **Two Different Accounts** · 1×
@@ -1539,13 +1538,13 @@ Every short label the learner sees: account names, options, step values, section
 `l30-balance-off` · BM title: `Mengimbangkan Akaun`
 
 > **Worked example (EN)** Closing an account has two halves that sit on OPPOSITE sides. The balance c/d is written on the smaller side, because its job is to make the two totals equal. The balance b/d then comes down on the larger side — and that is the side the account really has its balance on. Trade Receivables normally ends with a debit balance and Trade Payables with a credit one, but the entry that closes each of them is written on the other side.
-> **(BM)** Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Penghutang Perdagangan biasanya berakhir dengan baki debit dan Pemiutang Perdagangan dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi.
+> **(BM)** Menutup akaun ada dua bahagian yang berada di sebelah BERTENTANGAN. Baki c/d dicatat di sebelah yang lebih kecil, kerana tugasnya menyamakan kedua-dua jumlah. Baki b/d kemudian dibawa turun di sebelah yang lebih besar — dan itulah sebelah baki sebenar akaun tersebut. Akaun Belum Terima biasanya berakhir dengan baki debit dan Akaun Belum Bayar dengan baki kredit, tetapi catatan yang menutup setiap satunya ditulis di sebelah yang satu lagi.
 - → 
 
 **`dc-006`** · debit_credit · difficulty 3 · ledger, balancing-off, receivable
 
 - *Question (EN)* A Trade Receivables account has debits of RM5,000 and credits of RM3,200. On which side is the balance c/d written?
-- *Question (BM)* **Akaun Penghutang Perdagangan mempunyai debit RM5,000 dan kredit RM3,200. Di sebelah mana baki c/d dicatat?**
+- *Question (BM)* **Akaun Belum Terima mempunyai debit RM5,000 dan kredit RM3,200. Di sebelah mana baki c/d dicatat?**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* The balance c/d goes on the SMALLER side — it is the figure that makes the two totals equal. Here the credit side is smaller, so c/d is written there even though the account has a debit balance.
 - *Why (BM)* **Baki c/d dicatat di sebelah yang LEBIH KECIL — ia angka yang menyamakan kedua-dua jumlah. Di sini sebelah kredit lebih kecil, jadi c/d dicatat di situ walaupun akaun ini berbaki debit.**
@@ -1557,13 +1556,13 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Akaun yang sama: debit RM5,000, kredit RM3,200. Di sebelah mana baki b/d muncul apabila akaun dibuka semula?**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* The balance b/d comes down on the opposite side to the c/d — the LARGER side. A receivables account with a debit balance means customers still owe the business RM1,800.
-- *Why (BM)* **Baki b/d dibawa turun di sebelah bertentangan dengan c/d — sebelah yang LEBIH BESAR. Akaun penghutang berbaki debit bermakna pelanggan masih berhutang RM1,800 kepada perniagaan.**
+- *Why (BM)* **Baki b/d dibawa turun di sebelah bertentangan dengan c/d — sebelah yang LEBIH BESAR. Akaun Belum Terima berbaki debit bermakna pelanggan masih berhutang RM1,800 kepada perniagaan.**
 - → 
 
 **`dc-008`** · debit_credit · difficulty 3 · ledger, balancing-off, debit-credit
 
 - *Question (EN)* A Trade Payables account has credits of RM7,000 and debits of RM4,500. On which side is the balance c/d written?
-- *Question (BM)* **Akaun Pemiutang Perdagangan mempunyai kredit RM7,000 dan debit RM4,500. Di sebelah mana baki c/d dicatat?**
+- *Question (BM)* **Akaun Belum Bayar mempunyai kredit RM7,000 dan debit RM4,500. Di sebelah mana baki c/d dicatat?**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* Again the c/d sits on the smaller side, which here is the debit side. The balance b/d then comes down on the credit side — RM2,500 still owed to suppliers.
 - *Why (BM)* **Sekali lagi c/d berada di sebelah yang lebih kecil, iaitu sebelah debit di sini. Baki b/d kemudian dibawa turun di sebelah kredit — RM2,500 masih terhutang kepada pembekal.**
@@ -1572,7 +1571,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ta-006`** · t_account · difficulty 3 · ledger, balancing-off, receivable
 
 - *Question (EN)* Post these to the Trade Receivables account, then find the closing balance.
-- *Question (BM)* **Catat ini ke akaun Penghutang Perdagangan, kemudian cari baki penutup.**
+- *Question (BM)* **Catat ini ke Akaun Belum Terima, kemudian cari baki penutup.**
 - *Why (EN)* Debits 6,400. Credits 400 + 3,500 + 200 = 4,100. Balance 2,300 on the debit side — three separate things reduce what a customer owes, and only one increases it.
 - *Why (BM)* **Debit 6,400. Kredit 400 + 3,500 + 200 = 4,100. Baki 2,300 di sebelah debit — tiga perkara berasingan mengurangkan hutang pelanggan, hanya satu yang menambahnya.**
 - → 
@@ -1580,7 +1579,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ta-007`** · t_account · difficulty 3 · ledger, balancing-off, debit-credit
 
 - *Question (EN)* Post these to the Trade Payables account, then find the closing balance.
-- *Question (BM)* **Catat ini ke akaun Pemiutang Perdagangan, kemudian cari baki penutup.**
+- *Question (BM)* **Catat ini ke Akaun Belum Bayar, kemudian cari baki penutup.**
 - *Why (EN)* Credits 2,500 + 5,000 = 7,500. Debits 4,200 + 300 = 4,500. Balance 3,000 on the credit side. A discount received reduces the debt just as a payment does.
 - *Why (BM)* **Kredit 2,500 + 5,000 = 7,500. Debit 4,200 + 300 = 4,500. Baki 3,000 di sebelah kredit. Diskaun diterima mengurangkan hutang sama seperti bayaran.**
 - → 
@@ -1588,9 +1587,9 @@ Every short label the learner sees: account names, options, step values, section
 **`ta-008`** · t_account · difficulty 4 · ledger, balancing-off, receivable
 
 - *Question (EN)* Post these to the Trade Receivables account, then find the closing balance. Check the side carefully.
-- *Question (BM)* **Catat ini ke akaun Penghutang Perdagangan, kemudian cari baki penutup. Semak sebelahnya dengan teliti.**
+- *Question (BM)* **Catat ini ke Akaun Belum Terima, kemudian cari baki penutup. Semak sebelahnya dengan teliti.**
 - *Why (EN)* Debits 1,800, credits 2,300. The balance is 500 on the CREDIT side. A receivables account usually has a debit balance, but not always: the customer has paid for goods they then returned, so the business now owes them 500.
-- *Why (BM)* **Debit 1,800, kredit 2,300. Baki ialah 500 di sebelah KREDIT. Akaun penghutang biasanya berbaki debit, tetapi bukan selalu: pelanggan telah membayar untuk barang yang kemudiannya dipulangkan, jadi kini perniagaan yang berhutang 500 kepadanya.**
+- *Why (BM)* **Debit 1,800, kredit 2,300. Baki ialah 500 di sebelah KREDIT. Akaun Belum Terima biasanya berbaki debit, tetapi bukan selalu: pelanggan telah membayar untuk barang yang kemudiannya dipulangkan, jadi kini perniagaan yang berhutang 500 kepadanya.**
 - → 
 
 **`ta-009`** · t_account · difficulty 4 · ledger, balancing-off, debit-credit
@@ -1604,7 +1603,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ta-010`** · t_account · difficulty 4 · ledger, balancing-off, debit-credit
 
 - *Question (EN)* Post these to the Trade Payables account, then find the closing balance.
-- *Question (BM)* **Catat ini ke akaun Pemiutang Perdagangan, kemudian cari baki penutup.**
+- *Question (BM)* **Catat ini ke Akaun Belum Bayar, kemudian cari baki penutup.**
 - *Why (EN)* Credits 1,600 + 4,400 = 6,000. Debits 500 + 3,000 = 3,500. Balance 2,500 on the credit side. Returns outwards are goods sent back to the supplier, so they cut the debt — debit side.
 - *Why (BM)* **Kredit 1,600 + 4,400 = 6,000. Debit 500 + 3,000 = 3,500. Baki 2,500 di sebelah kredit. Pulangan keluar ialah barang dihantar balik kepada pembekal, jadi ia mengurangkan hutang — sebelah debit.**
 - → 
@@ -1620,7 +1619,7 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-1001`** · faded_step · difficulty 3 · ledger, balancing-off, faded-step
 
 - *Scenario (EN)* Trade Receivables. Debit side: balance b/d RM3,000, credit sales RM8,500. Credit side: cash received RM6,000, discount allowed RM400, returns inwards RM300.
-- *Scenario (BM)* **Penghutang Perdagangan. Sebelah debit: baki b/d RM3,000, jualan kredit RM8,500. Sebelah kredit: tunai diterima RM6,000, diskaun diberi RM400, pulangan masuk RM300.**
+- *Scenario (BM)* **Akaun Belum Terima. Sebelah debit: baki b/d RM3,000, jualan kredit RM8,500. Sebelah kredit: tunai diterima RM6,000, diskaun diberi RM400, pulangan masuk RM300.**
 - *Question (EN)* The account is almost closed. Finish the last two lines.
 - *Question (BM)* **Akaun ini hampir ditutup. Selesaikan dua baris terakhir.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -1637,7 +1636,7 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-1002`** · faded_step · difficulty 4 · ledger, balancing-off, faded-step
 
 - *Scenario (EN)* Trade Payables. Credit side: balance b/d RM2,400, credit purchases RM9,000. Debit side: paid supplier RM5,200, discount received RM300, returns outwards RM500.
-- *Scenario (BM)* **Pemiutang Perdagangan. Sebelah kredit: baki b/d RM2,400, belian kredit RM9,000. Sebelah debit: bayar pembekal RM5,200, diskaun diterima RM300, pulangan keluar RM500.**
+- *Scenario (BM)* **Akaun Belum Bayar. Sebelah kredit: baki b/d RM2,400, belian kredit RM9,000. Sebelah debit: bayar pembekal RM5,200, diskaun diterima RM300, pulangan keluar RM500.**
 - *Question (EN)* Four lines are missing. Close the account.
 - *Question (BM)* **Empat baris hilang. Tutup akaun ini.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -1648,13 +1647,13 @@ Every short label the learner sees: account names, options, step values, section
   - ␣ Side the balance b/d comes down on → **Sebelah baki b/d dibawa turun** · answer: Credit → **Kredit**
   - ␣ Balance b/d → **Baki b/d**
 - *Why (EN)* 11,400 − 6,000 = 5,400. On a payables account the smaller side is the debit side, so the c/d goes there and the b/d comes down as a CREDIT balance — 5,400 still owed to suppliers.
-- *Why (BM)* **11,400 − 6,000 = 5,400. Dalam akaun pemiutang, sebelah yang lebih kecil ialah sebelah debit, jadi c/d dicatat di situ dan b/d dibawa turun sebagai baki KREDIT — 5,400 masih terhutang kepada pembekal.**
+- *Why (BM)* **11,400 − 6,000 = 5,400. Dalam Akaun Belum Bayar, sebelah yang lebih kecil ialah sebelah debit, jadi c/d dicatat di situ dan b/d dibawa turun sebagai baki KREDIT — 5,400 masih terhutang kepada pembekal.**
 - → 
 
 **`fd-1003`** · faded_step · difficulty 5 · ledger, balancing-off, faded-step
 
 - *Scenario (EN)* Trade Receivables. Debit side: balance b/d RM1,500, credit sales RM2,600. Credit side: cash received RM4,300, returns inwards RM200.
-- *Scenario (BM)* **Penghutang Perdagangan. Sebelah debit: baki b/d RM1,500, jualan kredit RM2,600. Sebelah kredit: tunai diterima RM4,300, pulangan masuk RM200.**
+- *Scenario (BM)* **Akaun Belum Terima. Sebelah debit: baki b/d RM1,500, jualan kredit RM2,600. Sebelah kredit: tunai diterima RM4,300, pulangan masuk RM200.**
 - *Question (EN)* Nothing is worked for you. Close the account from the scenario alone.
 - *Question (BM)* **Tiada apa yang dikira untuk anda. Tutup akaun ini daripada senario sahaja.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -2224,7 +2223,7 @@ Every short label the learner sees: account names, options, step values, section
 `l19-control-sides` · BM title: `Sebelah Mana?`
 
 > **Worked example (EN)** A control account squeezes a whole ledger into one T-account, so its total can be checked against the individual accounts. The Sales Ledger Control Account behaves like one giant debtor: it is DEBITED with opening balance, credit sales and dishonoured cheques, and CREDITED with anything that reduces what customers owe — money received, discount allowed, returns inwards, bad debts, and contra set-offs. The Purchases Ledger Control Account is the mirror image: credited with credit purchases, debited with payments, discount received and returns outwards.
-> **(BM)** Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu penghutang gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar.
+> **(BM)** Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu Akaun Belum Terima gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar.
 - → 
 
 **`ca-001`** · debit_credit · difficulty 2 · control-accounts, debit-credit
@@ -2233,7 +2232,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Jualan, jualan kredit dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* A credit sale increases what customers owe you, and debtors are an asset.
-- *Why (BM)* **Jualan kredit menambah hutang pelanggan kepada anda, dan penghutang ialah aset.**
+- *Why (BM)* **Jualan kredit menambah hutang pelanggan kepada anda, dan Akaun Belum Terima ialah aset.**
 - → 
 
 **`ca-002`** · debit_credit · difficulty 3 · control-accounts, debit-credit
@@ -2242,7 +2241,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Jualan, diskaun diberi dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* Giving a discount reduces what the customer has to pay, so debtors fall.
-- *Why (BM)* **Memberi diskaun mengurangkan bayaran pelanggan, jadi penghutang berkurang.**
+- *Why (BM)* **Memberi diskaun mengurangkan bayaran pelanggan, jadi Akaun Belum Terima berkurang.**
 - → 
 
 **`ca-003`** · debit_credit · difficulty 3 · control-accounts, debit-credit
@@ -2251,7 +2250,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Jualan, pulangan masuk dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* Goods coming back cancel part of the sale, so the debtor owes less.
-- *Why (BM)* **Barang yang dipulangkan membatalkan sebahagian jualan, jadi penghutang berhutang kurang.**
+- *Why (BM)* **Barang yang dipulangkan membatalkan sebahagian jualan, jadi Akaun Belum Terima berhutang kurang.**
 - → 
 
 **`ca-004`** · debit_credit · difficulty 4 · control-accounts, debit-credit, bad-debts
@@ -2260,7 +2259,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Jualan, hutang lapuk dihapus kira dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* Writing the debt off removes it from debtors — the same credit side as a receipt.
-- *Why (BM)* **Menghapus kira hutang mengeluarkannya daripada penghutang — sebelah kredit yang sama seperti terimaan.**
+- *Why (BM)* **Menghapus kira hutang mengeluarkannya daripada Akaun Belum Terima — sebelah kredit yang sama seperti terimaan.**
 - → 
 
 **`ca-005`** · debit_credit · difficulty 4 · control-accounts, debit-credit
@@ -2269,7 +2268,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Jualan, cek tak layan dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* The payment failed, so the customer owes it again — debtors go back up.
-- *Why (BM)* **Bayaran gagal, jadi pelanggan berhutang semula — penghutang naik kembali.**
+- *Why (BM)* **Bayaran gagal, jadi pelanggan berhutang semula — Akaun Belum Terima naik kembali.**
 - → 
 
 **`ca-006`** · debit_credit · difficulty 3 · control-accounts, debit-credit
@@ -2278,7 +2277,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Belian, belian kredit dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* Buying on credit increases what you owe, and creditors are a liability.
-- *Why (BM)* **Membeli secara kredit menambah hutang anda, dan pemiutang ialah liabiliti.**
+- *Why (BM)* **Membeli secara kredit menambah hutang anda, dan Akaun Belum Bayar ialah liabiliti.**
 - → 
 
 **`ca-007`** · debit_credit · difficulty 4 · control-accounts, debit-credit
@@ -2287,7 +2286,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Dalam Akaun Kawalan Lejar Belian, diskaun diterima dicatat di sebelah...**
 - *Choices* Debit → **Debit** · Credit → **Kredit**
 - *Why (EN)* The discount reduces what you must pay the supplier, so creditors fall — the mirror of discount allowed.
-- *Why (BM)* **Diskaun mengurangkan bayaran kepada pembekal, jadi pemiutang berkurang — cerminan diskaun diberi.**
+- *Why (BM)* **Diskaun mengurangkan bayaran kepada pembekal, jadi Akaun Belum Bayar berkurang — cerminan diskaun diberi.**
 - → 
 
 **`ca-101`** · classify · difficulty 3 · control-accounts
@@ -2296,7 +2295,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Pulangan keluar muncul dalam akaun kawalan yang mana?**
 - *Choices* Sales Ledger Control Account → **Akaun Kawalan Lejar Jualan** · Purchases Ledger Control Account → **Akaun Kawalan Lejar Belian**
 - *Why (EN)* Returns OUTWARDS go back to your supplier, so they belong with creditors.
-- *Why (BM)* **Pulangan KELUAR dikembalikan kepada pembekal anda, jadi ia bersama pemiutang.**
+- *Why (BM)* **Pulangan KELUAR dikembalikan kepada pembekal anda, jadi ia bersama Akaun Belum Bayar.**
 - → 
 
 **`ca-102`** · classify · difficulty 3 · control-accounts
@@ -2305,7 +2304,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Diskaun diberi muncul dalam akaun kawalan yang mana?**
 - *Choices* Sales Ledger Control Account → **Akaun Kawalan Lejar Jualan** · Purchases Ledger Control Account → **Akaun Kawalan Lejar Belian**
 - *Why (EN)* You ALLOW a discount to a customer, so it sits with debtors.
-- *Why (BM)* **Anda MEMBERI diskaun kepada pelanggan, jadi ia bersama penghutang.**
+- *Why (BM)* **Anda MEMBERI diskaun kepada pelanggan, jadi ia bersama Akaun Belum Terima.**
 - → 
 
 **`ca-201`** · t_account · difficulty 4 · control-accounts, ledger
@@ -2313,7 +2312,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* Post these to the Sales Ledger Control Account, then find the closing balance.
 - *Question (BM)* **Catat ini ke Akaun Kawalan Lejar Jualan, kemudian cari baki penutup.**
 - *Why (EN)* Debits 12,000 + 45,000 = 57,000. Credits 38,000 + 1,200 + 800 + 500 = 40,500. Closing debtors 16,500 on the debit side.
-- *Why (BM)* **Debit 12,000 + 45,000 = 57,000. Kredit 38,000 + 1,200 + 800 + 500 = 40,500. Penghutang penutup 16,500 di sebelah debit.**
+- *Why (BM)* **Debit 12,000 + 45,000 = 57,000. Kredit 38,000 + 1,200 + 800 + 500 = 40,500. Akaun Belum Terima penutup 16,500 di sebelah debit.**
 - → 
 
 **`ca-202`** · t_account · difficulty 5 · control-accounts, ledger
@@ -2321,7 +2320,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* Post these to the Purchases Ledger Control Account, then find the closing balance.
 - *Question (BM)* **Catat ini ke Akaun Kawalan Lejar Belian, kemudian cari baki penutup.**
 - *Why (EN)* Credits 8,000 + 26,000 = 34,000. Debits 22,000 + 900 + 600 = 23,500. Closing creditors 10,500 on the credit side.
-- *Why (BM)* **Kredit 8,000 + 26,000 = 34,000. Debit 22,000 + 900 + 600 = 23,500. Pemiutang penutup 10,500 di sebelah kredit.**
+- *Why (BM)* **Kredit 8,000 + 26,000 = 34,000. Debit 22,000 + 900 + 600 = 23,500. Akaun Belum Bayar penutup 10,500 di sebelah kredit.**
 - → 
 
 **`ca-301`** · numeric · difficulty 5 · control-accounts
@@ -2343,7 +2342,7 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-501`** · faded_step · difficulty 3 · control-accounts, faded-step
 
 - *Scenario (EN)* Opening debtors RM12,000. Credit sales RM45,000. Cash received RM38,000. Discount allowed RM1,200. Returns inwards RM800. Bad debts written off RM500.
-- *Scenario (BM)* **Penghutang awal RM12,000. Jualan kredit RM45,000. Tunai diterima RM38,000. Diskaun diberi RM1,200. Pulangan masuk RM800. Hutang lapuk dihapus kira RM500.**
+- *Scenario (BM)* **Akaun Belum Terima awal RM12,000. Jualan kredit RM45,000. Tunai diterima RM38,000. Diskaun diberi RM1,200. Pulangan masuk RM800. Hutang lapuk dihapus kira RM500.**
 - *Question (EN)* The workings are done. Finish the last line.
 - *Question (BM)* **Kerja kira sudah siap. Selesaikan baris terakhir.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -2353,7 +2352,7 @@ Every short label the learner sees: account names, options, step values, section
   - Less: discount allowed → **Tolak: diskaun diberi**
   - Less: returns inwards → **Tolak: pulangan masuk**
   - Less: bad debts written off → **Tolak: hutang lapuk dihapus kira**
-  - ␣ Closing balance (debtors) → **Baki penutup (penghutang)**
+  - ␣ Closing balance (debtors) → **Baki penutup (Akaun Belum Terima)**
 - *Why (EN)* 57,000 − 40,500 = 16,500.
 - *Why (BM)* **57,000 − 40,500 = 16,500.**
 - → 
@@ -2361,7 +2360,7 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-502`** · faded_step · difficulty 4 · control-accounts, faded-step
 
 - *Scenario (EN)* Opening debtors RM9,000. Credit sales RM52,000. Cash received RM44,000. Discount allowed RM1,500. Returns inwards RM1,000. Bad debts written off RM800.
-- *Scenario (BM)* **Penghutang awal RM9,000. Jualan kredit RM52,000. Tunai diterima RM44,000. Diskaun diberi RM1,500. Pulangan masuk RM1,000. Hutang lapuk dihapus kira RM800.**
+- *Scenario (BM)* **Akaun Belum Terima awal RM9,000. Jualan kredit RM52,000. Tunai diterima RM44,000. Diskaun diberi RM1,500. Pulangan masuk RM1,000. Hutang lapuk dihapus kira RM800.**
 - *Question (EN)* Three lines are missing. Complete the control account.
 - *Question (BM)* **Tiga baris hilang. Lengkapkan akaun kawalan.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -2371,7 +2370,7 @@ Every short label the learner sees: account names, options, step values, section
   - Less: discount allowed → **Tolak: diskaun diberi**
   - ␣ Less: returns inwards → **Tolak: pulangan masuk**
   - ␣ Less: bad debts written off → **Tolak: hutang lapuk dihapus kira**
-  - ␣ Closing balance (debtors) → **Baki penutup (penghutang)**
+  - ␣ Closing balance (debtors) → **Baki penutup (Akaun Belum Terima)**
 - *Why (EN)* 9,000 + 52,000 = 61,000, less 44,000 + 1,500 + 1,000 + 800 = 47,300, leaving 13,700. Every one of those four reduces what customers owe.
 - *Why (BM)* **9,000 + 52,000 = 61,000, tolak 44,000 + 1,500 + 1,000 + 800 = 47,300, tinggal 13,700. Keempat-empatnya mengurangkan hutang pelanggan.**
 - → 
@@ -2379,7 +2378,7 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-503`** · faded_step · difficulty 5 · control-accounts, faded-step
 
 - *Scenario (EN)* Opening creditors RM8,000. Credit purchases RM26,000. Payments to suppliers RM22,000. Discount received RM900. Returns outwards RM600.
-- *Scenario (BM)* **Pemiutang awal RM8,000. Belian kredit RM26,000. Bayaran kepada pembekal RM22,000. Diskaun diterima RM900. Pulangan keluar RM600.**
+- *Scenario (BM)* **Akaun Belum Bayar awal RM8,000. Belian kredit RM26,000. Bayaran kepada pembekal RM22,000. Diskaun diterima RM900. Pulangan keluar RM600.**
 - *Question (EN)* Only the opening balance is given. Build the whole control account.
 - *Question (BM)* **Hanya baki awal diberi. Bina keseluruhan akaun kawalan.**
 - *Worked steps* (␣ marks a step the learner must supply)
@@ -2388,9 +2387,9 @@ Every short label the learner sees: account names, options, step values, section
   - ␣ Less: payments to suppliers → **Tolak: bayaran kepada pembekal**
   - ␣ Less: discount received → **Tolak: diskaun diterima**
   - ␣ Less: returns outwards → **Tolak: pulangan keluar**
-  - ␣ Closing balance (creditors) → **Baki penutup (pemiutang)**
+  - ␣ Closing balance (creditors) → **Baki penutup (Akaun Belum Bayar)**
 - *Why (EN)* 8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. The creditors account runs the same shape as the debtors one — only the meaning of each line flips.
-- *Why (BM)* **8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. Akaun pemiutang berjalan dengan bentuk yang sama seperti penghutang — hanya maksud setiap baris yang berbalik.**
+- *Why (BM)* **8,000 + 26,000 − 22,000 − 900 − 600 = 10,500. Akaun Belum Bayar berjalan dengan bentuk yang sama seperti Akaun Belum Terima — hanya maksud setiap baris yang berbalik.**
 - → 
 
 ### Correction of Errors & Suspense
@@ -2421,7 +2420,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Jualan kredit kepada Ali dicatat ke akaun Abu sebaliknya. Kesilapan apakah ini?**
 - *Choices* Error of omission → **Kesilapan peninggalan** · Error of commission → **Kesilapan komisen** · Error of principle → **Kesilapan prinsip** · Error of original entry → **Kesilapan catatan asal** · Error of complete reversal → **Kesilapan terbalik sepenuhnya** · Compensating error → **Kesilapan saling mengimbangi**
 - *Why (EN)* The right TYPE of account was used — a debtor — just the wrong person. That is commission, not principle.
-- *Why (BM)* **JENIS akaun yang betul digunakan — penghutang — cuma orang yang salah. Itu komisen, bukan prinsip.**
+- *Why (BM)* **JENIS akaun yang betul digunakan — Akaun Belum Terima — cuma orang yang salah. Itu komisen, bukan prinsip.**
 - → 
 
 **`ce-003`** · classify · difficulty 4 · error-types
@@ -2657,7 +2656,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ir-301`** · numeric · difficulty 5 · incomplete-records, control-accounts
 
 - *Question (EN)* Opening debtors RM9,000, closing debtors RM11,000, cash received from customers RM50,000. What were the credit sales?
-- *Question (BM)* **Penghutang awal RM9,000, penghutang akhir RM11,000, tunai diterima daripada pelanggan RM50,000. Berapakah jualan kredit?**
+- *Question (BM)* **Akaun Belum Terima awal RM9,000, Akaun Belum Terima akhir RM11,000, tunai diterima daripada pelanggan RM50,000. Berapakah jualan kredit?**
 - *Why (EN)* 50,000 + 11,000 − 9,000 = 52,000. Reconstruct the control account: whatever is still owed at the end, plus what was collected, minus what was already owed at the start.
 - *Why (BM)* **50,000 + 11,000 − 9,000 = 52,000. Bina semula akaun kawalan: apa yang masih dihutang di akhir, campur apa yang dikutip, tolak apa yang sudah dihutang di awal.**
 - → 
@@ -2665,9 +2664,9 @@ Every short label the learner sees: account names, options, step values, section
 **`ir-302`** · numeric · difficulty 5 · incomplete-records, control-accounts
 
 - *Question (EN)* Opening creditors RM6,000, closing creditors RM8,000, payments to suppliers RM31,000. What were the credit purchases?
-- *Question (BM)* **Pemiutang awal RM6,000, pemiutang akhir RM8,000, bayaran kepada pembekal RM31,000. Berapakah belian kredit?**
+- *Question (BM)* **Akaun Belum Bayar awal RM6,000, Akaun Belum Bayar akhir RM8,000, bayaran kepada pembekal RM31,000. Berapakah belian kredit?**
 - *Why (EN)* 31,000 + 8,000 − 6,000 = 33,000 — the same reconstruction, run on the creditors side.
-- *Why (BM)* **31,000 + 8,000 − 6,000 = 33,000 — pembinaan semula yang sama, dijalankan di sebelah pemiutang.**
+- *Why (BM)* **31,000 + 8,000 − 6,000 = 33,000 — pembinaan semula yang sama, dijalankan di sebelah Akaun Belum Bayar.**
 - → 
 
 #### Fading the Profit Calculation
@@ -2793,7 +2792,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Yuran yang masih terhutang oleh ahli pada akhir tahun ditunjukkan dalam penyata kedudukan kewangan sebagai...**
 - *Choices* An asset → **Aset** · A liability → **Liabiliti**
 - *Why (EN)* The club is owed money — arrears are accrued income, exactly like a receivable.
-- *Why (BM)* **Kelab dihutang wang — tunggakan ialah pendapatan terakru, sama seperti penghutang.**
+- *Why (BM)* **Kelab dihutang wang — tunggakan ialah pendapatan terakru, sama seperti Akaun Belum Terima.**
 - → 
 
 **`cl-202`** · classify · difficulty 4 · club-accounts, subscriptions
@@ -3741,7 +3740,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ra-008`** · numeric · difficulty 4 · ratio-analysis
 
 - *Question (EN)* Trade receivables RM30,000 and credit sales RM365,000. What is the debtors collection period, in days?
-- *Question (BM)* **Penghutang perdagangan RM30,000 dan jualan kredit RM365,000. Berapakah tempoh kutipan penghutang, dalam hari?**
+- *Question (BM)* **Akaun Belum Terima RM30,000 dan jualan kredit RM365,000. Berapakah tempoh kutipan Akaun Belum Terima, dalam hari?**
 - *Why (EN)* 30,000 ÷ 365,000 × 365 = 30 days. Only CREDIT sales are used — a cash sale was never owed in the first place.
 - *Why (BM)* **30,000 ÷ 365,000 × 365 = 30 hari. Hanya jualan KREDIT digunakan — jualan tunai tidak pernah terhutang sejak awal lagi.**
 - → 
@@ -3767,7 +3766,7 @@ Every short label the learner sees: account names, options, step values, section
 **`ra-011`** · classify · difficulty 3 · ratio-analysis
 
 - *Question (EN)* A firm's debtors collection period rose from 30 days to 60 days. What does this mean?
-- *Question (BM)* **Tempoh kutipan penghutang sebuah firma meningkat dari 30 hari kepada 60 hari. Apakah maksudnya?**
+- *Question (BM)* **Tempoh kutipan Akaun Belum Terima sebuah firma meningkat dari 30 hari kepada 60 hari. Apakah maksudnya?**
 - *Choices* Customers are paying more slowly → **Pelanggan membayar lebih lambat** · Customers are paying faster → **Pelanggan membayar lebih cepat**
 - *Why (EN)* A LONGER period means the money sits with the customer for longer — worse for cash flow, even though sales themselves may look healthy.
 - *Why (BM)* **Tempoh yang LEBIH PANJANG bermakna wang berada lebih lama dengan pelanggan — lebih buruk untuk aliran tunai, walaupun jualan itu sendiri mungkin kelihatan sihat.**
@@ -3913,7 +3912,7 @@ Every short label the learner sees: account names, options, step values, section
 **`cb-007`** · numeric · difficulty 4 · cash-budget
 
 - *Question (EN)* Customers pay one month after the sale. Credit sales were January RM20,000, February RM24,000, March RM30,000. How much is received from debtors in March?
-- *Question (BM)* **Pelanggan membayar sebulan selepas jualan. Jualan kredit ialah Januari RM20,000, Februari RM24,000, Mac RM30,000. Berapakah yang diterima daripada penghutang pada bulan Mac?**
+- *Question (BM)* **Pelanggan membayar sebulan selepas jualan. Jualan kredit ialah Januari RM20,000, Februari RM24,000, Mac RM30,000. Berapakah yang diterima daripada Akaun Belum Terima pada bulan Mac?**
 - *Why (EN)* March's receipts are February's sales: RM24,000. March's own sales of RM30,000 will not be received until April.
 - *Why (BM)* **Terimaan Mac ialah jualan Februari: RM24,000. Jualan Mac sendiri sebanyak RM30,000 tidak akan diterima sehingga April.**
 - → 
@@ -3921,7 +3920,7 @@ Every short label the learner sees: account names, options, step values, section
 **`cb-008`** · numeric · difficulty 3 · cash-budget
 
 - *Question (EN)* In March, cash sales are RM12,000 and receipts from debtors are RM24,000. What are the total receipts for March?
-- *Question (BM)* **Pada bulan Mac, jualan tunai ialah RM12,000 dan terimaan daripada penghutang RM24,000. Berapakah jumlah terimaan bagi bulan Mac?**
+- *Question (BM)* **Pada bulan Mac, jualan tunai ialah RM12,000 dan terimaan daripada Akaun Belum Terima RM24,000. Berapakah jumlah terimaan bagi bulan Mac?**
 - *Why (EN)* 12,000 + 24,000 = 36,000.
 - *Why (BM)* **12,000 + 24,000 = 36,000.**
 - → 
@@ -3961,13 +3960,13 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-1401`** · faded_step · difficulty 3 · cash-budget, faded-step
 
 - *Scenario (EN)* March. Opening cash RM5,000. Cash sales RM12,000. Received from debtors RM24,000. Paid suppliers RM18,000. Wages RM7,000. Rent RM3,000.
-- *Scenario (BM)* **Mac. Tunai awal RM5,000. Jualan tunai RM12,000. Terimaan daripada penghutang RM24,000. Bayaran kepada pembekal RM18,000. Gaji RM7,000. Sewa RM3,000.**
+- *Scenario (BM)* **Mac. Tunai awal RM5,000. Jualan tunai RM12,000. Terimaan daripada Akaun Belum Terima RM24,000. Bayaran kepada pembekal RM18,000. Gaji RM7,000. Sewa RM3,000.**
 - *Question (EN)* The workings are done. Finish the last line.
 - *Question (BM)* **Kerja kira sudah siap. Selesaikan baris terakhir.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Opening cash balance → **Baki tunai awal**
   - Add: cash sales → **Tambah: jualan tunai**
-  - Add: receipts from debtors → **Tambah: terimaan daripada penghutang**
+  - Add: receipts from debtors → **Tambah: terimaan daripada Akaun Belum Terima**
   - Less: payments to suppliers → **Tolak: bayaran kepada pembekal**
   - Less: wages → **Tolak: gaji**
   - Less: rent → **Tolak: sewa**
@@ -3979,13 +3978,13 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-1402`** · faded_step · difficulty 4 · cash-budget, faded-step
 
 - *Scenario (EN)* April. Opening cash RM8,000. Cash sales RM15,000. Received from debtors RM20,000. Paid suppliers RM22,000. Wages RM9,000. Rent RM4,000.
-- *Scenario (BM)* **April. Tunai awal RM8,000. Jualan tunai RM15,000. Terimaan daripada penghutang RM20,000. Bayaran kepada pembekal RM22,000. Gaji RM9,000. Sewa RM4,000.**
+- *Scenario (BM)* **April. Tunai awal RM8,000. Jualan tunai RM15,000. Terimaan daripada Akaun Belum Terima RM20,000. Bayaran kepada pembekal RM22,000. Gaji RM9,000. Sewa RM4,000.**
 - *Question (EN)* Three lines are missing. Complete the month.
 - *Question (BM)* **Tiga baris hilang. Lengkapkan bulan itu.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Opening cash balance → **Baki tunai awal**
   - Add: cash sales → **Tambah: jualan tunai**
-  - Add: receipts from debtors → **Tambah: terimaan daripada penghutang**
+  - Add: receipts from debtors → **Tambah: terimaan daripada Akaun Belum Terima**
   - Less: payments to suppliers → **Tolak: bayaran kepada pembekal**
   - ␣ Less: wages → **Tolak: gaji**
   - ␣ Less: rent → **Tolak: sewa**
@@ -3997,17 +3996,17 @@ Every short label the learner sees: account names, options, step values, section
 **`fd-1403`** · faded_step · difficulty 5 · cash-budget, faded-step
 
 - *Scenario (EN)* May. Opening cash RM3,000. Cash sales RM18,000. Received from debtors RM26,000. Paid suppliers RM25,000. Wages RM11,000. Rent RM5,000.
-- *Scenario (BM)* **Mei. Tunai awal RM3,000. Jualan tunai RM18,000. Terimaan daripada penghutang RM26,000. Bayaran kepada pembekal RM25,000. Gaji RM11,000. Sewa RM5,000.**
+- *Scenario (BM)* **Mei. Tunai awal RM3,000. Jualan tunai RM18,000. Terimaan daripada Akaun Belum Terima RM26,000. Bayaran kepada pembekal RM25,000. Gaji RM11,000. Sewa RM5,000.**
 - *Question (EN)* Only the opening balance is given. Build the whole month.
 - *Question (BM)* **Hanya baki awal diberi. Bina keseluruhan bulan itu.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Opening cash balance → **Baki tunai awal**
   - ␣ Add: cash sales → **Tambah: jualan tunai**
-  - ␣ Add: receipts from debtors → **Tambah: terimaan daripada penghutang**
+  - ␣ Add: receipts from debtors → **Tambah: terimaan daripada Akaun Belum Terima**
   - ␣ Less: payments to suppliers → **Tolak: bayaran kepada pembekal**
   - ␣ Less: wages → **Tolak: gaji**
   - ␣ Less: rent → **Tolak: sewa**
   - ␣ Closing cash balance → **Baki tunai akhir**
 - *Why (EN)* 3,000 + 44,000 − 41,000 = 6,000. The business is solvent all month, but only because the debtors paid: without that RM26,000 it would have run out of cash.
-- *Why (BM)* **3,000 + 44,000 − 41,000 = 6,000. Perniagaan mampu bertahan sepanjang bulan, tetapi hanya kerana penghutang membayar: tanpa RM26,000 itu ia akan kehabisan tunai.**
+- *Why (BM)* **3,000 + 44,000 − 41,000 = 6,000. Perniagaan mampu bertahan sepanjang bulan, tetapi hanya kerana pelanggan membayar: tanpa RM26,000 itu ia akan kehabisan tunai.**
 - → 

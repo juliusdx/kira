@@ -404,6 +404,25 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   - Exam runs are **local-only** — the answers sync as attempts, the paper as
     an event does not. That needs a table and a migration, worth doing once a
     mock has actually been sat.
+- **2026-07-30 (Penghutang/Pemiutang → Akaun Belum Terima/Bayar)** — Julius's
+  call, after the SPM cross-check showed neither 2024 paper uses the old terms
+  anywhere. 111 occurrences swept across the WHOLE bank, including Julius's own
+  ported Stages 1–5, plus `ACCOUNT_GLOSSARY_MS` and the `receivable` skill
+  label in `loader.ts`.
+  - **Compounds had to be collapsed, not substituted.** `Akaun Penghutang
+    Perdagangan` → `Akaun Belum Terima`, not `Akaun Akaun Belum Terima…`. The
+    script asserts zero `Akaun Akaun` afterwards. Likewise the paper has no
+    qualifier: "trade receivables" is just `Akaun Belum Terima`.
+  - **5 uses deliberately KEPT as `pemiutang`, and they are the interesting
+    part.** Where the word means the PEOPLE owed money rather than the ledger
+    account, an account name is not Malay: "an Akaun Belum Bayar can claim his
+    personal assets" is nonsense, and the dissolution payment order ranks
+    claimants, not accounts. Three were protected up front; **two more were
+    only found by reading the output** — a mechanical sweep produces valid JSON
+    and bad Malay, and the guard for that is a person-verb grep
+    (`boleh|membayar|menuntut|yang pasti`) plus actually reading it.
+  - `BM_REVIEW.md` still reports those 5 as a clash, which is right — they are
+    visible for Julius to overrule rather than hidden by an exception list.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -430,8 +449,9 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     our word differs from the exam board's, the board wins. It found 6 clashes
     on first run, the biggest being **`Penghutang`/`Pemiutang` (64 uses) where
     both 2024 papers say `Akaun Belum Terima`/`Akaun Belum Bayar`** — which
-    reads like a syllabus generation of drift. Julius has to confirm before
-    anything is rewritten; extend `SPM_TERMS` whenever another paper is read.
+    reads like a syllabus generation of drift. **Julius decided 2026-07-30:
+    switched everywhere** — see below. Extend `SPM_TERMS` whenever another
+    paper is read.
   - The inconsistency check is deliberately split: Malay marks neither plural
     nor articles, so one BM string covering "Assets" and "An asset" is correct
     Malay and is reported separately as an ENGLISH inconsistency instead. Left

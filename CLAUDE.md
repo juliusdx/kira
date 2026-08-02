@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 243 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 245 passing, no network
 - Live-backend tests: `npm run test:integration` — 12 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
@@ -28,7 +28,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 253 items / 21 topics / 43 lessons.
+- `seed_content.json` (repo ROOT) — all 276 items / 21 topics / 46 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -313,6 +313,22 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     learner has every reason to think that topic is covered.
   - Consequence for any mock-exam work: a paper generated from today's bank
     would silently omit these and hand back a flattering score.
+- **2026-07-30 (closing the two sharpest gaps)** — 23 items / 3 lessons into
+  `t10-depreciation`, bank now **276**. Content-only, no schema.
+  `l44-reducing-balance` drills the thing the exam actually tests: the rate
+  applies to the CARRYING AMOUNT, not to cost, so the charge falls every year.
+  Its hardest item is the 2024 shape — cost 12,000, accumulated 3,200, 5% —
+  where the straight-line answer (600) is one of the wrong options and the
+  right one is 440. `l45-disposal` is proceeds vs carrying amount, the three
+  transfers into the Disposal account, and the direction of a profit (credited)
+  against a loss (debited). `l46-faded-disposal` is the 15th ladder, 1 → 3 → 5
+  blanks. New skill tags `reducing-balance` and `disposal`, labelled in
+  `loader.ts`. **BM is Claude's, so all three lessons are in `BM_REVIEW.md`
+  (scope is now 174 items).**
+  - Verified in the browser under `localonly`, seeding IndexedDB to reach them:
+    worked example, numeric grading, the ladder's mixed number/choice steps and
+    its distractor pool all render, and the single-blank ladder commits on tap
+    as the submit rule says it should.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -437,6 +453,24 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   ids; STEP 0 is the footprint fallback for runs from before this, and its
   predicate is tested in `supabase/tests/cleanup_test.sql` — a DELETE against
   prod deserves at least what a migration gets.
+- 2026-07-30: **a duplicate item id used to be invisible to the content guard.**
+  A new fading ladder reused `fd-1401..1403`, already taken by the cash-budget
+  ladder. Every test stayed green and three items silently vanished, because
+  `loader.ts` builds its index as a `Map` keyed by item id — the duplicate
+  OVERWRITES the first, so `ALL_ENTRIES` never contains a collision and the
+  existing "unique item ids" assertion was comparing a deduplicated list
+  against itself. It could not fail. → the guard now reads
+  `seed_content.json` DIRECTLY, and a second test asserts the loaded count
+  equals the authored count so any silent loss shows up. An item id is the key
+  of `review_state`, `attempts` AND `item_notes`, so a collision does not just
+  lose a question, it merges two questions' progress into one learner row.
+  General rule: a guard that reads its subject through the very code that
+  normalises the fault cannot see the fault.
+- 2026-07-30: to browser-verify NEW content in `localonly`, do not hand-build
+  the id list — the Vite dev server serves `/seed_content.json`, so the page
+  can `fetch` it and seed `reviewState` for every id except the lesson under
+  test. Note `window.*` set before a `navigate` is gone after it; re-fetch
+  inside the same call that seeds.
 - 2026-07-29: **the teacher screens cannot be browser-verified in `localonly`.**
   `.env.localonly` blanks the Supabase vars, `SYNC_ENABLED` goes false, and the
   entire classroom UI is hidden — there is no Classes entry on the Progress

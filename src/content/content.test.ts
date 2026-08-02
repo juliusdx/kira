@@ -8,7 +8,10 @@ import {
   sectionTotals,
   type Response,
 } from '../grading/grade'
-import type { Item, LocalizedText } from './types'
+import type { ContentBundle, Item, LocalizedText } from './types'
+// Read the authored file directly, NOT through the loader: the loader's index
+// is a Map keyed by item id and so hides exactly the duplicate this guards.
+import rawSeed from '../../seed_content.json'
 
 // Guards the whole authored bank (all stages). Any future content port —
 // Stage 5, a new topic, a hand-edited answer — has to pass these.
@@ -54,6 +57,46 @@ describe('content bank — structure', () => {
     expect(items.length).toBeGreaterThan(50)
     const ids = items.map((i) => i.id)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('no item id is authored twice — checked against the RAW file', () => {
+    // This assertion has to read seed_content.json directly. The loader builds
+    // its index as a Map keyed by item id, so a duplicate SILENTLY overwrites
+    // the first one: by the time ALL_ENTRIES exists the collision is gone, one
+    // question has vanished from the bank, and the test above is comparing a
+    // deduplicated list against itself. It cannot fail.
+    //
+    // Found the day a new fading ladder was authored reusing fd-1401..1403,
+    // already taken by the cash-budget ladder. Three items disappeared and
+    // every test stayed green.
+    //
+    // An item id is the key of review_state, attempts AND item_notes, so a
+    // collision does not merely lose a question — it merges two different
+    // questions' progress into one learner row.
+    const seen = new Map<string, string>()
+    const clashes: string[] = []
+    for (const topic of (rawSeed as unknown as ContentBundle).topics) {
+      for (const lesson of topic.lessons) {
+        for (const item of lesson.items) {
+          const where = `${topic.id}/${lesson.id}`
+          const first = seen.get(item.id)
+          if (first) clashes.push(`${item.id}: ${first} and ${where}`)
+          else seen.set(item.id, where)
+        }
+      }
+    }
+    expect(clashes, 'item ids authored more than once').toEqual([])
+  })
+
+  it('every authored item survives into the loaded index', () => {
+    // The general form of the same failure: anything that silently drops an
+    // item between the file and the app shows up as a count mismatch.
+    let authored = 0
+    for (const topic of (rawSeed as unknown as ContentBundle).topics)
+      for (const lesson of topic.lessons) authored += lesson.items.length
+    expect(items.length, 'items lost between seed_content.json and the loader').toBe(
+      authored,
+    )
   })
 
   it('every topic and lesson is bilingual and ordered', () => {

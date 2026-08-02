@@ -182,6 +182,11 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
   accruals: { en: 'Accruals', ms: 'Terakru' },
   prepayments: { en: 'Prepayments', ms: 'Prabayar' },
   depreciation: { en: 'Depreciation', ms: 'Susut nilai' },
+  'reducing-balance': {
+    en: 'Reducing balance depreciation',
+    ms: 'Susut nilai baki berkurangan',
+  },
+  disposal: { en: 'Disposal of an asset', ms: 'Pelupusan aset' },
   'bad-debts': { en: 'Bad debts', ms: 'Hutang lapuk' },
   provision: {
     en: 'Provision for doubtful debts',

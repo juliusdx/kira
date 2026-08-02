@@ -42,7 +42,16 @@ const CLAUDE_TOPICS = new Set([
   't20-ratio-analysis',
   't21-cash-budget',
 ])
-const CLAUDE_LESSONS = new Set(['l30-balance-off', 'l31-faded-balancing'])
+const CLAUDE_LESSONS = new Set([
+  'l30-balance-off',
+  'l31-faded-balancing',
+  // 2026-07-30: authored to close the reducing-balance and disposal gaps the
+  // SPM 2024 papers exposed. Same provenance as everything else here — the BM
+  // is Claude's, not ported.
+  'l44-reducing-balance',
+  'l45-disposal',
+  'l46-faded-disposal',
+])
 
 const inScope = (topic, lesson) =>
   CLAUDE_TOPICS.has(topic.id) || CLAUDE_LESSONS.has(lesson.id)

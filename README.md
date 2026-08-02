@@ -24,12 +24,13 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**253 items across 21 topics**, Stages 1–7:
+**276 items across 21 topics**, Stages 1–7:
 
 1–2. The accounting equation · debits & credits · journal entries · spot the error
 3. Ledger & T-accounts · balancing off · the trial balance
 4. Income statement · statement of financial position
-5. Year-end adjustments — accruals & prepayments · depreciation · bad debts & provisions
+5. Year-end adjustments — accruals & prepayments · depreciation (straight line
+   and reducing balance) · disposal of an asset · bad debts & provisions
 6. Bank reconciliation · control accounts · correction of errors & suspense ·
    incomplete records · club & society accounts · partnership accounts
 7. Limited company accounts · manufacturing accounts · ratio analysis · cash budgets
@@ -37,7 +38,7 @@ Every feature is tied to a research-backed principle (see
 Eight interaction types: `classify`, `debit_credit`, `numeric`,
 `journal_entry`, `t_account`, `spot_error`, `statement_build`, `faded_step`.
 
-Fourteen of the lessons are **fading ladders** — the same procedure authored
+Fifteen of the lessons are **fading ladders** — the same procedure authored
 three times, one more step blanked each rung. They sit on the procedures where
 the order of the steps is the whole lesson: the journal entry, straight-line
 depreciation, write-off-then-provide (providing on the pre-write-off figure is
@@ -45,7 +46,8 @@ the classic miss), balancing off a ledger account (the balance c/d goes on the
 *smaller* side), the bank reconciliation, the control account, clearing a
 suspense account to nil, profit by capital comparison, the subscriptions
 working, the partnership appropriation, the company appropriation, the
-manufacturing account, both profit margins, and a month of a cash budget.
+manufacturing account, both profit margins, a month of a cash budget, and
+disposing of a non-current asset.
 
 A numeric answer is a whole, non-negative figure — the input accepts digits
 only — and its unit is authored, not assumed: a currency leads its figure
@@ -75,7 +77,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 243 hermetic unit + component tests (the CI gate)
+npm test           # 245 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)

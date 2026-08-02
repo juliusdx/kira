@@ -28,7 +28,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 276 items / 21 topics / 46 lessons.
+- `seed_content.json` (repo ROOT) — all 302 items / 22 topics / 50 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -329,6 +329,33 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     worked example, numeric grading, the ladder's mixed number/choice steps and
     its distractor pool all render, and the single-blank ladder commits on tap
     as the submit rule says it should.
+- **2026-07-30 (gap list, batch 2)** — 26 items / 4 lessons, bank now **302**.
+  Content-only, no schema. Taken in order of what the papers actually weight.
+  - **New topic `t22-documents`, inserted at order 3** — source documents,
+    books of first entry, petty cash & the imprest. That is 4 marks of Kertas 1
+    (Q5–Q8) and it is FOUNDATIONAL material that was missing entirely, so it is
+    placed between debits/credits and journals rather than appended. **Every
+    later topic was renumbered +1**; safe, because `review_state` is keyed by
+    item id and never by order.
+  - The traps are the content: a credit purchase of a VAN is not "purchases"
+    and a service supplied on credit is not "sales" (both general journal), a
+    statement of account is not a source document, and the imprest float is
+    "balance in hand + reimbursement", which is how the exam asks it.
+  - **`l50-inventory-valuation`** into `t7-income-statement` — lower of cost
+    and market, compared LINE BY LINE not on totals, plus which way an
+    overstatement pushes cost of sales and gross profit. One mark in Kertas 1
+    but it moves the answer inside two big Kertas 2 questions.
+  - New skill tags `source-documents`, `books-of-first-entry`, `petty-cash`,
+    `inventory-valuation`, labelled in `loader.ts`. BM is Claude's — scope of
+    `BM_REVIEW.md` is now 200 items.
+  - **Open question for Julius, surfaced by the review doc:** "Receipt" now has
+    two BM renderings — `Resit` (the document, sd-*) and `Terimaan` (money in,
+    cb-*). Both look right in their own context and a learner never meets both
+    in one question, so this is an ambiguity in the ENGLISH rather than a BM
+    error. Left as-is deliberately.
+  - **Still open on the gap list:** partnership dissolution / realisation
+    account, break-even, cooperatives, Partnership Act 1961 s.26, the
+    accounting bodies, share oversubscription, loose tools by revaluation.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

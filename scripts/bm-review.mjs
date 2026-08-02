@@ -31,6 +31,8 @@ const bundle = JSON.parse(readFileSync(join(ROOT, 'seed_content.json'), 'utf8'))
 // scope. Stage 6 is t12..t17, Stage 7 is t18..t21, and the two balancing-off
 // lessons were authored later into an otherwise-ported topic.
 const CLAUDE_TOPICS = new Set([
+  // 2026-07-30: authored to close gaps the SPM 2024 papers exposed.
+  't22-documents',
   't12-bank-reconciliation',
   't13-control-accounts',
   't14-suspense',
@@ -51,6 +53,7 @@ const CLAUDE_LESSONS = new Set([
   'l44-reducing-balance',
   'l45-disposal',
   'l46-faded-disposal',
+  'l50-inventory-valuation',
 ])
 
 const inScope = (topic, lesson) =>

@@ -24,11 +24,12 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**276 items across 21 topics**, Stages 1–7:
+**302 items across 22 topics**, Stages 1–7:
 
-1–2. The accounting equation · debits & credits · journal entries · spot the error
+1–2. The accounting equation · debits & credits · source documents · books of
+   first entry · petty cash & the imprest · journal entries · spot the error
 3. Ledger & T-accounts · balancing off · the trial balance
-4. Income statement · statement of financial position
+4. Income statement · valuing closing inventory · statement of financial position
 5. Year-end adjustments — accruals & prepayments · depreciation (straight line
    and reducing balance) · disposal of an asset · bad debts & provisions
 6. Bank reconciliation · control accounts · correction of errors & suspense ·

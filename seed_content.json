@@ -499,8 +499,644 @@
       ]
     },
     {
-      "id": "t3-journal",
+      "id": "t22-documents",
       "order": 3,
+      "title": {
+        "en": "Documents & First Entry",
+        "ms": "Dokumen & Catatan Pertama"
+      },
+      "lessons": [
+        {
+          "id": "l47-source-documents",
+          "order": 1,
+          "title": {
+            "en": "Which Document?",
+            "ms": "Dokumen Yang Mana?"
+          },
+          "worked_example": {
+            "prompt": {
+              "en": "Every entry starts from a document, and the document tells you what happened. An INVOICE is issued for a credit sale or purchase. A CREDIT NOTE reduces what a customer owes — goods came back, or they were overcharged. A DEBIT NOTE increases it, when the invoice undercharged them. A RECEIPT proves money came in, a CASH BILL proves a cash sale, a CHEQUE COUNTERFOIL proves a payment went out. A MEMO is the source for something internal, like the owner taking cash. But a DELIVERY NOTE, a STATEMENT OF ACCOUNT, a purchase order and a quotation record no amount owed or paid at that moment — they are not source documents and nothing is entered from them.",
+              "ms": "Setiap catatan bermula daripada satu dokumen, dan dokumen itu memberitahu apa yang berlaku. INVOIS dikeluarkan bagi jualan atau belian secara kredit. NOTA KREDIT mengurangkan hutang pelanggan — barang dipulangkan, atau mereka terlebih caj. NOTA DEBIT menambahkannya, apabila invois terkurang caj. RESIT membuktikan wang diterima, BIL TUNAI membuktikan jualan tunai, KERATAN CEK membuktikan bayaran dikeluarkan. MEMO ialah sumber bagi perkara dalaman, seperti pemilik mengambil tunai. Tetapi NOTA SERAHAN, PENYATA AKAUN, pesanan belian dan sebut harga tidak merekod sebarang jumlah terhutang atau dibayar pada masa itu — ia bukan dokumen sumber dan tiada apa dicatat daripadanya."
+            }
+          },
+          "items": [
+            {
+              "id": "sd-001",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "A business sells goods on credit. Which document does it issue to the customer?",
+                "ms": "Sebuah perniagaan menjual barang secara kredit. Dokumen manakah yang dikeluarkan kepada pelanggan?"
+              },
+              "data": {
+                "options": [
+                  "Invoice",
+                  "Receipt",
+                  "Credit note",
+                  "Delivery note"
+                ],
+                "options_ms": [
+                  "Invois",
+                  "Resit",
+                  "Nota kredit",
+                  "Nota serahan"
+                ]
+              },
+              "answer": "Invoice",
+              "explanation": {
+                "en": "The invoice states what is owed and is the source for the credit sale entry.",
+                "ms": "Invois menyatakan jumlah yang terhutang dan menjadi sumber bagi catatan jualan kredit."
+              }
+            },
+            {
+              "id": "sd-002",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "A customer returns goods. Which document does the seller send?",
+                "ms": "Seorang pelanggan memulangkan barang. Dokumen manakah yang dihantar oleh penjual?"
+              },
+              "data": {
+                "options": [
+                  "Credit note",
+                  "Debit note",
+                  "Invoice",
+                  "Statement of account"
+                ],
+                "options_ms": [
+                  "Nota kredit",
+                  "Nota debit",
+                  "Invois",
+                  "Penyata akaun"
+                ]
+              },
+              "answer": "Credit note",
+              "explanation": {
+                "en": "The customer owes less than the invoice said, so the seller credits their account.",
+                "ms": "Pelanggan berhutang kurang daripada yang dinyatakan dalam invois, jadi penjual mengkreditkan akaun mereka."
+              }
+            },
+            {
+              "id": "sd-003",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "An invoice undercharged the customer by RM50. Which document corrects it?",
+                "ms": "Sesuatu invois terkurang caj kepada pelanggan sebanyak RM50. Dokumen manakah yang membetulkannya?"
+              },
+              "data": {
+                "options": [
+                  "Debit note",
+                  "Credit note",
+                  "Memo",
+                  "Receipt"
+                ],
+                "options_ms": [
+                  "Nota debit",
+                  "Nota kredit",
+                  "Memo",
+                  "Resit"
+                ]
+              },
+              "answer": "Debit note",
+              "explanation": {
+                "en": "A debit note ADDS to the invoice. A credit note would take away, which is the wrong direction here.",
+                "ms": "Nota debit MENAMBAH kepada invois. Nota kredit akan menolak, iaitu arah yang salah di sini."
+              }
+            },
+            {
+              "id": "sd-004",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "Which of these is NOT a source document?",
+                "ms": "Antara berikut, yang manakah BUKAN dokumen sumber?"
+              },
+              "data": {
+                "options": [
+                  "Delivery note",
+                  "Invoice",
+                  "Receipt",
+                  "Cash bill"
+                ],
+                "options_ms": [
+                  "Nota serahan",
+                  "Invois",
+                  "Resit",
+                  "Bil tunai"
+                ]
+              },
+              "answer": "Delivery note",
+              "explanation": {
+                "en": "A delivery note proves goods arrived, not that anything is owed or paid — no entry is made from it.",
+                "ms": "Nota serahan membuktikan barang telah sampai, bukan bahawa ada hutang atau bayaran — tiada catatan dibuat daripadanya."
+              }
+            },
+            {
+              "id": "sd-005",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "The owner takes RM150 of business cash for private use. What is the source document?",
+                "ms": "Pemilik mengambil tunai perniagaan RM150 untuk kegunaan peribadi. Apakah dokumen sumbernya?"
+              },
+              "data": {
+                "options": [
+                  "Memo",
+                  "Invoice",
+                  "Receipt",
+                  "Cheque counterfoil"
+                ],
+                "options_ms": [
+                  "Memo",
+                  "Invois",
+                  "Resit",
+                  "Keratan cek"
+                ]
+              },
+              "answer": "Memo",
+              "explanation": {
+                "en": "Nobody outside the business is involved, so there is no invoice or receipt. An internal memo is the source for drawings.",
+                "ms": "Tiada pihak luar terlibat, jadi tiada invois atau resit. Memo dalaman ialah sumber bagi ambilan."
+              }
+            },
+            {
+              "id": "sd-006",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "Which document proves that money was received?",
+                "ms": "Dokumen manakah yang membuktikan wang telah diterima?"
+              },
+              "data": {
+                "options": [
+                  "Receipt",
+                  "Invoice",
+                  "Purchase order",
+                  "Delivery note"
+                ],
+                "options_ms": [
+                  "Resit",
+                  "Invois",
+                  "Pesanan belian",
+                  "Nota serahan"
+                ]
+              },
+              "answer": "Receipt",
+              "explanation": {
+                "en": "An invoice says money is owed; a receipt says it has actually been paid.",
+                "ms": "Invois menyatakan wang terhutang; resit menyatakan ia telah benar-benar dibayar."
+              }
+            },
+            {
+              "id": "sd-007",
+              "type": "classify",
+              "difficulty": 4,
+              "skill_tags": [
+                "source-documents"
+              ],
+              "prompt": {
+                "en": "A supplier sends a monthly summary of all invoices and payments. Is an entry made from it?",
+                "ms": "Seorang pembekal menghantar ringkasan bulanan semua invois dan bayaran. Adakah catatan dibuat daripadanya?"
+              },
+              "data": {
+                "options": [
+                  "No — it is not a source document",
+                  "Yes — it is a source document"
+                ],
+                "options_ms": [
+                  "Tidak — ia bukan dokumen sumber",
+                  "Ya — ia dokumen sumber"
+                ]
+              },
+              "answer": "No — it is not a source document",
+              "explanation": {
+                "en": "A statement of account only repeats transactions already entered from their own invoices. Entering it again would double-count them.",
+                "ms": "Penyata akaun hanya mengulangi urus niaga yang telah dicatat daripada invois masing-masing. Mencatatnya semula akan mengira dua kali."
+              }
+            }
+          ]
+        },
+        {
+          "id": "l48-books-of-first-entry",
+          "order": 2,
+          "title": {
+            "en": "Into Which Book?",
+            "ms": "Ke Dalam Buku Yang Mana?"
+          },
+          "worked_example": {
+            "prompt": {
+              "en": "A document is written up in a book of first entry before it ever reaches the ledger. Which book depends on two things: what was traded, and whether it was on credit. The SALES and PURCHASES journals take credit dealings in GOODS THE BUSINESS TRADES IN — nothing else. Returns get their own two books: returns inwards (from customers) and returns outwards (to suppliers). Cash and bank movements go to the cash book. Everything left over — buying a van on credit, correcting an error, opening entries, the owner taking goods — goes to the GENERAL JOURNAL. The two traps are a credit purchase of a non-current asset, which is not \"purchases\", and a service supplied on credit, which is not \"sales\".",
+              "ms": "Sesuatu dokumen dicatat dalam buku catatan pertama sebelum ia sampai ke lejar. Buku yang mana bergantung pada dua perkara: apa yang diniagakan, dan sama ada ia secara kredit. Jurnal JUALAN dan BELIAN mengambil urusan kredit bagi BARANG YANG DINIAGAKAN OLEH PERNIAGAAN — bukan yang lain. Pulangan mempunyai dua buku sendiri: pulangan masuk (daripada pelanggan) dan pulangan keluar (kepada pembekal). Pergerakan tunai dan bank masuk ke buku tunai. Selebihnya — membeli van secara kredit, membetulkan kesilapan, catatan pembukaan, pemilik mengambil barang — masuk ke JURNAL AM. Dua perangkapnya ialah belian aset bukan semasa secara kredit, yang bukan \"belian\", dan perkhidmatan diberi secara kredit, yang bukan \"jualan\"."
+            }
+          },
+          "items": [
+            {
+              "id": "bfe-001",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "A shop sells goods on credit to a customer. Which book records it first?",
+                "ms": "Sebuah kedai menjual barang secara kredit kepada pelanggan. Buku manakah merekodnya dahulu?"
+              },
+              "data": {
+                "options": [
+                  "Sales journal",
+                  "General journal",
+                  "Cash book",
+                  "Purchases journal"
+                ],
+                "options_ms": [
+                  "Jurnal jualan",
+                  "Jurnal am",
+                  "Buku tunai",
+                  "Jurnal belian"
+                ]
+              },
+              "answer": "Sales journal",
+              "explanation": {
+                "en": "Credit sales of the goods the business trades in — that is exactly what the sales journal is for.",
+                "ms": "Jualan kredit barang yang diniagakan oleh perniagaan — itulah tujuan jurnal jualan."
+              }
+            },
+            {
+              "id": "bfe-002",
+              "type": "classify",
+              "difficulty": 4,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "A trading business buys a delivery van on credit. Which book records it first?",
+                "ms": "Sebuah perniagaan perdagangan membeli van penghantaran secara kredit. Buku manakah merekodnya dahulu?"
+              },
+              "data": {
+                "options": [
+                  "General journal",
+                  "Purchases journal",
+                  "Cash book",
+                  "Sales journal"
+                ],
+                "options_ms": [
+                  "Jurnal am",
+                  "Jurnal belian",
+                  "Buku tunai",
+                  "Jurnal jualan"
+                ]
+              },
+              "answer": "General journal",
+              "explanation": {
+                "en": "The purchases journal is only for goods bought to resell. A van is a non-current asset, so it goes to the general journal.",
+                "ms": "Jurnal belian hanya untuk barang yang dibeli untuk dijual semula. Van ialah aset bukan semasa, jadi ia masuk ke jurnal am."
+              }
+            },
+            {
+              "id": "bfe-003",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "A customer returns goods that were sold to them on credit. Which book?",
+                "ms": "Seorang pelanggan memulangkan barang yang dijual kepadanya secara kredit. Buku yang mana?"
+              },
+              "data": {
+                "options": [
+                  "Returns inwards journal",
+                  "Returns outwards journal",
+                  "Sales journal",
+                  "General journal"
+                ],
+                "options_ms": [
+                  "Jurnal pulangan masuk",
+                  "Jurnal pulangan keluar",
+                  "Jurnal jualan",
+                  "Jurnal am"
+                ]
+              },
+              "answer": "Returns inwards journal",
+              "explanation": {
+                "en": "The goods come back IN to the business, so it is returns inwards.",
+                "ms": "Barang itu kembali MASUK ke perniagaan, jadi ia pulangan masuk."
+              }
+            },
+            {
+              "id": "bfe-004",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "The business returns faulty goods to its supplier. Which book?",
+                "ms": "Perniagaan memulangkan barang rosak kepada pembekalnya. Buku yang mana?"
+              },
+              "data": {
+                "options": [
+                  "Returns outwards journal",
+                  "Returns inwards journal",
+                  "Purchases journal",
+                  "General journal"
+                ],
+                "options_ms": [
+                  "Jurnal pulangan keluar",
+                  "Jurnal pulangan masuk",
+                  "Jurnal belian",
+                  "Jurnal am"
+                ]
+              },
+              "answer": "Returns outwards journal",
+              "explanation": {
+                "en": "The goods go back OUT to the supplier. Naming these from the goods’ direction, not from who is unhappy, is what keeps them straight.",
+                "ms": "Barang itu kembali KELUAR kepada pembekal. Menamakannya mengikut arah barang, bukan mengikut siapa yang tidak berpuas hati, itulah yang menjadikannya jelas."
+              }
+            },
+            {
+              "id": "bfe-005",
+              "type": "classify",
+              "difficulty": 4,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "A laundry provides washing services to a hotel on credit. Which book records it first?",
+                "ms": "Sebuah dobi memberikan perkhidmatan mencuci kepada sebuah hotel secara kredit. Buku manakah merekodnya dahulu?"
+              },
+              "data": {
+                "options": [
+                  "General journal",
+                  "Sales journal",
+                  "Cash book",
+                  "Returns inwards journal"
+                ],
+                "options_ms": [
+                  "Jurnal am",
+                  "Jurnal jualan",
+                  "Buku tunai",
+                  "Jurnal pulangan masuk"
+                ]
+              },
+              "answer": "General journal",
+              "explanation": {
+                "en": "The sales journal is for goods the business trades in. A service is not goods, so it goes to the general journal.",
+                "ms": "Jurnal jualan adalah untuk barang yang diniagakan. Perkhidmatan bukan barang, jadi ia masuk ke jurnal am."
+              }
+            },
+            {
+              "id": "bfe-006",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "An error found in the ledger has to be corrected. Which book records the correction?",
+                "ms": "Sesuatu kesilapan yang dijumpai dalam lejar perlu dibetulkan. Buku manakah merekod pembetulan itu?"
+              },
+              "data": {
+                "options": [
+                  "General journal",
+                  "Cash book",
+                  "Sales journal",
+                  "Purchases journal"
+                ],
+                "options_ms": [
+                  "Jurnal am",
+                  "Buku tunai",
+                  "Jurnal jualan",
+                  "Jurnal belian"
+                ]
+              },
+              "answer": "General journal",
+              "explanation": {
+                "en": "Corrections belong to no trading book, so they go to the general journal — where the narration explains what happened.",
+                "ms": "Pembetulan bukan milik mana-mana buku perdagangan, jadi ia masuk ke jurnal am — di mana keterangan menjelaskan apa yang berlaku."
+              }
+            },
+            {
+              "id": "bfe-007",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "books-of-first-entry"
+              ],
+              "prompt": {
+                "en": "Goods are sold and paid for in cash immediately. Which book records it first?",
+                "ms": "Barang dijual dan dibayar secara tunai serta-merta. Buku manakah merekodnya dahulu?"
+              },
+              "data": {
+                "options": [
+                  "Cash book",
+                  "Sales journal",
+                  "General journal",
+                  "Returns inwards journal"
+                ],
+                "options_ms": [
+                  "Buku tunai",
+                  "Jurnal jualan",
+                  "Jurnal am",
+                  "Jurnal pulangan masuk"
+                ]
+              },
+              "answer": "Cash book",
+              "explanation": {
+                "en": "The sales journal takes CREDIT sales only. Money moved here, so it is a cash book entry.",
+                "ms": "Jurnal jualan hanya mengambil jualan KREDIT. Wang bergerak di sini, jadi ia catatan buku tunai."
+              }
+            }
+          ]
+        },
+        {
+          "id": "l49-petty-cash",
+          "order": 3,
+          "title": {
+            "en": "Petty Cash & the Imprest",
+            "ms": "Tunai Runcit & Panjar"
+          },
+          "worked_example": {
+            "prompt": {
+              "en": "Small payments — postage, teh tarik for a meeting, a taxi — are not worth a cheque each, so a petty cashier holds a float. Under the IMPREST system that float is a fixed amount. At the end of the period the cashier is reimbursed with exactly what was spent, which restores the float to the same fixed figure it started at. So: reimbursement = total payments, and imprest = balance still in hand + reimbursement received. That second one is the way an exam usually asks it — you are given the leftover and the top-up, and the float is their sum.",
+              "ms": "Bayaran kecil — pos, teh tarik untuk mesyuarat, teksi — tidak berbaloi dikeluarkan cek satu per satu, jadi juruwang runcit memegang panjar. Di bawah sistem PANJAR, jumlah panjar itu ialah amaun tetap. Pada akhir tempoh, juruwang dibayar balik tepat seperti yang dibelanjakan, yang memulihkan panjar kepada angka tetap yang sama seperti pada permulaan. Jadi: bayaran balik = jumlah pembayaran, dan panjar = baki yang masih ada + bayaran balik diterima. Yang kedua itu ialah cara peperiksaan biasanya bertanya — anda diberi bakinya dan tambahannya, dan panjar ialah jumlah kedua-duanya."
+            }
+          },
+          "items": [
+            {
+              "id": "pc-001",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "petty-cash"
+              ],
+              "prompt": {
+                "en": "Under the imprest system, what happens to the petty cash float at the start of each period?",
+                "ms": "Di bawah sistem panjar, apakah yang berlaku kepada panjar tunai runcit pada permulaan setiap tempoh?"
+              },
+              "data": {
+                "options": [
+                  "It is restored to a fixed amount",
+                  "It grows each period",
+                  "It is cleared to zero"
+                ],
+                "options_ms": [
+                  "Ia dipulihkan kepada amaun tetap",
+                  "Ia bertambah setiap tempoh",
+                  "Ia dikosongkan kepada sifar"
+                ]
+              },
+              "answer": "It is restored to a fixed amount",
+              "explanation": {
+                "en": "That fixed amount is the imprest. Restoring it means the cashier always starts with the same sum.",
+                "ms": "Amaun tetap itu ialah panjar. Memulihkannya bermakna juruwang sentiasa bermula dengan jumlah yang sama."
+              }
+            },
+            {
+              "id": "pc-002",
+              "type": "numeric",
+              "difficulty": 3,
+              "skill_tags": [
+                "petty-cash"
+              ],
+              "prompt": {
+                "en": "The petty cash float is RM300. During the month RM175 was paid out. How much is reimbursed at month end?",
+                "ms": "Panjar tunai runcit ialah RM300. Sepanjang bulan itu RM175 telah dibayar. Berapakah yang dibayar balik pada akhir bulan?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 175,
+              "explanation": {
+                "en": "Exactly what was spent, so the float returns to RM300.",
+                "ms": "Tepat seperti yang dibelanjakan, supaya panjar kembali kepada RM300."
+              }
+            },
+            {
+              "id": "pc-003",
+              "type": "numeric",
+              "difficulty": 3,
+              "skill_tags": [
+                "petty-cash"
+              ],
+              "prompt": {
+                "en": "The float is RM300 and RM175 was paid out during the month. How much is still in hand just before the reimbursement?",
+                "ms": "Panjar ialah RM300 dan RM175 telah dibayar sepanjang bulan. Berapakah yang masih ada sebelum bayaran balik dibuat?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 125,
+              "explanation": {
+                "en": "300 − 175 = 125. Add the 175 reimbursement and the float is back to 300.",
+                "ms": "300 − 175 = 125. Tambah bayaran balik 175 dan panjar kembali kepada 300."
+              }
+            },
+            {
+              "id": "pc-004",
+              "type": "numeric",
+              "difficulty": 4,
+              "skill_tags": [
+                "petty-cash"
+              ],
+              "prompt": {
+                "en": "A petty cash book shows a balance brought down of RM48 and RM202 received from the chief cashier. What is the imprest amount?",
+                "ms": "Buku tunai runcit menunjukkan baki dibawa ke bawah RM48 dan RM202 diterima daripada ketua juruwang. Berapakah amaun panjar?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 250,
+              "explanation": {
+                "en": "48 + 202 = 250. The leftover plus the top-up IS the float — the payments figure is not needed at all.",
+                "ms": "48 + 202 = 250. Baki yang tinggal campur tambahan ITULAH panjar — angka pembayaran tidak diperlukan langsung."
+              }
+            },
+            {
+              "id": "pc-005",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "petty-cash",
+                "debit-credit"
+              ],
+              "prompt": {
+                "en": "In the petty cash book, on which side is a payment for postage entered?",
+                "ms": "Dalam buku tunai runcit, di sebelah manakah bayaran untuk pos dicatatkan?"
+              },
+              "data": {
+                "options": [
+                  "Credit",
+                  "Debit"
+                ],
+                "options_ms": [
+                  "Kredit",
+                  "Debit"
+                ]
+              },
+              "answer": "Credit",
+              "explanation": {
+                "en": "Money leaving is a credit, exactly as in the cash book. The reimbursement coming in is the debit.",
+                "ms": "Wang keluar ialah kredit, sama seperti dalam buku tunai. Bayaran balik yang masuk ialah debit."
+              }
+            },
+            {
+              "id": "pc-006",
+              "type": "classify",
+              "difficulty": 3,
+              "skill_tags": [
+                "petty-cash"
+              ],
+              "prompt": {
+                "en": "Which of these would NOT be paid from petty cash?",
+                "ms": "Antara berikut, yang manakah TIDAK akan dibayar daripada tunai runcit?"
+              },
+              "data": {
+                "options": [
+                  "A new delivery van",
+                  "Postage stamps",
+                  "A taxi fare",
+                  "Cleaning materials"
+                ],
+                "options_ms": [
+                  "Sebuah van penghantaran baharu",
+                  "Setem pos",
+                  "Tambang teksi",
+                  "Bahan pencuci"
+                ]
+              },
+              "answer": "A new delivery van",
+              "explanation": {
+                "en": "Petty cash is for small everyday payments. An asset costing thousands is paid by cheque and recorded properly.",
+                "ms": "Tunai runcit adalah untuk bayaran kecil harian. Aset bernilai ribuan dibayar dengan cek dan direkod dengan sewajarnya."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t3-journal",
+      "order": 4,
       "title": {
         "en": "Journal Entries",
         "ms": "Catatan Jurnal"
@@ -894,7 +1530,7 @@
     },
     {
       "id": "t4-errors",
-      "order": 4,
+      "order": 5,
       "title": {
         "en": "Spot the Error",
         "ms": "Kesan Kesilapan"
@@ -1028,7 +1664,7 @@
     },
     {
       "id": "t5-ledger",
-      "order": 5,
+      "order": 6,
       "title": {
         "en": "Ledger & T-Accounts",
         "ms": "Lejar & Akaun T"
@@ -1952,7 +2588,7 @@
     },
     {
       "id": "t6-trial-balance",
-      "order": 6,
+      "order": 7,
       "title": {
         "en": "The Trial Balance",
         "ms": "Imbangan Duga"
@@ -2310,7 +2946,7 @@
     },
     {
       "id": "t7-income-statement",
-      "order": 7,
+      "order": 8,
       "title": {
         "en": "Income Statement",
         "ms": "Penyata Pendapatan"
@@ -2608,12 +3244,183 @@
               }
             }
           ]
+        },
+        {
+          "id": "l50-inventory-valuation",
+          "order": 2,
+          "title": {
+            "en": "Valuing the Inventory",
+            "ms": "Menilai Inventori"
+          },
+          "worked_example": {
+            "prompt": {
+              "en": "Closing inventory is valued at the LOWER of what it cost and what it can be sold for. Compare the two figures line by line — not on the totals — and take the lower one each time. The reason is prudence: an asset must never be carried at more than it can actually fetch, and since closing inventory is deducted in the trading account, overstating it understates cost of sales and overstates profit. That is why the rule exists, and why it is applied per product rather than to the total, where a gain on one line could hide a fall on another.",
+              "ms": "Inventori akhir dinilai pada nilai yang LEBIH RENDAH antara kosnya dan harga ia boleh dijual. Bandingkan kedua-dua angka baris demi baris — bukan pada jumlahnya — dan ambil yang lebih rendah setiap kali. Sebabnya ialah berhemat: sesuatu aset tidak boleh dibawa pada nilai melebihi harga sebenar yang boleh diperoleh, dan kerana inventori akhir ditolak dalam akaun perdagangan, menyatakan lebih akan menyatakan kurang kos jualan dan menyatakan lebih untung. Itulah sebab peraturan ini wujud, dan sebab ia dikenakan setiap produk dan bukan pada jumlahnya, di mana kenaikan pada satu baris boleh menyembunyikan penurunan pada baris lain."
+            }
+          },
+          "items": [
+            {
+              "id": "iv-001",
+              "type": "classify",
+              "difficulty": 2,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "At what value is closing inventory shown?",
+                "ms": "Pada nilai manakah inventori akhir ditunjukkan?"
+              },
+              "data": {
+                "options": [
+                  "The lower of cost and market value",
+                  "Always cost",
+                  "Always market value",
+                  "The higher of cost and market value"
+                ],
+                "options_ms": [
+                  "Nilai lebih rendah antara kos dan harga pasaran",
+                  "Sentiasa kos",
+                  "Sentiasa harga pasaran",
+                  "Nilai lebih tinggi antara kos dan harga pasaran"
+                ]
+              },
+              "answer": "The lower of cost and market value",
+              "explanation": {
+                "en": "Prudence: never carry an asset above what it can actually fetch.",
+                "ms": "Berhemat: jangan sekali-kali membawa aset melebihi harga sebenar yang boleh diperoleh."
+              }
+            },
+            {
+              "id": "iv-002",
+              "type": "numeric",
+              "difficulty": 3,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "One product cost RM12,000 and can now be sold for RM11,400. At what value is it shown?",
+                "ms": "Satu produk berkos RM12,000 dan kini boleh dijual pada RM11,400. Pada nilai manakah ia ditunjukkan?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 11400,
+              "explanation": {
+                "en": "The market value is lower, so that is the figure. Recognise the fall now rather than pretend it has not happened.",
+                "ms": "Harga pasaran lebih rendah, jadi itulah angkanya. Iktiraf penurunan itu sekarang dan bukan berpura-pura ia tidak berlaku."
+              }
+            },
+            {
+              "id": "iv-003",
+              "type": "numeric",
+              "difficulty": 4,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "Product A: cost RM5,400, market RM5,600. Product B: cost RM3,800, market RM3,500. What is the total value of closing inventory?",
+                "ms": "Produk A: kos RM5,400, pasaran RM5,600. Produk B: kos RM3,800, pasaran RM3,500. Berapakah jumlah nilai inventori akhir?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 8900,
+              "explanation": {
+                "en": "Compare each line and take the lower: 5,400 for A and 3,500 for B, so 8,900. Comparing the TOTALS (9,200 against 9,100) would give 9,100 and let A’s gain hide B’s fall.",
+                "ms": "Bandingkan setiap baris dan ambil yang lebih rendah: 5,400 bagi A dan 3,500 bagi B, jadi 8,900. Membandingkan JUMLAH (9,200 berbanding 9,100) akan memberi 9,100 dan membiarkan kenaikan A menyembunyikan penurunan B."
+              }
+            },
+            {
+              "id": "iv-004",
+              "type": "classify",
+              "difficulty": 4,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "Closing inventory has been overstated. What happens to gross profit?",
+                "ms": "Inventori akhir telah dinyatakan lebih. Apakah yang berlaku kepada untung kasar?"
+              },
+              "data": {
+                "options": [
+                  "It is overstated",
+                  "It is understated",
+                  "It is unchanged"
+                ],
+                "options_ms": [
+                  "Ia dinyatakan lebih",
+                  "Ia dinyatakan kurang",
+                  "Ia tidak berubah"
+                ]
+              },
+              "answer": "It is overstated",
+              "explanation": {
+                "en": "Closing inventory is deducted in arriving at cost of sales, so a bigger figure means a smaller cost of sales and a bigger profit.",
+                "ms": "Inventori akhir ditolak untuk mendapatkan kos jualan, jadi angka yang lebih besar bermakna kos jualan lebih kecil dan untung lebih besar."
+              }
+            },
+            {
+              "id": "iv-005",
+              "type": "classify",
+              "difficulty": 4,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "Closing inventory has been overstated. What happens to cost of sales?",
+                "ms": "Inventori akhir telah dinyatakan lebih. Apakah yang berlaku kepada kos jualan?"
+              },
+              "data": {
+                "options": [
+                  "It is understated",
+                  "It is overstated",
+                  "It is unchanged"
+                ],
+                "options_ms": [
+                  "Ia dinyatakan kurang",
+                  "Ia dinyatakan lebih",
+                  "Ia tidak berubah"
+                ]
+              },
+              "answer": "It is understated",
+              "explanation": {
+                "en": "The two move opposite ways: overstating what is left understates what was sold.",
+                "ms": "Kedua-duanya bergerak berlawanan: menyatakan lebih apa yang tinggal menyatakan kurang apa yang telah dijual."
+              }
+            },
+            {
+              "id": "iv-006",
+              "type": "numeric",
+              "difficulty": 4,
+              "skill_tags": [
+                "inventory",
+                "inventory-valuation"
+              ],
+              "prompt": {
+                "en": "Closing inventory was overstated by RM900. By how much is gross profit overstated?",
+                "ms": "Inventori akhir dinyatakan lebih sebanyak RM900. Berapakah untung kasar dinyatakan lebih?"
+              },
+              "data": {
+                "unit": "RM"
+              },
+              "answer": 900,
+              "explanation": {
+                "en": "It carries straight through: 900 less cost of sales is 900 more gross profit.",
+                "ms": "Ia terus terbawa: kos jualan kurang 900 bermakna untung kasar lebih 900."
+              }
+            }
+          ]
         }
       ]
     },
     {
       "id": "t8-financial-position",
-      "order": 8,
+      "order": 9,
       "title": {
         "en": "Statement of Financial Position",
         "ms": "Penyata Kedudukan Kewangan"
@@ -3037,7 +3844,7 @@
     },
     {
       "id": "t9-accruals",
-      "order": 9,
+      "order": 10,
       "title": {
         "en": "Accruals & Prepayments",
         "ms": "Terakru & Prabayar"
@@ -3387,7 +4194,7 @@
     },
     {
       "id": "t10-depreciation",
-      "order": 10,
+      "order": 11,
       "title": {
         "en": "Depreciation",
         "ms": "Susut Nilai"
@@ -4920,7 +5727,7 @@
     },
     {
       "id": "t11-bad-debts",
-      "order": 11,
+      "order": 12,
       "title": {
         "en": "Bad Debts & Provisions",
         "ms": "Hutang Lapuk & Peruntukan"
@@ -5434,7 +6241,7 @@
     },
     {
       "id": "t12-bank-reconciliation",
-      "order": 12,
+      "order": 13,
       "title": {
         "en": "Bank Reconciliation",
         "ms": "Penyesuaian Bank"
@@ -6060,7 +6867,7 @@
     },
     {
       "id": "t13-control-accounts",
-      "order": 13,
+      "order": 14,
       "title": {
         "en": "Control Accounts",
         "ms": "Akaun Kawalan"
@@ -6759,7 +7566,7 @@
     },
     {
       "id": "t14-suspense",
-      "order": 14,
+      "order": 15,
       "title": {
         "en": "Correction of Errors & Suspense",
         "ms": "Pembetulan Kesilapan & Akaun Penyelesaian"
@@ -7440,7 +8247,7 @@
     },
     {
       "id": "t15-incomplete-records",
-      "order": 15,
+      "order": 16,
       "title": {
         "en": "Incomplete Records",
         "ms": "Rekod Tak Lengkap"
@@ -7982,7 +8789,7 @@
     },
     {
       "id": "t16-club-accounts",
-      "order": 16,
+      "order": 17,
       "title": {
         "en": "Club & Society Accounts",
         "ms": "Akaun Kelab dan Persatuan"
@@ -8578,7 +9385,7 @@
     },
     {
       "id": "t17-partnership",
-      "order": 17,
+      "order": 18,
       "title": {
         "en": "Partnership Accounts",
         "ms": "Akaun Perkongsian"
@@ -9178,7 +9985,7 @@
     },
     {
       "id": "t18-limited-companies",
-      "order": 18,
+      "order": 19,
       "title": {
         "en": "Limited Company Accounts",
         "ms": "Akaun Syarikat Berhad"
@@ -9764,7 +10571,7 @@
     },
     {
       "id": "t19-manufacturing",
-      "order": 19,
+      "order": 20,
       "title": {
         "en": "Manufacturing Accounts",
         "ms": "Akaun Pengilangan"
@@ -10367,7 +11174,7 @@
     },
     {
       "id": "t20-ratio-analysis",
-      "order": 20,
+      "order": 21,
       "title": {
         "en": "Analysing the Statements",
         "ms": "Analisis Penyata Kewangan"
@@ -10966,7 +11773,7 @@
     },
     {
       "id": "t21-cash-budget",
-      "order": 21,
+      "order": 22,
       "title": {
         "en": "Cash Budgets",
         "ms": "Belanjawan Tunai"

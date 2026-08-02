@@ -167,6 +167,16 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
   equity: { en: 'Equity', ms: 'Ekuiti' },
   inventory: { en: 'Inventory', ms: 'Inventori' },
   'debit-credit': { en: 'Debit & credit', ms: 'Debit & kredit' },
+  'source-documents': { en: 'Source documents', ms: 'Dokumen sumber' },
+  'books-of-first-entry': {
+    en: 'Books of first entry',
+    ms: 'Buku catatan pertama',
+  },
+  'petty-cash': { en: 'Petty cash & the imprest', ms: 'Tunai runcit & panjar' },
+  'inventory-valuation': {
+    en: 'Valuing closing inventory',
+    ms: 'Menilai inventori akhir',
+  },
   'double-entry': { en: 'Double entry', ms: 'Catatan bergu' },
   'credit-purchase': { en: 'Credit purchases', ms: 'Belian kredit' },
   receivable: { en: 'Receivables', ms: 'Penghutang' },

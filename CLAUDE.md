@@ -117,7 +117,8 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   against the syllabus as Stage 6 — in particular c/d ("baki c/d") and b/d
   ("baki b/d"), which are kept as the English abbreviations on purpose.**
 - **2026-07-28 (later still)** — Stage 7 content: 4 topics / 12 lessons / 56
-  items, taking the bank to 253 and finishing the Form 5 syllabus. Limited
+  items, taking the bank to 253. (This entry originally said it "finished the
+  Form 5 syllabus" — **that was wrong, see 2026-07-30 below.**) Limited
   company accounts (share capital, debentures, reserves, appropriation),
   manufacturing accounts (direct vs indirect vs non-factory, prime cost, cost
   of production), ratio analysis (margins, mark-up, liquidity, ROCE, turnover,
@@ -291,6 +292,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   - The client tolerates 0009 being absent, like 0007 and 0008 — the strip and
     the weak-spots card simply do not render, and the roster is unaffected.
     That tolerance is now moot on prod but still correct for a fresh project.
+- **2026-07-30 — the bank does NOT cover the Form 5 syllabus.** Checked against
+  the real SPM 2024 papers (3756/1 and 3756/2). The docs claimed completeness
+  from Stage 7 onwards; that claim was never tested against an actual paper and
+  it is false. Examined in 2024 and ABSENT from all 253 items:
+  break-even (Titik Pulang Modal, K1 Q39) · petty cash / imprest (K1 Q8) ·
+  source documents — invoice, debit note, credit note, delivery note (K1 Q5–Q6)
+  · books of first entry and which journal takes what (K1 Q7) ·
+  **reducing-balance depreciation** (K1 Q16, K2 Q2(iii), K2 Q3(iv)) ·
+  **disposal of a non-current asset** (K1 Q17) · partnership dissolution and
+  the realisation account (K1 Q32) · inventory at the lower of cost and market
+  (K1 Q11, K2 Q2(i), K2 Q6) · cooperatives (K2 Q1a) · the Partnership Act 1961
+  s.26 (K2 Q1e) · accounting bodies MIA/MASB (K1 Q2) · share oversubscription
+  (K1 Q34) · loose tools by revaluation (K2 Q3(v)).
+  - Verified structurally, not just by keyword: `t10-depreciation` holds only
+    straight-line + its ladder, `t17-partnership` only capital-vs-current +
+    appropriation, `t19-manufacturing` has no break-even.
+  - **Reducing balance and disposal are the two that matter most** — both are
+    heavily examined and both sit inside a topic Kira already teaches, so a
+    learner has every reason to think that topic is covered.
+  - Consequence for any mock-exam work: a paper generated from today's bank
+    would silently omit these and hand back a flattering score.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

@@ -200,6 +200,15 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
 - **Native apps.** A Capacitor wrap for the App Store / Play Store. Deferred
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
-- Stage 8+ content — only if the syllabus warrants it; Stages 1–7 cover the
-  Form 5 syllabus in full.
+- **The rest of the syllabus.** Stages 1–7 cover most of it but not all: checked
+  against the SPM 2024 papers, the bank has nothing on break-even, petty cash,
+  source documents, books of first entry, reducing-balance depreciation,
+  disposal of a non-current asset, partnership dissolution, inventory at the
+  lower of cost and market, or cooperatives. Reducing balance and disposal are
+  the sharpest omissions — both are heavily examined and both sit inside topics
+  Kira already teaches.
+- **A mock exam.** SPM Prinsip Perakaunan is two papers: 3756/1 is 40 multiple
+  choice in 1h15, 3756/2 is 2h30 of prepared statements and written
+  justification. The first is a good fit for this app; the second mostly is
+  not, and pretending otherwise would be the wrong kind of practice.
 - FSRS scheduling, and the multi-tenant authoring UI.

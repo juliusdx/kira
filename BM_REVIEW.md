@@ -16,6 +16,47 @@ Write corrections on the `→` line under anything wrong. Leave the rest untouch
 
 ---
 
+## 0. Against the SPM 2024 papers
+
+Transcribed from 3756/1 and 3756/2. This is the one section that needs no Malay to act on: where our word differs from the exam board's, the board wins.
+
+### 6 clashes — we use a different word from the paper
+
+- **Receivables** — paper says `Akaun Belum Terima`, we say `Penghutang` (40×)
+  - paper: K1 Q22, Q25, Q28; K2 Q2, Q4
+  - → 
+- **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (24×)
+  - paper: K1 Q4, Q10, Q25; K2 Q2, Q4
+  - → 
+- **Carrying amount / book value** — paper says `Nilai buku`, we say `Amaun bawaan` (17×)
+  - paper: K1 Q17; K2 Q5(ii) · we also use the paper's term 5×
+  - → 
+- **Ordinary shares** — paper says `Syer Biasa`, we say `Saham Biasa` (4×)
+  - paper: K1 Q33, Q34 · we also use the paper's term 4×
+  - → 
+- **Preference shares** — paper says `Syer Keutamaan`, we say `Saham Keutamaan` (3×)
+  - paper: K1 Q33 · we also use the paper's term 4×
+  - → 
+- **Appropriation of profit** — paper says `Pengasingan Untung Rugi`, we say `Pengagihan Untung` (4×)
+  - paper: K1 Q31
+  - → 
+
+### Not found in our content either way
+
+Neither the paper's term nor a known alternative appears. Usually just a concept we word differently in prose — worth a glance, not an alarm.
+
+- Manufacturing account — paper says `Akaun Pengeluaran` (K1 Q38; K2 Q3(a))
+- Trading and profit and loss account — paper says `Akaun Perdagangan dan Untung Rugi` (K1 Q20; K2 Q2(a), Q3(b))
+- Receipts and payments account — paper says `Akaun Penerimaan dan Pembayaran` (K1 Q35)
+- Cash budget — paper says `Penyata Belanjawan Tunai` (K1 Q27, Q28)
+- Provision for doubtful debts — paper says `Peruntukan hutang ragu` (K2 Q2, Q4, Q5)
+- Working capital — paper says `Modal kerja` (K1 Q30; K2 Q2(b))
+- Petty cash float — paper says `Panjar runcit` (K1 Q8)
+- Fixed deposit — paper says `Simpanan tetap` (K2 Q2, Q4)
+- Cost price / market price — paper says `Harga kos / Harga pasaran` (K1 Q11; K2 Q2(i), Q6)
+
+---
+
 ## 1. Inconsistencies found mechanically
 
 ### One English term, several BM renderings

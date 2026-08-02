@@ -62,6 +62,65 @@ const CLAUDE_LESSONS = new Set([
 const inScope = (topic, lesson) =>
   CLAUDE_TOPICS.has(topic.id) || CLAUDE_LESSONS.has(lesson.id)
 
+// --- the exam board's own Malay ---------------------------------------------
+// Transcribed from the SPM 2024 papers, 3756/1 and 3756/2. This is the one
+// authority available that does not require a human to read Malay: where our
+// term differs from the paper's, the paper wins by definition, whatever a
+// dictionary says.
+//
+// `ours` lists the renderings we actually use, so the check reports a real
+// clash rather than a possible one. Extend this whenever another paper is read.
+const SPM_TERMS = [
+  { en: 'Receivables', spm: 'Akaun Belum Terima', ours: ['Penghutang'], where: 'K1 Q22, Q25, Q28; K2 Q2, Q4' },
+  { en: 'Payables', spm: 'Akaun Belum Bayar', ours: ['Pemiutang'], where: 'K1 Q4, Q10, Q25; K2 Q2, Q4' },
+  { en: 'Carrying amount / book value', spm: 'Nilai buku', ours: ['Amaun bawaan'], where: 'K1 Q17; K2 Q5(ii)' },
+  { en: 'Accumulated depreciation', spm: 'Susut nilai terkumpul', ours: [], where: 'K1 Q16; K2 Q2, Q3' },
+  { en: 'Reducing balance', spm: 'Baki berkurangan', ours: [], where: 'K1 Q16; K2 Q2(iii), Q3(iv)' },
+  { en: 'Straight line', spm: 'Garis lurus', ours: [], where: 'K2 Q2(iii), Q5(iii)' },
+  { en: 'Revaluation method', spm: 'Kaedah penilaian semula', ours: [], where: 'K2 Q3(v)' },
+  { en: 'Disposal', spm: 'Pelupusan', ours: [], where: 'K1 Q17' },
+  { en: 'Realisation account', spm: 'Akaun Realisasi', ours: [], where: 'K1 Q32' },
+  { en: 'Break-even point', spm: 'Titik Pulang Modal', ours: [], where: 'K1 Q39' },
+  { en: 'Prime cost', spm: 'Kos prima', ours: [], where: 'K1 Q40' },
+  { en: 'Work in progress', spm: 'Kerja dalam proses', ours: [], where: 'K1 Q40; K2 Q3' },
+  { en: 'Finished goods', spm: 'Barang siap', ours: [], where: 'K2 Q3' },
+  { en: 'Direct material', spm: 'Bahan langsung', ours: [], where: 'K1 Q40; K2 Q3' },
+  { en: 'Direct labour', spm: 'Buruh langsung', ours: [], where: 'K2 Q3' },
+  { en: 'Manufacturing account', spm: 'Akaun Pengeluaran', ours: [], where: 'K1 Q38; K2 Q3(a)' },
+  { en: 'Trial balance', spm: 'Imbangan Duga', ours: [], where: 'K1 Q1, Q12, Q20; K2 Q3' },
+  { en: 'Statement of financial position', spm: 'Penyata Kedudukan Kewangan', ours: [], where: 'K1 Q20; K2 Q2(b), Q4(b)' },
+  { en: 'Trading and profit and loss account', spm: 'Akaun Perdagangan dan Untung Rugi', ours: [], where: 'K1 Q20; K2 Q2(a), Q3(b)' },
+  { en: 'Receipts and payments account', spm: 'Akaun Penerimaan dan Pembayaran', ours: [], where: 'K1 Q35' },
+  { en: 'Income and expenditure account', spm: 'Akaun Pendapatan dan Perbelanjaan', ours: [], where: 'K1 Q36' },
+  { en: 'Cash budget', spm: 'Penyata Belanjawan Tunai', ours: [], where: 'K1 Q27, Q28' },
+  { en: 'Provision for doubtful debts', spm: 'Peruntukan hutang ragu', ours: [], where: 'K2 Q2, Q4, Q5' },
+  { en: 'Bad debts', spm: 'Hutang lapuk', ours: [], where: 'K1 Q18, Q27; K2 Q2(v)' },
+  { en: 'Returns inwards', spm: 'Pulangan masuk', ours: [], where: 'K1 Q13, Q14; K2 Q2' },
+  { en: 'Returns outwards', spm: 'Pulangan keluar', ours: [], where: 'K1 Q13' },
+  { en: 'Carriage inwards', spm: 'Angkutan masuk', ours: [], where: 'K1 Q13, Q14; K2 Q3(iii)' },
+  { en: 'Drawings', spm: 'Ambilan', ours: [], where: 'K1 Q10, Q19; K2 Q2' },
+  { en: 'Working capital', spm: 'Modal kerja', ours: [], where: 'K1 Q30; K2 Q2(b)' },
+  { en: 'Inventory turnover', spm: 'Kadar Pusing Ganti Inventori', ours: [], where: 'K2 Q6' },
+  { en: 'Return on capital', spm: 'Pulangan atas Modal', ours: [], where: 'K1 Q21; K2 Q6' },
+  { en: 'Mark-up', spm: 'Tokokan', ours: [], where: 'K1 Q21' },
+  { en: 'Current ratio', spm: 'Nisbah semasa', ours: [], where: 'K1 Q21' },
+  { en: 'Ordinary shares', spm: 'Syer Biasa', ours: ['Saham Biasa'], where: 'K1 Q33, Q34' },
+  { en: 'Preference shares', spm: 'Syer Keutamaan', ours: ['Saham Keutamaan'], where: 'K1 Q33' },
+  { en: 'Partners current account', spm: 'Akaun Semasa', ours: [], where: 'K1 Q31' },
+  { en: 'Interest on capital', spm: 'Faedah atas modal', ours: [], where: 'K1 Q31' },
+  { en: 'Appropriation of profit', spm: 'Pengasingan Untung Rugi', ours: ['Pengagihan Untung'], where: 'K1 Q31' },
+  { en: 'Source document', spm: 'Dokumen Sumber', ours: [], where: 'K1 Q6' },
+  { en: 'Delivery note', spm: 'Nota Serahan', ours: [], where: 'K1 Q6' },
+  { en: 'Statement of account', spm: 'Penyata Akaun', ours: [], where: 'K1 Q6' },
+  { en: 'Petty cash float', spm: 'Panjar runcit', ours: [], where: 'K1 Q8' },
+  { en: 'Petty cash book', spm: 'Buku Tunai Runcit', ours: [], where: 'K1 Q8' },
+  { en: 'Books of first entry', spm: 'Buku Catatan Pertama', ours: [], where: 'K1 Q1' },
+  { en: 'General journal', spm: 'Jurnal Am', ours: [], where: 'K1 Q7, Q17; K2 Q4(a), Q5' },
+  { en: 'Loose tools', spm: 'Alat-alat kecil', ours: [], where: 'K1 Q26; K2 Q3(v)' },
+  { en: 'Fixed deposit', spm: 'Simpanan tetap', ours: [], where: 'K2 Q2, Q4' },
+  { en: 'Cost price / market price', spm: 'Harga kos / Harga pasaran', ours: [], where: 'K1 Q11; K2 Q2(i), Q6' },
+]
+
 // --- collection -------------------------------------------------------------
 /** Short labelled strings: the terminology. { en, ms, where[], field } */
 const terms = []
@@ -157,6 +216,32 @@ for (const topic of bundle.topics) {
   if (lessonsOut.length) topicsOut.push({ topic, lessons: lessonsOut })
 }
 
+// --- 0. against the exam board's own Malay ---------------------------------
+// Search the WHOLE in-scope bundle, not just the term list: a clashing word
+// inside a prompt or an explanation is read by the learner just the same.
+const scopedText = []
+for (const topic of bundle.topics)
+  for (const lesson of topic.lessons) {
+    if (!inScope(topic, lesson)) continue
+    scopedText.push(JSON.stringify({ t: topic.title, l: lesson.title, w: lesson.worked_example, i: lesson.items }))
+  }
+const haystack = scopedText.join('\n')
+
+const countOf = (needle) => {
+  if (!needle) return 0
+  const re = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
+  return (haystack.match(re) ?? []).length
+}
+
+const spmRows = SPM_TERMS.map((row) => {
+  const clashes = (row.ours ?? [])
+    .map((alt) => ({ alt, n: countOf(alt) }))
+    .filter((x) => x.n > 0)
+  return { ...row, spmUses: countOf(row.spm), clashes }
+})
+const spmClashes = spmRows.filter((r) => r.clashes.length > 0)
+const spmAbsent = spmRows.filter((r) => r.clashes.length === 0 && r.spmUses === 0)
+
 // --- 1. mechanical inconsistencies -----------------------------------------
 // No Malay required to find these, which is exactly why they go first.
 const byEn = new Map()
@@ -248,6 +333,42 @@ p(
     'generated and is never itself the content.',
 )
 p()
+p('---')
+p()
+
+// 0
+p('## 0. Against the SPM 2024 papers')
+p()
+p(
+  'Transcribed from 3756/1 and 3756/2. This is the one section that needs no ' +
+    'Malay to act on: where our word differs from the exam board\'s, the ' +
+    'board wins.',
+)
+p()
+if (spmClashes.length === 0) {
+  p('**No clashes.** Every term checked matches the paper.')
+} else {
+  p(`### ${spmClashes.length} clash${spmClashes.length === 1 ? '' : 'es'} — we use a different word from the paper`)
+  p()
+  for (const r of spmClashes) {
+    const mine = r.clashes.map((c) => `\`${c.alt}\` (${c.n}×)`).join(', ')
+    p(`- **${r.en}** — paper says \`${r.spm}\`, we say ${mine}`)
+    p(`  - paper: ${r.where}${r.spmUses ? ` · we also use the paper's term ${r.spmUses}×` : ''}`)
+    p('  - → ')
+  }
+  p()
+}
+if (spmAbsent.length) {
+  p('### Not found in our content either way')
+  p()
+  p(
+    'Neither the paper\'s term nor a known alternative appears. Usually just a ' +
+      'concept we word differently in prose — worth a glance, not an alarm.',
+  )
+  p()
+  for (const r of spmAbsent) p(`- ${r.en} — paper says \`${r.spm}\` (${r.where})`)
+  p()
+}
 p('---')
 p()
 

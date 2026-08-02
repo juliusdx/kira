@@ -424,6 +424,14 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   then the full prose. `scripts/bm-review.mjs` also holds the only record of
   WHICH content Claude authored (`CLAUDE_TOPICS` / `CLAUDE_LESSONS`); extend it
   when authoring more.
+  - **`BM_REVIEW.md` section 0 checks our BM against the SPM 2024 papers**
+    themselves (`SPM_TERMS` in the script, transcribed from 3756/1 and 3756/2).
+    This is the only part of the review that needs NO Malay to act on: where
+    our word differs from the exam board's, the board wins. It found 6 clashes
+    on first run, the biggest being **`Penghutang`/`Pemiutang` (64 uses) where
+    both 2024 papers say `Akaun Belum Terima`/`Akaun Belum Bayar`** — which
+    reads like a syllabus generation of drift. Julius has to confirm before
+    anything is rewritten; extend `SPM_TERMS` whenever another paper is read.
   - The inconsistency check is deliberately split: Malay marks neither plural
     nor articles, so one BM string covering "Assets" and "An asset" is correct
     Malay and is reported separately as an ENGLISH inconsistency instead. Left

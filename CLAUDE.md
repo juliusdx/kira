@@ -552,13 +552,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     items**). Four of the new terms are the exam board's own — `Ambilan`,
     `Pulangan masuk`, `Pulangan keluar`, `Angkutan masuk` all come straight
     from `SPM_TERMS`. Section 0 is unchanged at 2 deliberate clashes.
-  - **One thing left for Julius:** the new items joined a pre-existing
-    English-side split that `BM_REVIEW.md` §1 already flags and nobody has
-    ruled on — account names are `Trade Payables` (18 uses, options lists)
-    while statement LINE labels are `Trade payables` (bs-003, sb-002, ir-201).
-    That is arguably a real convention (statements use sentence case) rather
-    than an error, which is why it is still open. The new items use the
-    account-name form.
+  - **Resolved the same day, Julius's call: `Trade Payables` everywhere a
+    LABEL names the account.** 8 edits — the two classify prompts that are
+    nothing but the account name (bs-003, bs-008), three statement lines
+    (sb-002, ir-201 ×2), and three faded-step labels that lead with it
+    (fd-301..303). `BM_REVIEW.md` §1's English-side list went 6 → 4 and both
+    Trade entries are gone; the survivors are the plural/singular category,
+    which is a different thing.
+  - **PROSE was deliberately left alone — 9 occurrences**, listed by the
+    script rather than hidden: `clf-008`, `bd-101/102/104`, `bd-302`,
+    `fd-301..303` scenarios, `ra-008`. Every one is either sentence-initial
+    ("Trade receivables are RM50,000 before writing off a bad debt") or
+    lowercase mid-sentence ("deducted from trade receivables"), so the capital
+    there is sentence case and not an account name. Capitalising inside a
+    sentence is a separate style decision over Julius's ported Stage 1–5
+    prose. Note `ra-008` reads "Trade receivables RM30,000 and credit sales
+    RM365,000" — capitalising one and not "credit sales" would be worse.
+  - **None of the 17 occurrences was ever an option or an answer**, so there
+    was no answer-key coupling and no grader risk; they are all prompts,
+    labels, scenarios and explanations. The label edits were written as
+    explicit (item, path, from, to) tuples with every anchor asserted, and the
+    script refuses to write if a label-shaped occurrence survives.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

@@ -60,8 +60,6 @@ At most one of each group is right.
 
 Malay marks neither plural nor articles, so one BM string covering both of these is correct. What it exposes is the English side: the same concept is offered under two different canonical labels, in an app that can also be read in English.
 
-- `Akaun Belum Bayar` ← **Trade Payables** / **Trade payables** (je-103, je-106, je-107, err-015, err-017, ta-007, ta-010, ir-201)
-- `Akaun Belum Terima` ← **Trade Receivables** / **Trade receivables** (je-104, je-108, err-015, ta-006, ta-008, ir-201)
 - `Tunai diterima daripada pelanggan` ← **Cash received from customer** / **Cash received from customers** (ta-006, ta-008, ca-201)
 - `Aset` ← **Assets** / **An asset** (ir-201, cl-201, cl-202)
 - `Liabiliti` ← **Liabilities** / **A liability** (ir-201, cl-201, cl-202)
@@ -71,7 +69,7 @@ Malay marks neither plural nor articles, so one BM string covering both of these
 
 ---
 
-## 2. Terminology — 404 distinct terms, most-used first
+## 2. Terminology — 402 distinct terms, most-used first
 
 Every short label the learner sees: account names, options, step values, section headings, units. Prose is in section 3.
 
@@ -96,6 +94,9 @@ Every short label the learner sees: account names, options, step values, section
 - `Belian` ← **Purchases** · 9×
   - je-103, je-105, je-106, je-108, je-109, err-012, err-017, ce-204, +1 more
   - → 
+- `Akaun Belum Bayar` ← **Trade Payables** · 8×
+  - je-103, je-106, je-107, err-015, err-017, ta-007, ta-010, ir-201
+  - → 
 - `Pelupusan` ← **Disposal** · 7×
   - ds-201, ds-202, ds-203, err-401, fd-1501, fd-1502, fd-1503
   - → 
@@ -104,9 +105,6 @@ Every short label the learner sees: account names, options, step values, section
   - → 
 - `Untung bersih` ← **Net profit** · 7×
   - cl-102, fd-901, fd-902, fd-903, fd-1301, fd-1302, fd-1303
-  - → 
-- `Akaun Belum Bayar` ← **Trade Payables** · 7×
-  - je-103, je-106, je-107, err-015, err-017, ta-007, ta-010
   - → 
 - `Tunai` ← **Cash** · 6×
   - je-103, je-104, je-106, je-109, err-014, err-017
@@ -159,6 +157,9 @@ Every short label the learner sees: account names, options, step values, section
 - `Tunjuk dalam penyata penyesuaian` ← **Show in the reconciliation statement** · 6×
   - br-001, br-002, br-003, br-004, br-005, br-006
   - → 
+- `Akaun Belum Terima` ← **Trade Receivables** · 6×
+  - je-104, je-108, err-015, ta-006, ta-008, ir-201
+  - → 
 - `Kemas kini buku tunai` ← **Update the cash book** · 6×
   - br-001, br-002, br-003, br-004, br-005, br-006
   - → 
@@ -194,9 +195,6 @@ Every short label the learner sees: account names, options, step values, section
   - → 
 - `Untung atas Pelupusan` ← **Profit on Disposal** · 5×
   - ds-203, err-401, fd-1501, fd-1502, fd-1503
-  - → 
-- `Akaun Belum Terima` ← **Trade Receivables** · 5×
-  - je-104, je-108, err-015, ta-006, ta-008
   - → 
 - `Nilai buku (amaun bawaan)` ← **Book value (carrying amount)** · 4×
   - rb-101, fd-1501, fd-1502, fd-1503
@@ -1217,12 +1215,6 @@ Every short label the learner sees: account names, options, step values, section
   - → 
 - `Ia biasanya membawa hak mengundi` ← **They usually carry voting rights** · 1×
   - si-005
-  - → 
-- `Akaun Belum Bayar` ← **Trade payables** · 1×
-  - ir-201
-  - → 
-- `Akaun Belum Terima` ← **Trade receivables** · 1×
-  - ir-201
   - → 
 - `Dua Akaun Berbeza` ← **Two Different Accounts** · 1×
   - l26-receipts-vs-income

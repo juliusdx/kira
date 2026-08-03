@@ -4300,7 +4300,7 @@
                 "financial-position"
               ],
               "prompt": {
-                "en": "Trade payables",
+                "en": "Trade Payables",
                 "ms": "Akaun Belum Bayar"
               },
               "data": {
@@ -4455,7 +4455,7 @@
                 "financial-position"
               ],
               "prompt": {
-                "en": "Trade receivables",
+                "en": "Trade Receivables",
                 "ms": "Akaun Belum Terima"
               },
               "data": {
@@ -4600,7 +4600,7 @@
                   },
                   {
                     "label": {
-                      "en": "Trade payables",
+                      "en": "Trade Payables",
                       "ms": "Akaun Belum Bayar"
                     },
                     "amount": 3000,
@@ -6929,7 +6929,7 @@
                   {
                     "kind": "number",
                     "label": {
-                      "en": "Trade receivables before adjustment",
+                      "en": "Trade Receivables before adjustment",
                       "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 50000
@@ -7007,7 +7007,7 @@
                   {
                     "kind": "number",
                     "label": {
-                      "en": "Trade receivables before adjustment",
+                      "en": "Trade Receivables before adjustment",
                       "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 80000
@@ -7086,7 +7086,7 @@
                   {
                     "kind": "number",
                     "label": {
-                      "en": "Trade receivables before adjustment",
+                      "en": "Trade Receivables before adjustment",
                       "ms": "Akaun Belum Terima sebelum pelarasan"
                     },
                     "value": 60000
@@ -9363,7 +9363,7 @@
                   },
                   {
                     "label": {
-                      "en": "Trade receivables",
+                      "en": "Trade Receivables",
                       "ms": "Akaun Belum Terima"
                     },
                     "amount": 5000,
@@ -9379,7 +9379,7 @@
                   },
                   {
                     "label": {
-                      "en": "Trade payables",
+                      "en": "Trade Payables",
                       "ms": "Akaun Belum Bayar"
                     },
                     "amount": 7000,

@@ -10707,12 +10707,12 @@
           "order": 1,
           "title": {
             "en": "Shares, Debentures & Reserves",
-            "ms": "Saham, Debentur & Rizab"
+            "ms": "Syer, Debentur & Rizab"
           },
           "worked_example": {
             "prompt": {
               "en": "A company is owned by its shareholders and financed partly by lenders. Share capital and every reserve belong to the owners, so they are equity. A debenture is a loan: the holder is a lender, not an owner, and must be paid interest whether or not the company makes a profit.",
-              "ms": "Syarikat dimiliki oleh pemegang sahamnya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal saham dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak."
+              "ms": "Syarikat dimiliki oleh pemegang syernya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal syer dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak."
             }
           },
           "items": [
@@ -10726,7 +10726,7 @@
               ],
               "prompt": {
                 "en": "Where does Ordinary Share Capital belong?",
-                "ms": "Di manakah Modal Saham Biasa tergolong?"
+                "ms": "Di manakah Modal Syer Biasa tergolong?"
               },
               "data": {
                 "options": [
@@ -10743,7 +10743,7 @@
               "answer": "Equity",
               "explanation": {
                 "en": "Ordinary shareholders own the company, so what they put in is equity.",
-                "ms": "Pemegang saham biasa memiliki syarikat, jadi apa yang mereka masukkan ialah ekuiti."
+                "ms": "Pemegang syer biasa memiliki syarikat, jadi apa yang mereka masukkan ialah ekuiti."
               }
             },
             {
@@ -10831,7 +10831,7 @@
               "answer": "Current liability",
               "explanation": {
                 "en": "Once a dividend is proposed the company owes it to the shareholders and will pay it within the year — an amount owed, not an amount held.",
-                "ms": "Sebaik dividen dicadangkan, syarikat terhutang kepada pemegang saham dan akan membayarnya dalam tahun ini — jumlah yang terhutang, bukan yang dipegang."
+                "ms": "Sebaik dividen dicadangkan, syarikat terhutang kepada pemegang syer dan akan membayarnya dalam tahun ini — jumlah yang terhutang, bukan yang dipegang."
               }
             },
             {
@@ -10902,7 +10902,7 @@
           "worked_example": {
             "prompt": {
               "en": "Once profit after tax is known, the company decides what to do with it: park some in a reserve, pay the preference shareholders their fixed percentage, pay the ordinary shareholders whatever is declared, and carry the rest forward. Interest is NOT part of this — it was already deducted to arrive at the profit.",
-              "ms": "Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang saham keutamaan peratusan tetap mereka, membayar pemegang saham biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh."
+              "ms": "Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang syer keutamaan peratusan tetap mereka, membayar pemegang syer biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh."
             }
           },
           "items": [
@@ -10916,13 +10916,13 @@
               ],
               "prompt": {
                 "en": "A company has 200,000 6% preference shares of RM1 each. How much is the preference dividend for the year?",
-                "ms": "Sebuah syarikat mempunyai 200,000 saham keutamaan 6% bernilai RM1 setiap satu. Berapakah dividen keutamaan bagi tahun tersebut?"
+                "ms": "Sebuah syarikat mempunyai 200,000 syer keutamaan 6% bernilai RM1 setiap satu. Berapakah dividen keutamaan bagi tahun tersebut?"
               },
               "data": {},
               "answer": 12000,
               "explanation": {
                 "en": "6% of RM200,000 = RM12,000. A preference dividend is a fixed percentage of the preference share capital — it does not change with profit.",
-                "ms": "6% daripada RM200,000 = RM12,000. Dividen keutamaan ialah peratusan tetap daripada modal saham keutamaan — ia tidak berubah mengikut untung."
+                "ms": "6% daripada RM200,000 = RM12,000. Dividen keutamaan ialah peratusan tetap daripada modal syer keutamaan — ia tidak berubah mengikut untung."
               }
             },
             {
@@ -10935,13 +10935,13 @@
               ],
               "prompt": {
                 "en": "A company declares an ordinary dividend of 4 sen per share on 500,000 ordinary shares. How much is the ordinary dividend?",
-                "ms": "Sebuah syarikat mengisytiharkan dividen biasa 4 sen sesaham ke atas 500,000 saham biasa. Berapakah dividen biasa itu?"
+                "ms": "Sebuah syarikat mengisytiharkan dividen biasa 4 sen sesyer ke atas 500,000 syer biasa. Berapakah dividen biasa itu?"
               },
               "data": {},
               "answer": 20000,
               "explanation": {
                 "en": "500,000 × RM0.04 = RM20,000. An ordinary dividend is declared per SHARE, so it depends on the number of shares, not on their value.",
-                "ms": "500,000 × RM0.04 = RM20,000. Dividen biasa diisytiharkan bagi setiap SAHAM, jadi ia bergantung pada bilangan saham, bukan pada nilainya."
+                "ms": "500,000 × RM0.04 = RM20,000. Dividen biasa diisytiharkan bagi setiap SYER, jadi ia bergantung pada bilangan syer, bukan pada nilainya."
               }
             },
             {

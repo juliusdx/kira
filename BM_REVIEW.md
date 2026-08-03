@@ -20,19 +20,13 @@ Write corrections on the `→` line under anything wrong. Leave the rest untouch
 
 Transcribed from 3756/1 and 3756/2. This is the one section that needs no Malay to act on: where our word differs from the exam board's, the board wins.
 
-### 5 clashes — we use a different word from the paper
+### 3 clashes — we use a different word from the paper
 
 - **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (5×)
   - paper: K1 Q4, Q10, Q25; K2 Q2, Q4 · we also use the paper's term 19×
   - → 
 - **Carrying amount / book value** — paper says `Nilai buku`, we say `Amaun bawaan` (6×)
   - paper: K1 Q17; K2 Q5(ii) · we also use the paper's term 22×
-  - → 
-- **Ordinary shares** — paper says `Syer Biasa`, we say `Saham Biasa` (4×)
-  - paper: K1 Q33, Q34 · we also use the paper's term 4×
-  - → 
-- **Preference shares** — paper says `Syer Keutamaan`, we say `Saham Keutamaan` (3×)
-  - paper: K1 Q33 · we also use the paper's term 4×
   - → 
 - **Appropriation of profit** — paper says `Pengasingan Untung Rugi`, we say `Pengagihan Untung` (4×)
   - paper: K1 Q31
@@ -611,7 +605,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Sesebuah syarikat menjemput orang ramai memohon syer. Jika permohonan melebihi syer yang ditawarkan, terbitan itu TERLEBIH LANGGANAN, dan lebihan wang itu bukan milik syarikat — ia dikembalikan kepada pemohon, atau ditahan dan ditolak daripada jumlah seterusnya yang mereka perlu bayar. Terkurang langganan ialah masalah sebaliknya: permohonan kurang daripada syer yang ditawarkan, dan penaja jamin yang menjamin terbitan itu mengambil kekurangannya. Perhatikan juga kedudukan masing-masing: pemegang syer keutamaan mendapat dividen pada kadar tetap SEBELUM pemegang syer biasa mendapat apa-apa, dan sebagai pertukaran mereka biasanya tiada hak mengundi.` ← **A company invites the public to apply for shares. If applications come in for more shares than were offered the issue is OVERSUBSCRIBED, and the excess money is not the company’s to keep — it is refunded to the applicants, or held and set against the next amount they owe. Undersubscribed is the opposite problem: fewer applications than shares offered, and the underwriter who guaranteed the issue takes up the shortfall. Note also who ranks where: preference shareholders get their dividend at a fixed rate BEFORE the ordinary shareholders get anything, and in exchange they usually have no vote.** · 1×
   - l55-share-issue
   - → 
-- `Syarikat dimiliki oleh pemegang sahamnya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal saham dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak.` ← **A company is owned by its shareholders and financed partly by lenders. Share capital and every reserve belong to the owners, so they are equity. A debenture is a loan: the holder is a lender, not an owner, and must be paid interest whether or not the company makes a profit.** · 1×
+- `Syarikat dimiliki oleh pemegang syernya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal syer dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak.` ← **A company is owned by its shareholders and financed partly by lenders. Share capital and every reserve belong to the owners, so they are equity. A debenture is a loan: the holder is a lender, not an owner, and must be paid interest whether or not the company makes a profit.** · 1×
   - l32-company-capital
   - → 
 - `Akaun kawalan memampatkan keseluruhan lejar ke dalam satu akaun T, supaya jumlahnya boleh disemak dengan akaun individu. Akaun Kawalan Lejar Jualan berkelakuan seperti satu Akaun Belum Terima gergasi: ia DIDEBIT dengan baki awal, jualan kredit dan cek tak layan, dan DIKREDIT dengan apa sahaja yang mengurangkan hutang pelanggan — wang diterima, diskaun diberi, pulangan masuk, hutang lapuk, dan kontra. Akaun Kawalan Lejar Belian ialah cerminannya: dikredit dengan belian kredit, didebit dengan bayaran, diskaun diterima dan pulangan keluar.` ← **A control account squeezes a whole ledger into one T-account, so its total can be checked against the individual accounts. The Sales Ledger Control Account behaves like one giant debtor: it is DEBITED with opening balance, credit sales and dishonoured cheques, and CREDITED with anything that reduces what customers owe — money received, discount allowed, returns inwards, bad debts, and contra set-offs. The Purchases Ledger Control Account is the mirror image: credited with credit purchases, debited with payments, discount received and returns outwards.** · 1×
@@ -968,7 +962,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Komputer pejabat` ← **Office computers** · 1×
   - rv-001
   - → 
-- `Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang saham keutamaan peratusan tetap mereka, membayar pemegang saham biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh.` ← **Once profit after tax is known, the company decides what to do with it: park some in a reserve, pay the preference shareholders their fixed percentage, pay the ordinary shareholders whatever is declared, and carry the rest forward. Interest is NOT part of this — it was already deducted to arrive at the profit.** · 1×
+- `Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang syer keutamaan peratusan tetap mereka, membayar pemegang syer biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh.` ← **Once profit after tax is known, the company decides what to do with it: park some in a reserve, pay the preference shareholders their fixed percentage, pay the ordinary shareholders whatever is declared, and carry the rest forward. Interest is NOT part of this — it was already deducted to arrive at the profit.** · 1×
   - l33-company-appropriation
   - → 
 - `Satu` ← **One** · 1×
@@ -1088,7 +1082,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Bahagian untung` ← **Share of profit** · 1×
   - pa-401
   - → 
-- `Saham, Debentur & Rizab` ← **Shares, Debentures & Reserves** · 1×
+- `Syer, Debentur & Rizab` ← **Shares, Debentures & Reserves** · 1×
   - l32-company-capital
   - → 
 - `Enam Kesilapan Yang Imbangan Duga Tidak Nampak` ← **Six Errors the Trial Balance Cannot See** · 1×
@@ -3193,19 +3187,19 @@ Every short label the learner sees: account names, options, step values, section
 
 #### Shares, Debentures & Reserves
 
-`l32-company-capital` · BM title: `Saham, Debentur & Rizab`
+`l32-company-capital` · BM title: `Syer, Debentur & Rizab`
 
 > **Worked example (EN)** A company is owned by its shareholders and financed partly by lenders. Share capital and every reserve belong to the owners, so they are equity. A debenture is a loan: the holder is a lender, not an owner, and must be paid interest whether or not the company makes a profit.
-> **(BM)** Syarikat dimiliki oleh pemegang sahamnya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal saham dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak.
+> **(BM)** Syarikat dimiliki oleh pemegang syernya dan sebahagian pembiayaannya datang daripada pemberi pinjaman. Modal syer dan setiap rizab adalah milik pemilik, jadi ia ekuiti. Debentur pula ialah pinjaman: pemegangnya pemberi pinjaman, bukan pemilik, dan mesti dibayar faedah sama ada syarikat untung atau tidak.
 - → 
 
 **`co-001`** · classify · difficulty 2 · company-accounts, share-capital
 
 - *Question (EN)* Where does Ordinary Share Capital belong?
-- *Question (BM)* **Di manakah Modal Saham Biasa tergolong?**
+- *Question (BM)* **Di manakah Modal Syer Biasa tergolong?**
 - *Choices* Equity → **Ekuiti** · Non-current liability → **Liabiliti bukan semasa** · Current liability → **Liabiliti semasa**
 - *Why (EN)* Ordinary shareholders own the company, so what they put in is equity.
-- *Why (BM)* **Pemegang saham biasa memiliki syarikat, jadi apa yang mereka masukkan ialah ekuiti.**
+- *Why (BM)* **Pemegang syer biasa memiliki syarikat, jadi apa yang mereka masukkan ialah ekuiti.**
 - → 
 
 **`co-002`** · classify · difficulty 3 · company-accounts
@@ -3232,7 +3226,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (BM)* **Di manakah Dividen Biasa Dicadangkan tergolong?**
 - *Choices* Equity → **Ekuiti** · Non-current liability → **Liabiliti bukan semasa** · Current liability → **Liabiliti semasa**
 - *Why (EN)* Once a dividend is proposed the company owes it to the shareholders and will pay it within the year — an amount owed, not an amount held.
-- *Why (BM)* **Sebaik dividen dicadangkan, syarikat terhutang kepada pemegang saham dan akan membayarnya dalam tahun ini — jumlah yang terhutang, bukan yang dipegang.**
+- *Why (BM)* **Sebaik dividen dicadangkan, syarikat terhutang kepada pemegang syer dan akan membayarnya dalam tahun ini — jumlah yang terhutang, bukan yang dipegang.**
 - → 
 
 **`co-005`** · classify · difficulty 3 · company-accounts
@@ -3258,23 +3252,23 @@ Every short label the learner sees: account names, options, step values, section
 `l33-company-appropriation` · BM title: `Mengagihkan Untung`
 
 > **Worked example (EN)** Once profit after tax is known, the company decides what to do with it: park some in a reserve, pay the preference shareholders their fixed percentage, pay the ordinary shareholders whatever is declared, and carry the rest forward. Interest is NOT part of this — it was already deducted to arrive at the profit.
-> **(BM)** Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang saham keutamaan peratusan tetap mereka, membayar pemegang saham biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh.
+> **(BM)** Setelah untung selepas cukai diketahui, syarikat memutuskan apa yang hendak dibuat dengannya: menyimpan sebahagian dalam rizab, membayar pemegang syer keutamaan peratusan tetap mereka, membayar pemegang syer biasa apa yang diisytiharkan, dan membawa bakinya ke hadapan. Faedah BUKAN sebahagian daripada ini — ia sudah ditolak sebelum untung diperoleh.
 - → 
 
 **`co-007`** · numeric · difficulty 3 · company-accounts, dividends
 
 - *Question (EN)* A company has 200,000 6% preference shares of RM1 each. How much is the preference dividend for the year?
-- *Question (BM)* **Sebuah syarikat mempunyai 200,000 saham keutamaan 6% bernilai RM1 setiap satu. Berapakah dividen keutamaan bagi tahun tersebut?**
+- *Question (BM)* **Sebuah syarikat mempunyai 200,000 syer keutamaan 6% bernilai RM1 setiap satu. Berapakah dividen keutamaan bagi tahun tersebut?**
 - *Why (EN)* 6% of RM200,000 = RM12,000. A preference dividend is a fixed percentage of the preference share capital — it does not change with profit.
-- *Why (BM)* **6% daripada RM200,000 = RM12,000. Dividen keutamaan ialah peratusan tetap daripada modal saham keutamaan — ia tidak berubah mengikut untung.**
+- *Why (BM)* **6% daripada RM200,000 = RM12,000. Dividen keutamaan ialah peratusan tetap daripada modal syer keutamaan — ia tidak berubah mengikut untung.**
 - → 
 
 **`co-008`** · numeric · difficulty 3 · company-accounts, dividends
 
 - *Question (EN)* A company declares an ordinary dividend of 4 sen per share on 500,000 ordinary shares. How much is the ordinary dividend?
-- *Question (BM)* **Sebuah syarikat mengisytiharkan dividen biasa 4 sen sesaham ke atas 500,000 saham biasa. Berapakah dividen biasa itu?**
+- *Question (BM)* **Sebuah syarikat mengisytiharkan dividen biasa 4 sen sesyer ke atas 500,000 syer biasa. Berapakah dividen biasa itu?**
 - *Why (EN)* 500,000 × RM0.04 = RM20,000. An ordinary dividend is declared per SHARE, so it depends on the number of shares, not on their value.
-- *Why (BM)* **500,000 × RM0.04 = RM20,000. Dividen biasa diisytiharkan bagi setiap SAHAM, jadi ia bergantung pada bilangan saham, bukan pada nilainya.**
+- *Why (BM)* **500,000 × RM0.04 = RM20,000. Dividen biasa diisytiharkan bagi setiap SYER, jadi ia bergantung pada bilangan syer, bukan pada nilainya.**
 - → 
 
 **`co-009`** · numeric · difficulty 4 · company-accounts

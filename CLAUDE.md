@@ -450,6 +450,22 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     English, tests all green. Found by reading the output, same as the
     `pemiutang` person-sense cases. **Order a content sweep so the teaching
     text is written LAST, or protect it explicitly.**
+- **2026-07-30 (Saham → Syer)** — Julius's call. Both 2024 papers say `Syer
+  Biasa` / `Syer Keutamaan` / `sesyer`, and we already used both spellings
+  (14 `saham` against 33 `syer`), so it was the exam's word AND an internal
+  inconsistency. 14 switched, plus the `share-capital` skill label in
+  `loader.ts` (`Modal saham` → `Modal Syer`).
+  - **A blind spot the two earlier sweeps happened to dodge: ALL-CAPS
+    emphasis.** One item wrote `setiap SAHAM` to mirror the English `per
+    SHARE`, and a `/Saham/g` + `/saham/g` pair does not touch it. Audited the
+    earlier switches for the same shape — no `PENGHUTANG`, `PEMIUTANG` or
+    `AMAUN BAWAAN` existed, so they were unaffected. **Any future term sweep
+    needs the all-caps case, or a case-insensitive match with case-aware
+    replacement.**
+  - Section 0 is now down to 3 clashes, and two of them are DELIBERATE: the 5
+    person-sense `Pemiutang`, and the 6 `Amaun bawaan` that make up the paired
+    `Nilai buku (amaun bawaan)` labels and teaching lines. Only
+    `Pengagihan Untung` vs `Pengasingan Untung Rugi` is untouched.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

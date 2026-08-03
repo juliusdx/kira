@@ -466,6 +466,21 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     person-sense `Pemiutang`, and the 6 `Amaun bawaan` that make up the paired
     `Nilai buku (amaun bawaan)` labels and teaching lines. Only
     `Pengagihan Untung` vs `Pengasingan Untung Rugi` is untouched.
+- **2026-07-30 (Pengagihan Untung → Pengasingan Untung Rugi)** — Julius's call,
+  the last real clash on the list. 17 edits, and unlike the three sweeps before
+  it these were written out ONE BY ONE with each anchor asserted, because a
+  blanket regex had already produced bad Malay three times that day. Two senses
+  kept apart the way the paper uses them: the ACCOUNT or statement line is
+  `Akaun Pengasingan Untung Rugi` / `Pengasingan Untung Rugi` (K1 Q31 prints
+  the line exactly so), the PROCESS in prose is `pengasingan untung`.
+  - It also closed a section-1 inconsistency for free: both `l29` and `l34` are
+    titled "Fading the Appropriation" in English and had drifted to two
+    different BM titles. They are now identical, which is what the English says.
+  - **Section 0 is now down to 2 clashes and BOTH are deliberate** — the 5
+    person-sense `Pemiutang` and the 6 `Amaun bawaan` inside the paired
+    `Nilai buku (amaun bawaan)` labels. There are no accidental clashes left
+    against the 2024 papers. Extending `SPM_TERMS` with another year's paper is
+    what would find more.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

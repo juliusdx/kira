@@ -9866,7 +9866,7 @@
               ],
               "prompt": {
                 "en": "In the appropriation account, interest on drawings is...",
-                "ms": "Dalam akaun pengagihan, faedah atas ambilan adalah..."
+                "ms": "Dalam Akaun Pengasingan Untung Rugi, faedah atas ambilan adalah..."
               },
               "data": {
                 "options": [
@@ -9894,7 +9894,7 @@
               ],
               "prompt": {
                 "en": "In the appropriation account, a partner's salary is...",
-                "ms": "Dalam akaun pengagihan, gaji seorang pekongsi adalah..."
+                "ms": "Dalam Akaun Pengasingan Untung Rugi, gaji seorang pekongsi adalah..."
               },
               "data": {
                 "options": [
@@ -9909,7 +9909,7 @@
               "answer": "Deducted from profit",
               "explanation": {
                 "en": "It is taken out before the rest is shared — a partner's salary is an appropriation of profit, never an expense in the income statement.",
-                "ms": "Ia dikeluarkan sebelum yang selebihnya dibahagi — gaji pekongsi ialah pengagihan untung, bukan belanja dalam penyata pendapatan."
+                "ms": "Ia dikeluarkan sebelum yang selebihnya dibahagi — gaji pekongsi ialah pengasingan untung, bukan belanja dalam penyata pendapatan."
               }
             },
             {
@@ -10028,12 +10028,12 @@
           "order": 2,
           "title": {
             "en": "Fading the Appropriation",
-            "ms": "Melunturkan Pengagihan"
+            "ms": "Melunturkan Pengasingan Untung Rugi"
           },
           "worked_example": {
             "prompt": {
               "en": "The appropriation account always runs in the same order: start at net profit, take out everything the partners are individually entitled to (interest on capital, then salaries), add back the interest they are charged on drawings, and whatever remains is shared in the profit-sharing ratio. Only the last line of the first rung is blank; after that more of it goes.",
-              "ms": "Akaun pengagihan sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang."
+              "ms": "Akaun Pengasingan Untung Rugi sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang."
             }
           },
           "items": [
@@ -10048,7 +10048,7 @@
               ],
               "prompt": {
                 "en": "The appropriation is done. Work out Ali's share.",
-                "ms": "Pengagihan sudah siap. Kira bahagian Ali."
+                "ms": "Pengasingan Untung Rugi sudah siap. Kira bahagian Ali."
               },
               "data": {
                 "scenario": {
@@ -10131,7 +10131,7 @@
               ],
               "prompt": {
                 "en": "Three lines are missing. Complete the appropriation.",
-                "ms": "Tiga baris hilang. Lengkapkan pengagihan."
+                "ms": "Tiga baris hilang. Lengkapkan pengasingan untung rugi."
               },
               "data": {
                 "scenario": {
@@ -10216,7 +10216,7 @@
               ],
               "prompt": {
                 "en": "Only the net profit is given. Work the whole appropriation.",
-                "ms": "Hanya untung bersih diberi. Kerjakan keseluruhan pengagihan."
+                "ms": "Hanya untung bersih diberi. Kerjakan keseluruhan pengasingan untung rugi."
               },
               "data": {
                 "scenario": {
@@ -10498,7 +10498,7 @@
                 ],
                 "options_ms": [
                   "Akaun Realisasi",
-                  "Akaun Pengagihan",
+                  "Akaun Pengasingan Untung Rugi",
                   "Akaun Modal",
                   "Akaun Semasa"
                 ]
@@ -10959,7 +10959,7 @@
               "answer": 93000,
               "explanation": {
                 "en": "150,000 − 25,000 − 12,000 − 20,000 = 93,000. All three are appropriations of profit already earned.",
-                "ms": "150,000 − 25,000 − 12,000 − 20,000 = 93,000. Ketiga-tiganya ialah pengagihan untung yang telah diperoleh."
+                "ms": "150,000 − 25,000 − 12,000 − 20,000 = 93,000. Ketiga-tiganya ialah pengasingan untung yang telah diperoleh."
               }
             },
             {
@@ -10998,13 +10998,13 @@
                 ],
                 "options_ms": [
                   "Belanja dalam penyata pendapatan",
-                  "Pengagihan untung"
+                  "Pengasingan Untung Rugi"
                 ]
               },
               "answer": "An expense in the income statement",
               "explanation": {
                 "en": "This is the classic trap. Interest is the cost of borrowing and is deducted BEFORE profit is arrived at; a dividend is a share of profit already earned. Treating interest as an appropriation overstates the profit.",
-                "ms": "Inilah perangkap klasiknya. Faedah ialah kos meminjam dan ditolak SEBELUM untung diperoleh; dividen pula ialah bahagian daripada untung yang sudah diperoleh. Menganggap faedah sebagai pengagihan akan melebihkan untung."
+                "ms": "Inilah perangkap klasiknya. Faedah ialah kos meminjam dan ditolak SEBELUM untung diperoleh; dividen pula ialah bahagian daripada untung yang sudah diperoleh. Menganggap faedah sebagai pengasingan untung akan melebihkan untung."
               }
             }
           ]
@@ -11014,12 +11014,12 @@
           "order": 3,
           "title": {
             "en": "Fading the Appropriation",
-            "ms": "Melunturkan Pengagihan Untung"
+            "ms": "Melunturkan Pengasingan Untung Rugi"
           },
           "worked_example": {
             "prompt": {
               "en": "The appropriation runs top to bottom in one direction: start from profit after tax, take off every appropriation, and what is left joins the retained profit already carried forward from last year. Each rung below hands you less of it.",
-              "ms": "Pengagihan berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengagihan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya."
+              "ms": "Pengasingan untung rugi berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengasingan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya."
             }
           },
           "items": [
@@ -11115,7 +11115,7 @@
               ],
               "prompt": {
                 "en": "Three lines are missing. Complete the appropriation.",
-                "ms": "Tiga baris hilang. Lengkapkan pengagihan itu."
+                "ms": "Tiga baris hilang. Lengkapkan pengasingan itu."
               },
               "data": {
                 "scenario": {
@@ -11199,7 +11199,7 @@
               ],
               "prompt": {
                 "en": "Only the profit after tax is given. Build the whole appropriation.",
-                "ms": "Hanya untung selepas cukai diberi. Bina keseluruhan pengagihan."
+                "ms": "Hanya untung selepas cukai diberi. Bina keseluruhan pengasingan untung rugi."
               },
               "data": {
                 "scenario": {

@@ -20,16 +20,13 @@ Write corrections on the `→` line under anything wrong. Leave the rest untouch
 
 Transcribed from 3756/1 and 3756/2. This is the one section that needs no Malay to act on: where our word differs from the exam board's, the board wins.
 
-### 3 clashes — we use a different word from the paper
+### 2 clashes — we use a different word from the paper
 
 - **Payables** — paper says `Akaun Belum Bayar`, we say `Pemiutang` (5×)
   - paper: K1 Q4, Q10, Q25; K2 Q2, Q4 · we also use the paper's term 19×
   - → 
 - **Carrying amount / book value** — paper says `Nilai buku`, we say `Amaun bawaan` (6×)
   - paper: K1 Q17; K2 Q5(ii) · we also use the paper's term 22×
-  - → 
-- **Appropriation of profit** — paper says `Pengasingan Untung Rugi`, we say `Pengagihan Untung` (4×)
-  - paper: K1 Q31
   - → 
 
 ### Not found in our content either way
@@ -50,18 +47,13 @@ Neither the paper's term nor a known alternative appears. Usually just a concept
 
 ## 1. Inconsistencies found mechanically
 
-### One English term, several BM renderings
+### One English term, two BM renderings
 
 At most one of each group is right.
 
 - **Receipt**
   - `Resit` — 5× (sd-001, sd-003, sd-004, sd-005, sd-006)
   - `Terimaan` — 6× (cb-001, cb-002, cb-003, cb-004, cb-005, cb-006)
-  - → 
-
-- **Fading the Appropriation**
-  - `Melunturkan Pengagihan` — 1× (l29-faded-appropriation)
-  - `Melunturkan Pengagihan Untung` — 1× (l34-faded-company)
   - → 
 
 ### Not a BM problem — but the ENGLISH disagrees with itself
@@ -509,7 +501,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Diskaun diterima` ← **Discount received** · 2×
   - ta-007, ca-202
   - → 
-- `Melunturkan Pengagihan` / `Melunturkan Pengagihan Untung` ← **Fading the Appropriation** · 2×
+- `Melunturkan Pengasingan Untung Rugi` ← **Fading the Appropriation** · 2×
   - l29-faded-appropriation, l34-faded-company
   - → 
 - `Penyata Pendapatan` ← **Income Statement** · 2×
@@ -665,7 +657,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Sentiasa harga pasaran` ← **Always market value** · 1×
   - iv-001
   - → 
-- `Pengagihan untung` ← **An appropriation of profit** · 1×
+- `Pengasingan Untung Rugi` ← **An appropriation of profit** · 1×
   - co-011
   - → 
 - `Belanja dalam penyata pendapatan` ← **An expense in the income statement** · 1×
@@ -674,7 +666,7 @@ Every short label the learner sees: account names, options, step values, section
 - `Mengagihkan Untung` ← **Appropriating the Profit** · 1×
   - l33-company-appropriation
   - → 
-- `Akaun Pengagihan` ← **Appropriation Account** · 1×
+- `Akaun Pengasingan Untung Rugi` ← **Appropriation Account** · 1×
   - pd-001
   - → 
 - `Aset` ← **Assets** · 1×
@@ -1121,10 +1113,10 @@ Every short label the learner sees: account names, options, step values, section
 - `Persamaan Perakaunan` ← **The Accounting Equation** · 1×
   - t1-equation
   - → 
-- `Akaun pengagihan sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang.` ← **The appropriation account always runs in the same order: start at net profit, take out everything the partners are individually entitled to (interest on capital, then salaries), add back the interest they are charged on drawings, and whatever remains is shared in the profit-sharing ratio. Only the last line of the first rung is blank; after that more of it goes.** · 1×
+- `Akaun Pengasingan Untung Rugi sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang.` ← **The appropriation account always runs in the same order: start at net profit, take out everything the partners are individually entitled to (interest on capital, then salaries), add back the interest they are charged on drawings, and whatever remains is shared in the profit-sharing ratio. Only the last line of the first rung is blank; after that more of it goes.** · 1×
   - l29-faded-appropriation
   - → 
-- `Pengagihan berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengagihan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya.` ← **The appropriation runs top to bottom in one direction: start from profit after tax, take off every appropriation, and what is left joins the retained profit already carried forward from last year. Each rung below hands you less of it.** · 1×
+- `Pengasingan untung rugi berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengasingan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya.` ← **The appropriation runs top to bottom in one direction: start from profit after tax, take off every appropriation, and what is left joins the retained profit already carried forward from last year. Each rung below hands you less of it.** · 1×
   - l34-faded-company
   - → 
 - `Hayat berguna aset` ← **The asset’s useful life** · 1×
@@ -2942,7 +2934,7 @@ Every short label the learner sees: account names, options, step values, section
 **`pa-201`** · classify · difficulty 5 · partnership, appropriation
 
 - *Question (EN)* In the appropriation account, interest on drawings is...
-- *Question (BM)* **Dalam akaun pengagihan, faedah atas ambilan adalah...**
+- *Question (BM)* **Dalam Akaun Pengasingan Untung Rugi, faedah atas ambilan adalah...**
 - *Choices* Added to profit → **Ditambah kepada untung** · Deducted from profit → **Ditolak daripada untung**
 - *Why (EN)* The partners are charged it, so it comes back INTO the pool of profit available to share. It is the one line that goes up.
 - *Why (BM)* **Pekongsi dicaj untuknya, jadi ia kembali MASUK ke dalam untung yang boleh dibahagi. Ia satu-satunya baris yang naik.**
@@ -2951,10 +2943,10 @@ Every short label the learner sees: account names, options, step values, section
 **`pa-202`** · classify · difficulty 4 · partnership, appropriation
 
 - *Question (EN)* In the appropriation account, a partner's salary is...
-- *Question (BM)* **Dalam akaun pengagihan, gaji seorang pekongsi adalah...**
+- *Question (BM)* **Dalam Akaun Pengasingan Untung Rugi, gaji seorang pekongsi adalah...**
 - *Choices* Added to profit → **Ditambah kepada untung** · Deducted from profit → **Ditolak daripada untung**
 - *Why (EN)* It is taken out before the rest is shared — a partner's salary is an appropriation of profit, never an expense in the income statement.
-- *Why (BM)* **Ia dikeluarkan sebelum yang selebihnya dibahagi — gaji pekongsi ialah pengagihan untung, bukan belanja dalam penyata pendapatan.**
+- *Why (BM)* **Ia dikeluarkan sebelum yang selebihnya dibahagi — gaji pekongsi ialah pengasingan untung, bukan belanja dalam penyata pendapatan.**
 - → 
 
 **`pa-301`** · numeric · difficulty 5 · partnership, appropriation
@@ -2983,10 +2975,10 @@ Every short label the learner sees: account names, options, step values, section
 
 #### Fading the Appropriation
 
-`l29-faded-appropriation` · BM title: `Melunturkan Pengagihan`
+`l29-faded-appropriation` · BM title: `Melunturkan Pengasingan Untung Rugi`
 
 > **Worked example (EN)** The appropriation account always runs in the same order: start at net profit, take out everything the partners are individually entitled to (interest on capital, then salaries), add back the interest they are charged on drawings, and whatever remains is shared in the profit-sharing ratio. Only the last line of the first rung is blank; after that more of it goes.
-> **(BM)** Akaun pengagihan sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang.
+> **(BM)** Akaun Pengasingan Untung Rugi sentiasa berjalan dalam susunan yang sama: mula pada untung bersih, keluarkan segala hak individu pekongsi (faedah atas modal, kemudian gaji), tambah semula faedah yang dicaj atas ambilan, dan apa yang tinggal dibahagi mengikut nisbah perkongsian untung. Hanya baris terakhir anak tangga pertama yang kosong; selepas itu lebih banyak hilang.
 - → 
 
 **`fd-901`** · faded_step · difficulty 4 · partnership, appropriation, faded-step
@@ -2994,7 +2986,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Scenario (EN)* Net profit RM60,000. Interest on capital: Ali RM4,000, Bakar RM3,000. Salary to Bakar RM8,000. Interest on drawings totals RM800. Ali and Bakar share profits 3:2.
 - *Scenario (BM)* **Untung bersih RM60,000. Faedah atas modal: Ali RM4,000, Bakar RM3,000. Gaji kepada Bakar RM8,000. Faedah atas ambilan berjumlah RM800. Ali dan Bakar berkongsi untung 3:2.**
 - *Question (EN)* The appropriation is done. Work out Ali's share.
-- *Question (BM)* **Pengagihan sudah siap. Kira bahagian Ali.**
+- *Question (BM)* **Pengasingan Untung Rugi sudah siap. Kira bahagian Ali.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Net profit → **Untung bersih**
   - Less: interest on capital — Ali → **Tolak: faedah atas modal — Ali**
@@ -3012,7 +3004,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Scenario (EN)* Net profit RM80,000. Interest on capital: Ali RM5,000, Bakar RM4,000. Salary to Bakar RM10,000. Interest on drawings totals RM1,000. Ali and Bakar share profits 3:2.
 - *Scenario (BM)* **Untung bersih RM80,000. Faedah atas modal: Ali RM5,000, Bakar RM4,000. Gaji kepada Bakar RM10,000. Faedah atas ambilan berjumlah RM1,000. Ali dan Bakar berkongsi untung 3:2.**
 - *Question (EN)* Three lines are missing. Complete the appropriation.
-- *Question (BM)* **Tiga baris hilang. Lengkapkan pengagihan.**
+- *Question (BM)* **Tiga baris hilang. Lengkapkan pengasingan untung rugi.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Net profit → **Untung bersih**
   - Less: interest on capital — Ali → **Tolak: faedah atas modal — Ali**
@@ -3030,7 +3022,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Scenario (EN)* Net profit RM50,000. Interest on capital: Ali RM3,000, Bakar RM2,000. Salary to Bakar RM6,000. Interest on drawings totals RM500. Ali and Bakar share profits 3:2.
 - *Scenario (BM)* **Untung bersih RM50,000. Faedah atas modal: Ali RM3,000, Bakar RM2,000. Gaji kepada Bakar RM6,000. Faedah atas ambilan berjumlah RM500. Ali dan Bakar berkongsi untung 3:2.**
 - *Question (EN)* Only the net profit is given. Work the whole appropriation.
-- *Question (BM)* **Hanya untung bersih diberi. Kerjakan keseluruhan pengagihan.**
+- *Question (BM)* **Hanya untung bersih diberi. Kerjakan keseluruhan pengasingan untung rugi.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Net profit → **Untung bersih**
   - ␣ Less: interest on capital — Ali → **Tolak: faedah atas modal — Ali**
@@ -3115,7 +3107,7 @@ Every short label the learner sees: account names, options, step values, section
 
 - *Question (EN)* On dissolution, which account is opened to work out the gain or loss on selling the assets?
 - *Question (BM)* **Semasa pembubaran, akaun manakah dibuka untuk mengira untung atau rugi atas penjualan aset?**
-- *Choices* Realisation Account → **Akaun Realisasi** · Appropriation Account → **Akaun Pengagihan** · Capital Account → **Akaun Modal** · Current Account → **Akaun Semasa**
+- *Choices* Realisation Account → **Akaun Realisasi** · Appropriation Account → **Akaun Pengasingan Untung Rugi** · Capital Account → **Akaun Modal** · Current Account → **Akaun Semasa**
 - *Why (EN)* Everything to do with turning assets into cash passes through it.
 - *Why (BM)* **Segala yang berkaitan menukar aset kepada tunai melaluinya.**
 - → 
@@ -3276,7 +3268,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Question (EN)* Profit after tax RM150,000. Transfer to general reserve RM25,000, preference dividend RM12,000, ordinary dividend RM20,000. What is the retained profit for the year?
 - *Question (BM)* **Untung selepas cukai RM150,000. Pindahan ke rizab am RM25,000, dividen keutamaan RM12,000, dividen biasa RM20,000. Berapakah untung tertahan bagi tahun tersebut?**
 - *Why (EN)* 150,000 − 25,000 − 12,000 − 20,000 = 93,000. All three are appropriations of profit already earned.
-- *Why (BM)* **150,000 − 25,000 − 12,000 − 20,000 = 93,000. Ketiga-tiganya ialah pengagihan untung yang telah diperoleh.**
+- *Why (BM)* **150,000 − 25,000 − 12,000 − 20,000 = 93,000. Ketiga-tiganya ialah pengasingan untung yang telah diperoleh.**
 - → 
 
 **`co-010`** · numeric · difficulty 3 · company-accounts
@@ -3291,17 +3283,17 @@ Every short label the learner sees: account names, options, step values, section
 
 - *Question (EN)* Debenture interest is...
 - *Question (BM)* **Faedah debentur ialah...**
-- *Choices* An expense in the income statement → **Belanja dalam penyata pendapatan** · An appropriation of profit → **Pengagihan untung**
+- *Choices* An expense in the income statement → **Belanja dalam penyata pendapatan** · An appropriation of profit → **Pengasingan Untung Rugi**
 - *Why (EN)* This is the classic trap. Interest is the cost of borrowing and is deducted BEFORE profit is arrived at; a dividend is a share of profit already earned. Treating interest as an appropriation overstates the profit.
-- *Why (BM)* **Inilah perangkap klasiknya. Faedah ialah kos meminjam dan ditolak SEBELUM untung diperoleh; dividen pula ialah bahagian daripada untung yang sudah diperoleh. Menganggap faedah sebagai pengagihan akan melebihkan untung.**
+- *Why (BM)* **Inilah perangkap klasiknya. Faedah ialah kos meminjam dan ditolak SEBELUM untung diperoleh; dividen pula ialah bahagian daripada untung yang sudah diperoleh. Menganggap faedah sebagai pengasingan untung akan melebihkan untung.**
 - → 
 
 #### Fading the Appropriation
 
-`l34-faded-company` · BM title: `Melunturkan Pengagihan Untung`
+`l34-faded-company` · BM title: `Melunturkan Pengasingan Untung Rugi`
 
 > **Worked example (EN)** The appropriation runs top to bottom in one direction: start from profit after tax, take off every appropriation, and what is left joins the retained profit already carried forward from last year. Each rung below hands you less of it.
-> **(BM)** Pengagihan berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengagihan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya.
+> **(BM)** Pengasingan untung rugi berjalan dari atas ke bawah dalam satu arah: mula dari untung selepas cukai, tolak setiap pengasingan, dan apa yang tinggal bergabung dengan untung tertahan yang sudah dibawa ke hadapan dari tahun lepas. Setiap anak tangga di bawah memberi anda kurang daripadanya.
 - → 
 
 **`fd-1101`** · faded_step · difficulty 3 · company-accounts, faded-step
@@ -3327,7 +3319,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Scenario (EN)* Profit after tax RM210,000. Transfer to general reserve RM40,000. Preference dividend RM9,000. Ordinary dividend RM36,000. Retained profit brought forward RM85,000.
 - *Scenario (BM)* **Untung selepas cukai RM210,000. Pindahan ke rizab am RM40,000. Dividen keutamaan RM9,000. Dividen biasa RM36,000. Untung tertahan dibawa ke hadapan RM85,000.**
 - *Question (EN)* Three lines are missing. Complete the appropriation.
-- *Question (BM)* **Tiga baris hilang. Lengkapkan pengagihan itu.**
+- *Question (BM)* **Tiga baris hilang. Lengkapkan pengasingan itu.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Profit after tax → **Untung selepas cukai**
   - Less: transfer to general reserve → **Tolak: pindahan ke rizab am**
@@ -3345,7 +3337,7 @@ Every short label the learner sees: account names, options, step values, section
 - *Scenario (EN)* Profit after tax RM96,000. Transfer to general reserve RM15,000. Preference dividend RM6,000. Ordinary dividend RM25,000. Retained profit brought forward RM42,000.
 - *Scenario (BM)* **Untung selepas cukai RM96,000. Pindahan ke rizab am RM15,000. Dividen keutamaan RM6,000. Dividen biasa RM25,000. Untung tertahan dibawa ke hadapan RM42,000.**
 - *Question (EN)* Only the profit after tax is given. Build the whole appropriation.
-- *Question (BM)* **Hanya untung selepas cukai diberi. Bina keseluruhan pengagihan.**
+- *Question (BM)* **Hanya untung selepas cukai diberi. Bina keseluruhan pengasingan untung rugi.**
 - *Worked steps* (␣ marks a step the learner must supply)
   - Profit after tax → **Untung selepas cukai**
   - ␣ Less: transfer to general reserve → **Tolak: pindahan ke rizab am**

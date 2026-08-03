@@ -219,7 +219,7 @@ export const SKILL_LABELS: Record<string, LocalizedText> = {
   'club-accounts': { en: 'Club accounts', ms: 'Akaun kelab' },
   subscriptions: { en: 'Subscriptions', ms: 'Yuran' },
   partnership: { en: 'Partnership', ms: 'Perkongsian' },
-  appropriation: { en: 'Profit appropriation', ms: 'Pengagihan untung' },
+  appropriation: { en: 'Profit appropriation', ms: 'Pengasingan untung rugi' },
   // Stage 7
   'company-accounts': { en: 'Limited company accounts', ms: 'Akaun syarikat berhad' },
   'share-capital': { en: 'Share capital', ms: 'Modal Syer' },

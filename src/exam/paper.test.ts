@@ -26,6 +26,23 @@ describe('the blueprint', () => {
     expect(total).toBe(EXAM_QUESTIONS)
   })
 
+  it('leaves out no topic the bank can actually examine', () => {
+    // The failure this exists for: t3-journal and t4-errors sat outside the
+    // blueprint because they held only journal_entry and spot_error items, so
+    // a mock paper never asked about double entry or spotting an error and
+    // handed back a flattering score. Nothing failed — the paper was a full 40
+    // questions and every test was green.
+    //
+    // Author MCQ items for a topic and forget the blueprint and it happens
+    // again, silently, in exactly the same shape. So: any topic that CAN
+    // supply a multiple-choice question has to be examined or deliberately
+    // removed from the bank, not quietly skipped.
+    const named = new Set(BLUEPRINT.map((b) => b.topicId))
+    const examinable = new Set(ALL_ENTRIES.filter(isMcq).map((e) => e.topicId))
+    const omitted = [...examinable].filter((t) => !named.has(t))
+    expect(omitted, 'topics with MCQ items that no paper ever asks about').toEqual([])
+  })
+
   it('names only topics that exist and can actually supply MCQ items', () => {
     // A blueprint entry pointing at a renamed topic would silently shrink the
     // paper — the redistribution would paper over it.

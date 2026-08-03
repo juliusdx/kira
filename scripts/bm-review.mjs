@@ -57,6 +57,11 @@ const CLAUDE_LESSONS = new Set([
   // t10 and t1 are otherwise ported topics; these two lessons are not.
   'l54-revaluation-method',
   'l56-entities-and-bodies',
+  // 2026-08-03: multiple-choice items for the two topics a mock paper could
+  // not examine. t3 and t4 are Julius's ported Stage 1-2 topics; these two
+  // lessons inside them are Claude's, so only they are in scope.
+  'l57-which-account',
+  'l58-diagnose',
 ])
 
 const inScope = (topic, lesson) =>

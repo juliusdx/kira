@@ -22,17 +22,26 @@ export const EXAM_MS = EXAM_MINUTES * 60_000
  * than on how many items Kira happens to hold. It is data, so it can be
  * argued with — and it sums to EXAM_QUESTIONS, which a test enforces.
  *
- * Two topics are absent because they have no multiple-choice items at all:
- * `t3-journal` and `t4-errors` are built from journal_entry and spot_error.
- * The real paper does examine both, so this is a genuine gap in what a Kira
- * mock can ask, and it is a content job rather than a code one.
+ * `t3-journal` and `t4-errors` used to be absent, because they held only
+ * journal_entry and spot_error items and a paper cannot ask those. They were
+ * missing for a CONTENT reason, never because the syllabus leaves them out —
+ * double entry is the spine of the whole paper. Both now hold MCQ items and
+ * both are examined here.
+ *
+ * The three questions that funded them came from within the same block: one
+ * each off the three largest recording-cycle topics (t1, t22, t6). That keeps
+ * the opening cycle at its modelled 12 questions and leaves every later topic
+ * exactly where the 2024 paper put it, rather than paying for journals with a
+ * mark taken from partnerships.
  */
 export const BLUEPRINT: { topicId: string; count: number }[] = [
-  { topicId: 't1-equation', count: 3 },
+  { topicId: 't1-equation', count: 2 },
   { topicId: 't2-debit-credit', count: 1 },
-  { topicId: 't22-documents', count: 4 },
+  { topicId: 't22-documents', count: 3 },
+  { topicId: 't3-journal', count: 2 },
+  { topicId: 't4-errors', count: 1 },
   { topicId: 't5-ledger', count: 1 },
-  { topicId: 't6-trial-balance', count: 3 },
+  { topicId: 't6-trial-balance', count: 2 },
   { topicId: 't7-income-statement', count: 3 },
   { topicId: 't8-financial-position', count: 2 },
   { topicId: 't9-accruals', count: 1 },

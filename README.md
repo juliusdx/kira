@@ -24,11 +24,12 @@ Every feature is tied to a research-backed principle (see
 
 ## Content
 
-**338 items across 22 topics**, Stages 1–7:
+**356 items across 22 topics**, Stages 1–7:
 
 1–2. The accounting equation · forms of business & who sets the rules · debits &
    credits · source documents · books of first entry · petty cash & the
-   imprest · journal entries · spot the error
+   imprest · journal entries, from naming the two accounts to building the
+   whole entry · spotting what is wrong with an entry, then correcting it
 3. Ledger & T-accounts · balancing off · the trial balance
 4. Income statement · valuing closing inventory · statement of financial position
 5. Year-end adjustments — accruals & prepayments · depreciation (straight line,
@@ -82,7 +83,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 276 hermetic unit + component tests (the CI gate)
+npm test           # 277 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -91,7 +92,7 @@ npm run preview    # serve the built app (use this to test offline/install)
 Two further suites exist and are deliberately **not** part of `npm test`:
 
 ```bash
-npm run test:integration   # 10 tests against the live Supabase project
+npm run test:integration   # 12 tests against the live Supabase project
 ./supabase/tests/run.sh    # RLS policies vs a throwaway local Postgres
 ```
 
@@ -132,6 +133,13 @@ report should look like a report, not like a game.
 A paper shaped like SPM Kertas 1: **40 multiple-choice questions in 75 minutes**,
 drawn across the syllabus to a blueprint modelled on the real 2024 paper rather
 than on whatever the bank happens to hold most of.
+
+**All 22 topics are examinable.** Journals and error-spotting used to be
+missing, because those two topics held nothing a multiple-choice paper could
+ask — and nothing failed when they were skipped, since the paper was still a
+full 40 questions. A test now fails the build if any topic the bank could
+examine is left out of the blueprint, because a paper that quietly omits a
+topic hands back a flattering score.
 
 Nothing is marked until the paper is handed in, and every answer stays
 revisable until then — tapping the chosen option again rubs it out. The clock
@@ -225,12 +233,13 @@ Schema changes are **applied by hand** in the Supabase SQL Editor
   while the app still ships several times a day — store review turns a
   2-minute deploy into a 1–3 day cycle.
 - **Kertas 2.** SPM Prinsip Perakaunan is two papers. 3756/1 — 40 multiple
-  choice in 1h15 — now has a mock (see below). 3756/2 is 2h30 of prepared
+  choice in 1h15 — now has a mock (see above). 3756/2 is 2h30 of prepared
   statements and written justification: partial credit across a 13-mark
   statement, the own-figure rule, and "which business would you invest in, and
   why". None of that is gradeable by a pure function, and a version that only
   checked the final figure would teach the wrong lesson about how it is marked.
-- **Multiple-choice items for journal entries and spot-the-error**, so those
-  two topics can appear in a mock paper. They currently hold only
-  `journal_entry` and `spot_error` items, which are not multiple choice.
+- **More past papers.** The terminology and coverage checks are only as good as
+  the papers they are checked against, and today that is one year (SPM 2024).
+  A wider corpus is catalogued in an external pipeline repo; using it is
+  measurement, not content — questions are not copied in.
 - FSRS scheduling, and the multi-tenant authoring UI.

@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 276 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 277 passing, no network
 - Live-backend tests: `npm run test:integration` — 12 passing, hits real Supabase
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
@@ -28,7 +28,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
 ## Map (only the load-bearing parts)
-- `seed_content.json` (repo ROOT) — all 338 items / 22 topics / 56 lessons.
+- `seed_content.json` (repo ROOT) — all 356 items / 22 topics / 58 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
@@ -380,9 +380,10 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   shell; Dexie goes to **version 2** with an `examRuns` store.
   - **MCQ only.** `classify` + `debit_credit` are the single-answer types; a
     T-account in a 75-minute 40-question paper would wreck the time budget and
-    stop it being a Kertas 1. Consequence: `t3-journal` and `t4-errors` CANNOT
-    appear — they hold only journal_entry/spot_error items — and the real paper
-    does examine both. That is a content job, not a code one.
+    stop it being a Kertas 1. Consequence at the time: `t3-journal` and
+    `t4-errors` CANNOT appear — they hold only journal_entry/spot_error items —
+    and the real paper does examine both. That is a content job, not a code
+    one. **Done on 2026-08-03, see below.**
   - **`BLUEPRINT` is modelled on the 2024 paper, not on what Kira happens to
     hold**, and a test asserts it sums to 40 and that every named topic can
     actually supply its allocation. A shortfall is redistributed so a paper is
@@ -481,6 +482,83 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     `Nilai buku (amaun bawaan)` labels. There are no accidental clashes left
     against the 2024 papers. Extending `SPM_TERMS` with another year's paper is
     what would find more.
+- **2026-07-30 (NEXT SESSION'S TARGET) — Mike's SPM corpus.**
+  `https://github.com/whitegreenstudios/spm-practice` (whitegreenstudios), a
+  scrape → OCR → question-bank pipeline over Malaysian SPM papers. Surveyed
+  this session, NOT yet used. What is actually there:
+  - `papers_list.json` catalogues **2,480 papers**, of which **255 are
+    `prinsip-perakaunan`** — 2021 (64), 2022 (43), 2023 (55), 2024 (37), 2025
+    (56), across ~14 states. That is a far bigger corpus than the two 2024
+    papers `SPM_TERMS` was built from.
+  - **They are TRIAL papers** (`edukaji.my/spm-trial-paper/…`), i.e. state mock
+    exams, not Lembaga Peperiksaan's own. The repo tags trial vs
+    `spm-past-year` and keeps them apart on purpose. **A trial paper is a
+    weaker authority on terminology than the real one** — useful for frequency
+    and coverage, not for overruling a real paper.
+  - **The accounting papers are NOT extracted.** The committed markdown corpus
+    and the 5,784-question `data.json` cover Add Maths, Sejarah, BM, Pendidikan
+    Islam and English only — no Perakaunan. Source PDFs are deliberately
+    gitignored (~3.5 GB, and third-party copyright), so using these means
+    re-running the scrape + extract stages ourselves.
+  - Three plausible uses, in descending confidence: **extend `SPM_TERMS`**
+    (biggest, cheapest win — more years and states of BM terminology to check
+    ours against); **make `BLUEPRINT` empirical** rather than modelled on one
+    paper, by counting real topic frequency across many papers; and calibrate
+    the gap list against more than one year.
+  - **Copyright is unchanged by this.** The repo excludes the PDFs for exactly
+    that reason. Use the corpus to CHECK our terminology, coverage and
+    weighting — never to copy questions into `seed_content.json`, which ships
+    in a public bundle and is heading for app stores.
+- **2026-08-03 (the mock paper can finally examine journals and errors)** — 18
+  items / 2 lessons, bank now **356**. Content-only, no schema. This closes the
+  gap the mock-exam shell shipped with and named in its own comment: a paper
+  could not ask about double entry or spotting an error, because `t3-journal`
+  and `t4-errors` held nothing but `journal_entry` and `spot_error` items.
+  - They were also the **two thinnest topics in the bank** — 7 and 3 items
+    against 12–41 everywhere else — so this was a teaching hole as much as an
+    exam one. They are now 17 and 11.
+  - **`l57-which-account`** into `t3-journal`, 10 items — given a transaction,
+    which account is debited or credited. The traps are the content: a credit
+    customer paying is NOT a sale (recording it again counts one sale twice),
+    a computer bought on credit for the office is not "purchases", carriage
+    inwards is not folded into purchases, and returns inwards/outwards are
+    opposite directions. Drawings, returns and carriage are all K1 Q10/Q13/Q14
+    material that the bank had never asked about directly.
+  - **`l58-diagnose`** into `t4-errors`, 8 items — say what is wrong BEFORE
+    correcting it. Four options every time: sides reversed, wrong account,
+    amounts differ, or nothing is wrong. **One item's answer really is
+    "nothing is wrong"**, which is what keeps the other seven honest, and the
+    amounts-differ item is the only fault on the list a trial balance catches.
+  - **Both lessons go FIRST in their topic**, existing lessons shifted +1 —
+    naming the account is a smaller step than building the whole entry, and
+    diagnosing a fault is smaller than correcting it. Safe for the same reason
+    the t22 insertion was: `review_state` is keyed by item id, never by order.
+  - **BLUEPRINT rebalanced within the recording-cycle block**, not across the
+    paper: t3 gets 2 and t4 gets 1, funded by one each off the three largest
+    cycle topics (t1 3→2, t22 4→3, t6 3→2). The opening cycle keeps its
+    modelled 12 questions and every later topic keeps the count the 2024 paper
+    gave it — journals are not paid for with a partnership mark.
+  - **The new test is the point, not the counts.** `leaves out no topic the
+    bank can actually examine` fails if any topic holding MCQ items is missing
+    from the blueprint. Nothing caught the original omission: the paper was a
+    full 40 questions and every test was green. Verified by deleting t4-errors
+    from the blueprint and bumping t5 to keep the sum at 40 — the new test is
+    the ONLY one that fails.
+  - Verified in the browser under `localonly`: both lessons render in BM and
+    EN, commit on tap, the long "what is wrong" options wrap cleanly on a
+    375px viewport, the wrong-answer path fires the self-explanation gate, and
+    a real sat paper asks je-106 at **question 8 of 40** and err-011 at **9**.
+  - BM is Claude's, so both lessons are in `BM_REVIEW.md` (scope now **254
+    items**). Four of the new terms are the exam board's own — `Ambilan`,
+    `Pulangan masuk`, `Pulangan keluar`, `Angkutan masuk` all come straight
+    from `SPM_TERMS`. Section 0 is unchanged at 2 deliberate clashes.
+  - **One thing left for Julius:** the new items joined a pre-existing
+    English-side split that `BM_REVIEW.md` §1 already flags and nobody has
+    ruled on — account names are `Trade Payables` (18 uses, options lists)
+    while statement LINE labels are `Trade payables` (bs-003, sb-002, ir-201).
+    That is arguably a real convention (statements use sentence case) rather
+    than an error, which is why it is still open. The new items use the
+    account-name form.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships
@@ -489,10 +567,12 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - **Deferred with a reason:** a mid-session badge toast. Badges recompute from
   ALL attempts, so firing one mid-session means recomputing after every answer
   — it needs a cheap incremental check first, not a bolt-on.
-- **Needs a human, not code:** the BM terminology of Stages 6 and 7 and of the
-  balancing-off lessons has never been read against the syllabus — by now that
-  is the MAJORITY of the bank (151 of 253 items). It is the part Claude
-  authored rather than ported, and it is in front of Ariel.
+- **Needs a human, not code:** the BM terminology Claude authored has never
+  been read against the syllabus by someone who reads Malay — that is now
+  **254 of 356 items**, the clear majority of the bank, and it is in front of
+  Ariel. Section 0 (the SPM cross-check) is CLEAN as of 2026-07-30, but it only
+  covers the ~48 terms transcribed from one year's papers; sections 1–3 are
+  still the read-through.
   **`BM_REVIEW.md` now exists to make that review finite** — run
   `npm run bm-review` to regenerate it from `seed_content.json`. It is
   GENERATED: never edit the content there, edit the JSON. Three sections, in

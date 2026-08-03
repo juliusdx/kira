@@ -435,6 +435,21 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     review doc flags it, because neither appears as an option or a step label.
     Worth fixing in `scripts/bm-review.mjs` if another prose-level clash turns
     up; noted here so the next session does not trust section 1 to be complete.
+  - **Resolved the same day, Julius's call: teach the equivalence.** The four
+    LABELS a learner reads as a heading or picks as an answer now carry both
+    names — `Book value (carrying amount)` / `Nilai buku (amaun bawaan)` — and
+    the three worked examples that DEFINE the term say outright that the two
+    are one figure and the exam uses the first. Everywhere else uses the single
+    primary term: repeating the parenthetical through twenty prompts is noise,
+    not teaching. `rb-101`'s `answer` moved with its option, which the content
+    guard's `answer ∈ options` check and grader round-trip both cover.
+  - **A global replace ate the word it was meant to teach.** Step 3 of the
+    script ran after step 2 had inserted the teaching sentences, and only the
+    exact paired string was protected — so "Book value and carrying amount are
+    two names…" became "Book value and book value…". Valid JSON, nonsense
+    English, tests all green. Found by reading the output, same as the
+    `pemiutang` person-sense cases. **Order a content sweep so the teaching
+    text is written LAST, or protect it explicitly.**
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

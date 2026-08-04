@@ -12,8 +12,10 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 277 passing, no network
-- Live-backend tests: `npm run test:integration` — 12 passing, hits real Supabase
+- **Hermetic tests (the CI gate): `npm test`** — 288 passing, no network
+- Live-backend tests: **`KIRA_ALLOW_PROD_TESTS=1 npm run test:integration`** —
+  12 passing, hits real Supabase. Without the opt-in a guard refuses and exits
+  1 (`scripts/confirm-prod-tests.mjs`), naming the project it would have hit
   (deliberately excluded from CI so deploys don't depend on Supabase uptime).
   Each run signs in ~3 anonymous users it cannot delete; their ids land in
   `.probe-users.local` for the next sweep.
@@ -85,10 +87,11 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   holds real learner progress — Ariel's account, a real classroom roster, live
   push subscriptions. There is no staging. Read this before running anything
   that talks to the network:
-  - **`npm run test:integration` HITS PRODUCTION.** Each run signs in ~3 real
-    anonymous users it cannot delete (that needs a service_role key, and there
-    is none on this machine); their ids land in `.probe-users.local` so Julius
-    can sweep them by hand later. Do not run it casually, and never in a loop.
+  - **`npm run test:integration` HITS PRODUCTION**, and now REFUSES unless you
+    say so: `KIRA_ALLOW_PROD_TESTS=1`. Each run signs in ~28 real anonymous
+    users it cannot delete (that needs a service_role key, and there is none on
+    this machine); their ids land in `.probe-users.local` so Julius can sweep
+    them by hand later. Do not run it casually, and never in a loop.
   - **`npm test` is the safe one** — hermetic, no network, and it is the CI
     gate. Use it freely.
   - **For UI work use `npm run dev -- --mode localonly`** (or the
@@ -653,6 +656,29 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   scheduling, multi-tenant authoring UI.
 
 ## Gotchas (append-only lesson log)
+- 2026-08-04: **a guard that fails OPEN is worse than no guard, because it
+  reads as protection.** A new `scripts/confirm-prod-tests.mjs` was added in
+  front of `test:integration` and wrapped its logic in the conventional
+  run-as-CLI check, `import.meta.url === \`file://${process.argv[1]}\``, so the
+  module could also be imported by its own test. The check was FALSE, the body
+  never ran, `node scripts/confirm-prod-tests.mjs` exited 0, `&& vitest` ran,
+  and **28 probe users went into Ariel's production project** — the exact harm
+  the guard was written to prevent, caused by the guard's own plumbing.
+  Two independent reasons it was false, either sufficient: npm passes
+  `argv[1]` **relative** (`scripts/confirm-prod-tests.mjs`), and **this repo's
+  path contains a SPACE**, which `import.meta.url` percent-encodes to `%20`
+  while string concatenation does not. → Never compare a URL to a path by
+  concatenation; use `fileURLToPath`. Better, **do not gate a guard on
+  detecting how it was invoked at all**: put the decision in a pure importable
+  module and let the CLI file be unconditional, so there is no branch that can
+  evaluate wrong. A guard must fail CLOSED.
+- 2026-08-04: **the unit tests for that guard were green the entire time.**
+  They tested `isAllowed()`, which was always correct — the broken part was the
+  script package.json actually invokes. → test a guard by SPAWNING it the way
+  its caller does (relative path, real cwd) and asserting the exit code. Same
+  shape as the duplicate-item-id lesson below: a guard tested through the layer
+  that normalises the fault cannot see the fault. Verified by reintroducing the
+  bug and watching 4 subprocess assertions fail with `expected +0 to be 1`.
 - 2026-07-27: identity bugs keep recurring in different disguises → anonymous
   auth is per-device AND per-origin, so one person is different users on
   localhost vs the deployed site vs their phone → check `identity.userId`

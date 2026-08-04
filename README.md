@@ -83,7 +83,7 @@ wrong answer key fails the build.
 ```bash
 npm install
 npm run dev        # dev server
-npm test           # 277 hermetic unit + component tests (the CI gate)
+npm test           # 288 hermetic unit + component tests (the CI gate)
 npm run typecheck
 npm run build      # production build + service worker
 npm run preview    # serve the built app (use this to test offline/install)
@@ -92,7 +92,7 @@ npm run preview    # serve the built app (use this to test offline/install)
 Two further suites exist and are deliberately **not** part of `npm test`:
 
 ```bash
-npm run test:integration   # 12 tests against the live Supabase project
+KIRA_ALLOW_PROD_TESTS=1 npm run test:integration   # 12 tests vs live Supabase
 ./supabase/tests/run.sh    # RLS policies vs a throwaway local Postgres
 ```
 

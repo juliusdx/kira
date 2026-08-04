@@ -1,0 +1,30 @@
+# Who gets asked to review what.
+#
+# CODEOWNERS DOES NOT PARTITION THE CODE. It grants nobody, restricts nobody
+# and locks nothing — either of us can edit any file here. All it does is
+# auto-request the right reviewer on a pull request, so the wrong person is
+# not the one being waited on.
+#
+# `require_code_owner_reviews` is currently FALSE in branch protection, so
+# these lines request a review rather than block a merge. Turn it on when the
+# split below has actually settled, not before.
+
+# The app is Julius's. Default owner for everything not named later.
+*                           @juliusdx
+
+# The corpus interface — the seam between kira and whitegreenstudios/spm-practice.
+# Measurements generated over the SPM papers land here, so Mike is the one who
+# knows whether a number is right; Julius is the one who knows what it breaks.
+/scripts/bm-review.mjs      @juliusdx @michaellu88
+/src/exam/paper.ts          @juliusdx @michaellu88
+
+# The live backend and the deploy path. RLS is the only security boundary in
+# this app and every migration is applied BY HAND to production, so changes
+# here always want the person holding the SQL Editor.
+/supabase/                  @juliusdx
+/.github/                   @juliusdx
+
+# The content bank. Not a permissions statement — a merge-conflict warning.
+# This is one 13,000-line JSON file, and two people editing it on separate
+# branches is the likeliest bad merge in the repo. See CLAUDE.md.
+/seed_content.json          @juliusdx

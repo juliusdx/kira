@@ -27,6 +27,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - Build: `npm run build`
 - Deploy: push to `main` → GitHub Actions → GitHub Pages → kira.accme.my
 
+## Working together (two people, since 2026-08-04)
+- **`main` is protected.** Branch, PR, let the `build` check pass, merge. The
+  check is the same job that deploys, so a PR is held to exactly the bar
+  production is. Merging deploys to kira.accme.my in about a minute — there is
+  no staging, so a merge IS a release.
+- Julius is a repo admin and is deliberately NOT bound by the protection yet,
+  so he can still push straight to `main`. That is a concession to cadence, not
+  a statement that the rule is optional; it flips to `enforce_admins: true`
+  once per-PR previews exist.
+- `.github/CODEOWNERS` **routes reviews, it does not partition the code.** It
+  locks nothing and grants nothing — either of us may edit any file.
+- **`seed_content.json` is the likeliest bad merge in the repo.** One JSON file,
+  13k+ lines, 356 items. Two branches both authoring content will conflict, and
+  a hand-resolved JSON conflict is exactly how an item id gets duplicated or an
+  item silently disappears. Two mitigations, both already in place: the content
+  guard reads the RAW file and fails on a duplicate id, and a second test
+  asserts the loaded count equals the authored count. Trust neither as a
+  substitute for saying out loud who is editing content this week.
+- Keep branches SHORT. A long-lived branch against a file-per-topic-less bank
+  is what turns a merge into an archaeology exercise.
+
 ## Map (only the load-bearing parts)
 - `seed_content.json` (repo ROOT) — all 356 items / 22 topics / 58 lessons.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
@@ -60,6 +81,26 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 - `supabase/functions/send-reminders/` — Deno Edge Function, deployed via CLI
 
 ## Danger zone
+- **THERE IS ONE SUPABASE PROJECT AND IT IS PRODUCTION.** `ccbioktxfpeqaocjkqpr`
+  holds real learner progress — Ariel's account, a real classroom roster, live
+  push subscriptions. There is no staging. Read this before running anything
+  that talks to the network:
+  - **`npm run test:integration` HITS PRODUCTION.** Each run signs in ~3 real
+    anonymous users it cannot delete (that needs a service_role key, and there
+    is none on this machine); their ids land in `.probe-users.local` so Julius
+    can sweep them by hand later. Do not run it casually, and never in a loop.
+  - **`npm test` is the safe one** — hermetic, no network, and it is the CI
+    gate. Use it freely.
+  - **For UI work use `npm run dev -- --mode localonly`** (or the
+    `dev-local-only` launch entry, port 5179). It blanks the Supabase vars so
+    the app never signs in, which is what stops each check minting another
+    orphan account on prod.
+  - **For RLS/policy work use `./supabase/tests/run.sh`** — throwaway local
+    Postgres, applies every migration, touches nothing real.
+  - **Migrations are applied by hand, by Julius, and by nobody else.** Hand one
+    over as ONE block; never paste `supabase/tests/*.sql` into the SQL Editor.
+  - A separate dev Supabase project is the fix and is not built yet. Until it
+    is, treat every network-touching command as production access.
 - **Migrations are applied by hand by Julius in the Supabase SQL Editor.** There
   is no CLI/MCP path for schema (see ENV below). Always run
   `./supabase/tests/run.sh` first — a policy hole is far cheaper to catch there

@@ -15,7 +15,15 @@
 --   review_state, attempts, class_members, push_subscriptions), so removing
 --   the user removes everything they own in one statement.
 --
--- Last used: 2026-07-29 (STEP 0, footprint match) — 105 empty anonymous
+-- Last used: 2026-08-04 (STEP 1/2, by id) — 28 anonymous users from a single
+-- `npm run test:integration` run that a broken guard script failed to block.
+-- All 28 created inside a 4.2-second window (08:10:33.731 -> 08:10:37.934),
+-- which is the burst shape one run makes; ids came from .probe-users.local, so
+-- no footprint matching was needed. Ariel's real account, Julius's, and the two
+-- older Claude probes were each explicitly confirmed ABSENT from the list first.
+-- This is also the run that exposed the STEP 3 false green — see STEP 3.
+--
+-- Before that: 2026-07-29 (STEP 0, footprint match) — 105 empty anonymous
 -- accounts accumulated 26–29 July from `npm run test:integration` runs and
 -- browser verification against prod. Confirmed burst-shaped first: bursts of
 -- 12/11/7/6/6/6/4/4/3/3/2/2 with sub-30-second spreads, plus singletons on the
@@ -227,11 +235,32 @@ returning u.id;
 
 -- ---------------------------------------------------------------------------
 -- STEP 3 — confirm. Expect a single row of zeros.
+--
+-- `auth_users_left` IS THE ANSWER. The other three columns are context, and on
+-- their own they are actively misleading: `npm run test:integration` deletes
+-- its OWN rows before it finishes and only ever leaks the auth user, so
+-- profiles/review_state/attempts are already zero for a probe the moment the
+-- run ends — before any cleanup has happened at all.
+--
+-- Read wrong on 2026-08-04: a run of this step reported 0/0/0 and was taken as
+-- "cleaned", while all 28 probe users were still sitting in auth.users. Two
+-- ways to get a false green here, and this step used to have both:
+--   * the placeholder id below is not replaced, so every count is trivially 0
+--   * the columns never looked at auth.users, which is the only table a probe
+--     actually leaks into
+-- Same lesson as PostgREST answering an RLS-filtered write with 204: read back
+-- the thing you care about, not a thing that correlates with it.
 -- ---------------------------------------------------------------------------
 select
+  (select count(*) from auth.users          where id      in ('00000000-0000-0000-0000-000000000000')) as auth_users_left,
   (select count(*) from public.profiles     where id      in ('00000000-0000-0000-0000-000000000000')) as profiles_left,
   (select count(*) from public.review_state where user_id in ('00000000-0000-0000-0000-000000000000')) as reviews_left,
   (select count(*) from public.attempts     where user_id in ('00000000-0000-0000-0000-000000000000')) as attempts_left;
+
+-- If auth_users_left is not 0, STEP 2 did not remove them. The usual cause is
+-- that its two guards fired — the user is in a class or owns one — which means
+-- STOP: that is the guard working, not a bug, and one of those ids belongs to
+-- somebody real.
 
 -- ---------------------------------------------------------------------------
 -- OPTIONAL — a wider look, for eyeballing only. Every user holding practice

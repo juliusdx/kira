@@ -3,6 +3,12 @@ name: Deploy Kira to GitHub Pages
 on:
   push:
     branches: [main]
+  # `main` is protected and requires the `build` check to pass before a pull
+  # request can merge, so the suite has to actually RUN on pull requests.
+  # Without this trigger every PR would sit forever waiting for a check that
+  # never starts, and the protection would read as "nothing can ever merge".
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,9 +16,11 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment; don't cancel an in-progress production deploy.
+# Ref-scoped, so a PR build never queues behind a production deploy or vice
+# versa. Production still serialises against itself, which is the property the
+# original single `pages` group existed for.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -41,6 +49,9 @@ jobs:
           path: dist
 
   deploy:
+    # NEVER publish a pull request. On a PR this workflow exists only to run
+    # the suite as the required check; the live site is built from `main`.
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

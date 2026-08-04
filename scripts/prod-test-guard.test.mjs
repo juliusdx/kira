@@ -75,11 +75,19 @@ describe('the decision', () => {
     expect(targetRef(read).ref).toBe('devproject')
   })
 
-  it('resolves .env through fileURLToPath, not string surgery on a URL', () => {
-    // This repo's own path contains a space. `import.meta.url` percent-encodes
-    // it; naive `.replace('file://','')` does not, and the read silently fails.
-    expect(repoRoot).toContain(' ')
-    expect(targetRef()).not.toBe(null)
+  it('resolves a file: URL with a space, which is what broke v1', () => {
+    // The checkout this is developed in lives at ".../Kira Accounting Tutor/",
+    // so import.meta.url percent-encodes the space and naive string surgery
+    // yields a path that does not exist — the .env read then fails silently.
+    //
+    // Asserted on a SYNTHETIC url, deliberately. The first version of this
+    // test asserted the real repo path contained a space, which is true on the
+    // author's Mac and false on CI (/home/runner/work/kira/kira) — a test that
+    // encodes the machine rather than the code, and it went red on the first
+    // push. Same category of mistake as the bug it was written to guard.
+    const url = 'file:///Users/j/Kira%20Accounting%20Tutor/scripts/x.mjs'
+    expect(fileURLToPath(url)).toBe('/Users/j/Kira Accounting Tutor/scripts/x.mjs')
+    expect(url.replace('file://', '')).not.toBe(fileURLToPath(url))
   })
 
   it('survives a missing or unparseable .env rather than throwing', () => {

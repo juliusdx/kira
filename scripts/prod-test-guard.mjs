@@ -8,10 +8,34 @@ import { dirname, join } from 'node:path'
 
 export const OPT_IN = 'KIRA_ALLOW_PROD_TESTS'
 
+/**
+ * The live project — Ariel's progress, a real classroom roster, live push
+ * subscriptions. Hard-coded on purpose: this is the one value the guard must
+ * not read from the same .env it is checking, or pointing .env somewhere else
+ * would move the definition of "production" along with it.
+ */
+export const PROD_REF = 'ccbioktxfpeqaocjkqpr'
+
 /** Opt-in must be deliberate: `1` or `true`, nothing looser. */
 export function isAllowed(env = process.env) {
   const v = (env[OPT_IN] ?? '').trim().toLowerCase()
   return v === '1' || v === 'true'
+}
+
+/**
+ * Does this target require the opt-in?
+ *
+ * Only production does. Running the suite against a DEV project is ordinary
+ * work and should not need a ceremony — a guard that cries wolf on the safe
+ * case gets routed around, and then it is not protecting the dangerous one
+ * either.
+ *
+ * An UNKNOWN target counts as production. Fail closed: no .env, an unreadable
+ * one, or a URL shape this cannot parse are all cases where the guard does not
+ * know what it is about to hit, and "I could not tell" must never mean "go".
+ */
+export function needsOptIn(target) {
+  return !target || target.ref === PROD_REF
 }
 
 /**
@@ -74,6 +98,8 @@ export function refuseMessage(target) {
 }
 
 export function proceedMessage(target) {
+  if (!needsOptIn(target))
+    return `  Target is ${target.ref} (from ${target.file}) — not production. Running the integration suite; no opt-in needed.`
   const where = target ? `project ${target.ref}` : 'the project configured in .env'
   return `  ${OPT_IN} set — running the integration suite against LIVE ${where}. Probe user ids will be appended to .probe-users.local.`
 }

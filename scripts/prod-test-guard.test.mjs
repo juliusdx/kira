@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
-import { isAllowed, targetRef, refuseMessage, OPT_IN } from './prod-test-guard.mjs'
+import { isAllowed, needsOptIn, targetRef, refuseMessage, OPT_IN, PROD_REF } from './prod-test-guard.mjs'
 
 // A guard against touching production deserves what a migration gets.
 //
@@ -48,6 +48,22 @@ describe('the guard script itself', () => {
     // `export KIRA_ALLOW_PROD_TESTS=` reads as "set" to a truthy check.
     for (const v of ['', '0', 'false', 'yes'])
       expect(runGuard({ [OPT_IN]: v }).status, JSON.stringify(v)).toBe(1)
+  })
+})
+
+describe('which targets need the opt-in', () => {
+  it('production does', () => {
+    expect(needsOptIn({ ref: PROD_REF, file: '.env' })).toBe(true)
+  })
+
+  it('a dev project does NOT — the point of having one', () => {
+    expect(needsOptIn({ ref: 'somedevproject', file: '.env.test.local' })).toBe(false)
+  })
+
+  it('an UNKNOWN target counts as production', () => {
+    // No .env, an unreadable one, or an unparseable URL. "I could not tell"
+    // must never mean "go".
+    expect(needsOptIn(null)).toBe(true)
   })
 })
 

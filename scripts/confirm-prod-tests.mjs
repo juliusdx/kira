@@ -27,11 +27,20 @@
 // only to act on it, unconditionally, every single time it is executed.
 // ---------------------------------------------------------------------------
 
-import { isAllowed, targetRef, refuseMessage, proceedMessage } from './prod-test-guard.mjs'
+import {
+  isAllowed,
+  needsOptIn,
+  targetRef,
+  refuseMessage,
+  proceedMessage,
+} from './prod-test-guard.mjs'
 
 const target = targetRef()
 
-if (!isAllowed()) {
+// Only PRODUCTION needs the ceremony. A dev project is ordinary work, and a
+// guard that fires on the safe case gets routed around — at which point it is
+// not guarding the dangerous one either. An unknown target counts as prod.
+if (needsOptIn(target) && !isAllowed()) {
   process.stderr.write(refuseMessage(target) + '\n')
   process.exit(1)
 }

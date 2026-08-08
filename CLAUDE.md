@@ -55,6 +55,27 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   Content is DATA; adding a stage — or a fading ladder — is a file edit.
   `src/content/loader.ts` imports it directly.
 - `src/scheduler/scheduler.ts` — Leitner boxes 1–5, pure, FSRS-swappable
+- **`src/items/logic.ts` + `src/items/renderers.tsx` — the ITEM TYPE REGISTRY.**
+  Adding an interaction type is: a union member in `types.ts`, a variant in the
+  `Item` union, one entry in each map. Nothing else. The switch on `item.type`
+  used to live in FIVE places (`grade.ts`, `ItemRenderer`, `itemTypeLabel`,
+  `loader`'s `validate()`, `exam/paper`'s `isMcq`) and adding a type meant
+  finding all five.
+  - **The two maps are split on purpose — do not collapse them.** A single
+    registry would import the React components, and `grade()` is pulled in by
+    `buildQueue`, the scheduler and the sync layer. Verified by walking the
+    import graph: `grade.ts`, `scheduler.ts`, `buildQueue.ts`, `exam/paper.ts`
+    and `sync/sync.ts` each reach **zero** `.tsx` files and zero react
+    packages. That property is what the purity rule below rests on.
+  - `grading/graders.ts` holds the response shapes, the helpers and the eight
+    per-type graders. `grade.ts` is now a 16-line dispatch plus
+    `export * from './graders'`, so the ~9 modules importing helpers from it
+    did not have to move.
+  - Two sites still switch on type and are left deliberately: `describeChosen`
+    and `ItemPreview`'s `Body`. **Only the first fails to compile** on a new
+    type — `Body` has no declared return type, so inference absorbs the
+    fall-through and a new type renders NOTHING. If you add a type, check that
+    screen by hand or give `Body` a `default:` arm asserting on `never`.
 - `src/grading/grade.ts`, `src/session/buildQueue.ts` — pure, no I/O, unit-tested
 - `src/db/data.ts` — the single data-access seam over Dexie/IndexedDB
 - `src/sync/` — Supabase client, `sync.ts` (local-first reconcile), `identity.ts`
@@ -633,6 +654,34 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     labels, scenarios and explanations. The label edits were written as
     explicit (item, path, from, to) tuples with every anchor asserted, and the
     script refuses to write if a label-shaped occurrence survives.
+- **2026-08-08 (item types stop being scattered code)** — `src/items/logic.ts`
+  + `src/items/renderers.tsx`, authored outside this repo as a patch and
+  reviewed in [PR #2](https://github.com/juliusdx/kira/pull/2) (`a158c76`).
+  See the Map entry above for what it is and what not to collapse.
+  Content was already data; item TYPES were still code in five places.
+  - **What was verified, beyond the suite going 295 → 300.** `isMcq` changed
+    from naming `classify`/`debit_credit` literally to asking the registry for
+    `singleChoice`, which the whole mock paper rests on — checked both that
+    `singleChoice` is set on exactly those two types AND that across all 356
+    items not one disagrees with the old predicate (184 MCQ items). The content
+    guard now delegates to per-type validators, so `je-101`'s answer was
+    corrupted to prove it still fails with the same message, then restored
+    byte-identical. And the "adding a type is two entries" claim was tested by
+    declaring a real 9th type: exactly four compile errors — the two maps,
+    `describeChosen`, and `content.test.ts`'s `correctResponse`.
+  - **Browser-verified under `localonly`, all 8 types in one session** by
+    seeding one item of each as due. Every badge comes from the registry label,
+    every type graded correctly, 8/8 and no console errors. The submit rule
+    still holds (a single-blank `faded_step` commits on TAP; the four
+    multi-part types wait for Check). And nothing was lost to React batching —
+    the T-account reached Debit 21,500 / Kredit 12,000 with all three sides
+    landing, the statement 51,000 / 22,000 with all five lines.
+  - **Merged with `--admin`, so NO approval was recorded.** GitHub refuses
+    self-approval and the PR was opened under Julius's own account, so the
+    1-approval rule was bypassed rather than satisfied. Consequence worth
+    knowing: 14 files of outside-authored code reached production with no
+    second human reviewer. To get a real review next time, push the branch and
+    let Julius open the PR — then a non-author can actually approve it.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

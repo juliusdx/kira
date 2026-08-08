@@ -308,3 +308,19 @@ Science. **Kaji** is the natural sibling: *mengkaji* is to investigate or study,
 literally the inquiry verb the syllabus is built on (Inkuiri dalam Sains), and it is the
 same four-letter Malay-verb shape. Worth grabbing the domain before you are attached to
 something else.
+
+> **DECIDED 2026-08-08 (Julius).** Keep the Malay-verb names: **Kira** for accounting,
+> **Kaji** for Science. A generic parent brand ("Accme Learn", one domain with subject
+> tiles) was considered and set aside in favour of keeping the distinct names.
+>
+> Two things this deliberately does *not* settle, both still open:
+>
+> 1. **Whether a parent brand sits above them**, and whether that is one deploy or several.
+>    Note `accme.my` is a near-empty WordPress site and `learn.accme.my` has no DNS record
+>    (checked 2026-08-08), so there is no equity to inherit either way.
+> 2. **Which origin each app is served from — and this is the decision that gets more
+>    expensive every week.** Anonymous auth is per device AND per *origin* (the first entry
+>    in Kira's gotcha log), so moving a live app's domain later turns every anonymous
+>    learner into a new user with zero progress. Ariel survives because she has an email
+>    account; nobody else would. A name is a string in the manifest; an origin is
+>    everyone's data. Settle Kaji's domain before it has learners, not after.

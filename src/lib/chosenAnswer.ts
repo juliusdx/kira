@@ -1,6 +1,6 @@
 import type { Item, Locale } from '../content/types'
 import { t as tc, accountMs, localizedOptions } from '../content/loader'
-import { blankSteps } from '../grading/grade'
+import { blankSteps } from '../grading/graders'
 
 /**
  * Turn the opaque `chosen` jsonb from `learner_last_wrong` into lines a

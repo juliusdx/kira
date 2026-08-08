@@ -1,5 +1,6 @@
 import { ALL_ENTRIES, topicOf } from '../content/loader'
 import type { ChoiceItem, ItemIndexEntry } from '../content/types'
+import { ITEM_LOGIC } from '../items/logic'
 
 // Building a mock Kertas 1.
 //
@@ -66,7 +67,7 @@ export interface PaperQuestion {
 
 /** Is this item single-answer multiple choice? */
 export function isMcq(entry: ItemIndexEntry): boolean {
-  return entry.item.type === 'classify' || entry.item.type === 'debit_credit'
+  return ITEM_LOGIC[entry.item.type].singleChoice === true
 }
 
 export function mcqOptions(item: ChoiceItem): string[] {

@@ -6,7 +6,7 @@ import type {
 import { t as tc } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
 import { Button, FOCUS } from '../ui'
-import { sectionTotals, type StatementResponse } from '../../grading/grade'
+import { sectionTotals, type StatementResponse } from '../../grading/graders'
 import { AmountInput, formatAmount, type ItemProps } from './shared'
 
 // Statement build (Spec §3, type 7): sort each line into the right part of the

@@ -1,6 +1,7 @@
 import type { Item, Locale } from '../../content/types'
 import type { Response } from '../../grading/grade'
 import { FOCUS } from '../ui'
+import { ITEM_LOGIC } from '../../items/logic'
 
 /** Uniform contract every question-type renderer implements. */
 export interface ItemProps {
@@ -178,15 +179,5 @@ export function ResultIcon({ correct }: { correct: boolean }) {
 }
 
 export function itemTypeLabel(item: Item, locale: Locale): string {
-  const labels: Record<Item['type'], { en: string; ms: string }> = {
-    classify: { en: 'Classify', ms: 'Kelaskan' },
-    debit_credit: { en: 'Debit or Credit', ms: 'Debit atau Kredit' },
-    numeric: { en: 'Solve', ms: 'Selesaikan' },
-    journal_entry: { en: 'Journal entry', ms: 'Catatan jurnal' },
-    t_account: { en: 'T-account', ms: 'Akaun T' },
-    spot_error: { en: 'Spot the error', ms: 'Kesan kesilapan' },
-    statement_build: { en: 'Build the statement', ms: 'Bina penyata' },
-    faded_step: { en: 'Fill the step', ms: 'Isi langkah' },
-  }
-  return labels[item.type][locale]
+  return ITEM_LOGIC[item.type].label[locale]
 }

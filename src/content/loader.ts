@@ -10,6 +10,7 @@ import type {
 // Julius's authored bank lives at the project root as the single source of
 // truth. The loader imports it directly so porting Stage 3–4 is a file edit.
 import rawSeed from '../../seed_content.json'
+import { ITEM_LOGIC } from '../items/logic'
 
 const bundle = rawSeed as unknown as ContentBundle
 
@@ -47,10 +48,10 @@ function validate(): string[] {
       errors.push(`${id}: missing prompt en/ms`)
     if (!it.explanation?.en || !it.explanation?.ms)
       errors.push(`${id}: missing explanation en/ms`)
-    if (it.type === 'classify' || it.type === 'debit_credit') {
-      if (!it.data.options?.includes(it.answer))
-        errors.push(`${id}: answer "${it.answer}" not in options`)
-    }
+    // Type-specific checks come from the registry, so a new interaction type
+    // brings its own guard rather than editing this loop.
+    for (const problem of ITEM_LOGIC[it.type].validate?.(it) ?? [])
+      errors.push(`${id}: ${problem}`)
   }
   return errors
 }

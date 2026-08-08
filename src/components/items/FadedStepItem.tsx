@@ -6,7 +6,7 @@ import type {
 } from '../../content/types'
 import { t as tc } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
-import { blankSteps, fadedChoicePool, type FadedStepResponse } from '../../grading/grade'
+import { blankSteps, fadedChoicePool, type FadedStepResponse } from '../../grading/graders'
 import { Button } from '../ui'
 import { AccountChip, AmountInput, formatAmount, type ItemProps } from './shared'
 

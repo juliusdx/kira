@@ -3,7 +3,7 @@ import type { TAccountItem as TAccountItemType } from '../../content/types'
 import { localizedAccount, accountMs } from '../../content/loader'
 import { useKira } from '../../app/KiraContext'
 import { Button } from '../ui'
-import { tAccountBalance, type TAccountResponse } from '../../grading/grade'
+import { tAccountBalance, type TAccountResponse } from '../../grading/graders'
 import { AmountInput, DrCrToggle, formatAmount, type ItemProps } from './shared'
 
 export function TAccountItem({ item, locale, graded, lastResponse, onSubmit }: ItemProps) {

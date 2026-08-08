@@ -1,6 +1,6 @@
 import type { Item, Locale, LocalizedText } from '../content/types'
 import { t as tc, accountMs, localizedOptions } from '../content/loader'
-import { blankSteps, fadedChoicePool } from '../grading/grade'
+import { blankSteps, fadedChoicePool } from '../grading/graders'
 import { useKira } from '../app/KiraContext'
 
 // The question as the learner met it, rendered READ-ONLY for a teacher.

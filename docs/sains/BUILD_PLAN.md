@@ -212,6 +212,29 @@ material is, it is where your daughter is, and it has years of life left. Then 4
 (the UASA years), then 2, then 1 last or never. Version content per year level as
 independent modules, not one monolith.
 
+> **DECIDED 2026-08-08 (Julius): Year 3 first, Years 1 and 2 last.** So the order is
+> **3 → 4, 5, 6 → 2 → 1**, matching the recommendation above.
+>
+> **This decision does not depend on the KP2027 claim, which is why it is safe to make
+> now.** Two of the three reasons stand on their own: all 77 Science worksheets in the
+> folder are Tahun 3, and that is the year Julius's daughter is in. KP2027 only affects
+> whether Year 1 is *last* or *never* — and either way it is years away.
+>
+> **Consequence: verifying KP2027 is DE-prioritised, and Phase 0 shrinks to one task.**
+> §8 lists Phase 0 as (a) confirm KP2027 against a KPM document and (b) prototype the
+> image pipeline. With Year 1 deferred to the end, (a) gates nothing and can wait until
+> Years 1–2 are actually in view. **(b) still gates the content schema and is the real
+> Phase 0.**
+>
+> **Where to start inside Year 3.** The worksheet clusters and §5's "build `sequence`
+> first" advice point at the same topic, which is a useful convergence: 消化 ·
+> Penghadaman is the largest cluster at **17 of 77 files**, and 消化过程 (ordering the
+> digestive process) is exactly the `sequence` item type — auto-gradable, no images, no
+> LLM. Then 营养素／均衡饮食 (15) and 牙齿 · Gigi (14), which together with digestion are
+> **46 of 77 files, all within the human-body theme**. Note 牙齿 and the animal-teeth
+> topic (8) are the two most artwork-dependent, so they want the image pipeline settled
+> first — another reason (b) is the true Phase 0.
+
 **UPSR may return.** The Ministry set an end-of-2026 deadline on a policy review of
 whether to reinstate UPSR and PT3 (Malay Mail, 15 Jan 2026). Kira already got this right
 by accident: `BLUEPRINT` is data and a test asserts it sums correctly. Keep the target

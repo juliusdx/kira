@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "icons": "node scripts/gen-icons.mjs",
     "test:integration": "node scripts/confirm-prod-tests.mjs && vitest run integration",
-    "bm-review": "node scripts/bm-review.mjs"
+    "bm-review": "node scripts/bm-review.mjs",
+    "check:diagrams": "node scripts/check-diagrams.mjs"
   },
   "keywords": [],
   "author": "",

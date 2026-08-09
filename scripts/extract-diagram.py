@@ -3,6 +3,7 @@
 Turn a photographed worksheet into a themeable, hotspot-ready SVG diagram.
 
     python3 scripts/extract-diagram.py photo.jpg --box 415 250 630 625 --out digestive
+    # -> traced-refs/digestive.svg.txt   (gitignored; a REFERENCE, not a shippable asset)
 
 Why this exists: hand-authoring diagrams was measured at roughly five revisions
 per asset to reach textbook legibility, and the result was still worse than the
@@ -14,7 +15,7 @@ label_diagram item, an MCQ that highlights a single organ, and a classify item.
     ⚠️  LICENSING. Published workbook artwork is the publisher's copyright.
     This script is safe for personal use and for producing a REFERENCE that an
     illustrator redraws. Do not ship traced third-party artwork in a product
-    without permission. See SPIKE_FINDINGS.md §9.
+    without permission. See docs/KAJI_DECISIONS.md §3.5.
 
 Pipeline: crop → de-shade → Otsu → strip leader lines → despeckle → potrace.
 Requires: opencv-python-headless, potrace.
@@ -103,7 +104,15 @@ def trace(ink, opttolerance=2.0, turdsize=80):
     inner = inner.replace("fill:#000000", "").replace('style=""', "")
     # 1dp is below one screen pixel at any size we render, and saves ~10%
     inner = re.sub(r"(\d+)\.(\d)\d+", r"\1.\2", inner)
-    return f'<g transform="{transform}" fill="currentColor" stroke="none">{inner}</g>'
+    # data-provenance is load-bearing, not a comment: scripts/check-diagrams.mjs
+    # refuses to let a `traced` asset be committed or bundled, and an unstamped
+    # file in a diagram directory is treated as traced. The stamp lives INSIDE
+    # the artwork so it survives being renamed or moved, which is how a traced
+    # asset would otherwise launder itself into a shipping path.
+    return (
+        f'<g data-provenance="traced" transform="{transform}"'
+        f' fill="currentColor" stroke="none">{inner}</g>'
+    )
 
 
 def main():
@@ -113,6 +122,9 @@ def main():
                     metavar=("X0", "Y0", "X1", "Y1"), help="crop of the figure")
     ap.add_argument("--scale", type=float, default=3.0)
     ap.add_argument("--out", default="diagram")
+    ap.add_argument("--out-dir", default="traced-refs",
+                    help="where to write. Default is gitignored and NOT shipped; "
+                         "putting traced output under src/ fails the provenance guard.")
     a = ap.parse_args()
 
     im = cv2.imread(a.photo)
@@ -126,8 +138,12 @@ def main():
     ink = tight_crop(despeckle(strip_leaders(ink)))
     art = trace(ink)
 
-    os.makedirs("src/content/diagrams", exist_ok=True)
-    path = f"src/content/diagrams/{a.out}.svg.txt"
+    # NOT src/content/diagrams/. That is the shipping content path inside a
+    # PUBLIC repo, so the old default contradicted the licensing warning above:
+    # the failure would not have been "we bundled it" but "we redistributed the
+    # publisher's illustration from a public URL". traced-refs/ is gitignored.
+    os.makedirs(a.out_dir, exist_ok=True)
+    path = os.path.join(a.out_dir, f"{a.out}.svg.txt")
     open(path, "w").write(art)
     print(f"{path}  {len(art)} B raw, {len(gzip.compress(art.encode(), 9))} B gzip")
     print(f"figure is {ink.shape[1]}x{ink.shape[0]} source px — place hotspots in that space")

@@ -428,17 +428,59 @@ BUILD_PLAN's image sizing, bundling, UASA format and grading sections outright. 
 is retained as background: the longer reasoning, the transfer-by-area table and the
 fork-vs-share argument that led here.
 
-Two things known to be broken and deliberately not patched, because they are worth fixing
-properly rather than quietly:
+Both defects found on 2026-08-08 are **FIXED**:
 
-1. **`scripts/extract-diagram.py` writes to `src/content/diagrams/`** — the shipping content
-   path — while §3.5 says traced output must never ship in a product. Its default output
-   location contradicts its own licensing warning. §3.5 is the strongest rule in this
-   document and the only one with no enforcement behind it. The fix that matches how this
-   codebase works elsewhere (the duplicate-id guard, the prod-test guard, the `_test.sql`
-   hard stop) is **provenance as a schema field** — `provenance: 'traced' | 'original' |
-   'licensed'` on each diagram, plus a content-guard test that fails the build when a
-   `traced` asset is referenced by a shipped item. That makes §3.5 unbypassable instead of
-   remembered.
-2. **The script's docstring cites `SPIKE_FINDINGS.md §9`, which is not on disk.** Either it
-   did not come across, or the citation should point at §3.5 here.
+1. ~~`extract-diagram.py` writes to the shipping content path~~ — **§3.5 IS NOW ENFORCED.**
+   See §3.6.
+2. ~~The docstring cites a `SPIKE_FINDINGS.md` that is not on disk~~ — repointed at §3.5
+   here.
+
+---
+
+## 3.6 §3.5 is enforced, not remembered
+
+§3.5 was the strongest rule in this document and the only one with nothing behind it, while
+`extract-diagram.py` defaulted to writing into `src/content/diagrams/`. That is not merely
+the shipping path — it is inside a **PUBLIC** GitHub repo, so the failure mode was never "we
+bundled the artwork" but "we republished the publisher's illustration from a public URL
+before the app existed".
+
+**The stamp lives inside the artwork.** `extract-diagram.py` now emits
+`<g data-provenance="traced" …>`, and writes to **`traced-refs/`** (gitignored) rather than
+under `src/`. A stamp in the file survives renaming, moving between directories and copying
+into another repo — which are precisely the ways a traced asset would launder itself. A
+sidecar manifest would not.
+
+```
+traced    derived from third-party artwork. Reference only. Never ships, never committed.
+original  drawn by us. Ships.
+licensed  third-party, permission on file. Ships.
+```
+
+**Anything else, including missing, is treated as `traced`.** Fail closed — "I cannot tell
+where this picture came from" must never mean "ship it".
+
+**The guard.** `scripts/diagram-provenance.mjs` is the pure policy;
+`scripts/diagram-scan.mjs` is the filesystem and git side; `scripts/check-diagrams.mjs` is
+an unconditional CLI (`npm run check:diagrams`). The audit **also runs inside `npm test`**,
+so CI enforces it without extra wiring. Installed before the hazard: there are no diagrams
+yet, so it passes trivially today and goes red the day one lands somewhere it must not.
+
+It blocks three things and permits two, all verified by deliberately doing them:
+
+| case | verdict |
+|---|---|
+| `traced` in a shipping path, untracked | **blocked** — a build would bundle it |
+| `traced` inside a diagram dir with **no stamp** | **blocked** — fail closed |
+| `traced` **committed** anywhere | **blocked** — names the public-repo consequence |
+| `traced`, gitignored, outside `src/` | **allowed** — the illustrator's reference must stay workable |
+| `original` / `licensed` in a shipping path | **allowed** |
+
+A positive `traced` stamp is honoured **anywhere in the tree**, but a *missing* stamp only
+matters inside a diagram directory. That asymmetry is deliberate: Kira's own
+`public/icon.svg` and `public/favicon.svg` are generated app icons, and a guard that
+demanded a stamp on every SVG would have failed on them the moment it was installed. **A
+guard whose first act is a false positive gets deleted, not fixed.**
+
+Not legal advice, and enforcement is not permission — §3.5's conclusion stands. This only
+makes the rule impossible to break by accident.

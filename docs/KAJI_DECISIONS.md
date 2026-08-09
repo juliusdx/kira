@@ -19,6 +19,46 @@ Dexie store, same Supabase backend, same classroom/roster model.
 **Start at Year 3, not Year 1.** Year 3 is where the source material is and it has years of
 syllabus life left. Then 4–6 (the UASA years), then 2, then 1 last or never — see §6.
 
+### 1.1 Settled by Julius, 2026-08-08
+
+Folded in from `docs/sains/BUILD_PLAN.md`, which is now background only. These are product
+decisions rather than measurements, so they are recorded with their reasoning and the date.
+
+**Naming: keep the Malay verbs.** `Kira` (to count) for accounting, `Kaji` (to
+investigate) for Science. A generic parent brand — one domain, subject tiles, e.g. "Accme
+Learn" — was considered and set aside in favour of keeping the two distinct names. This
+does not settle whether a parent brand later sits *above* them, or whether that is one
+deploy or several.
+
+**Origin: Kaji is served from `kaji.accme.my`.** This was the decision worth making early,
+because anonymous auth is per device AND per **origin** — the first entry in Kira's gotcha
+log — so changing it after launch turns every anonymous learner into a new user holding
+nothing. A name is a string in the manifest; an origin is everyone's data.
+
+- **Nothing needs buying.** `accme.my` is already owned, so the subdomain is one free DNS
+  record at SiteGround (`ns1/ns2.siteground.net`) and cannot be claimed by anyone else.
+- **MEASURED 2026-08-08:** no wildcard exists on `accme.my` (a nonsense host resolves to
+  nothing), so `kaji.accme.my` serves nothing today rather than quietly landing on the
+  WordPress site at the root. `kaji.my` is **registered** (active, via Shinjiru), as are
+  `kajiapp.com` and `getkaji.com`. `kaji.com.my` showed no DNS, but `.com.my` requires
+  Malaysian business registration. So the subdomain is the best option actually available,
+  not a budget compromise.
+- **The DNS record is deliberately NOT created yet** — its value depends on the host, which
+  is still open. For Kira's Pages pattern it would be `CNAME kaji → juliusdx.github.io`
+  plus a `public/CNAME` in the repo to survive deploys.
+
+**Year order: 3 → 4, 5, 6 → 2 → 1.** Year 3 first, Years 1 and 2 last.
+
+- **The decision does not rest on the ASSUMED KP2027 claim (§6), which is what makes it
+  safe to make now.** Two of the three reasons stand alone: all 77 Science worksheets in
+  the source folder are Tahun 3, and that is the year Julius's daughter is in. KP2027 only
+  decides whether Year 1 ends up *last* or *never*, and either answer is years away.
+- **Consequence — the image spike is the only real Phase 0.** BUILD_PLAN §8 paired
+  "confirm KP2027 against a KPM document" with "prototype the image pipeline". With Year 1
+  deferred to the end, the first gates nothing until Years 1–2 are in view. The second
+  constrains the content schema and is now the only thing between here and authoring —
+  and §3 has already answered its design question, so what remains is the prototype.
+
 ---
 
 ## 2. Architecture: share Kira, don't fork it
@@ -277,6 +317,14 @@ equivalent, because a journal entry never shares an account pool with the next q
 
 Build `sequence` first: trivially gradable, no images, no LLM, exercises the whole pipeline.
 
+**And the topic picks itself, because two arguments converge on it.** 消化 · Penghadaman is
+the largest cluster in the source folder at **17 of 77 files**, and 消化过程 — ordering the
+digestive process — *is* the `sequence` type. So the first build needs neither the trace
+pipeline nor the LLM grader, and it lands on the best-supported topic in the corpus. Then
+营养素／均衡饮食 (15) and 牙齿 · Gigi (14): with digestion that is **46 of 77 files inside a
+single theme**. 牙齿 and animal teeth (8) are the two most artwork-dependent topics, so they
+follow the §3 spike rather than precede it.
+
 **Partial credit is not optional.** Kira grades all-or-nothing, which is right for a journal
 entry — a double entry that doesn't balance is simply wrong. A six-organ diagram scored
 all-or-nothing tells a Year 3 pupil nothing, and PBD reports per standard. `GradeResult`
@@ -366,4 +414,31 @@ file-per-topic from the start, with the loader concatenating.
 | UASA format and abolition of UPSR | MEASURED (two `moe.gov.my` PDFs) |
 | KP2027 / Year 1 Sains removal | **ASSUMED** — news + teacher blog only |
 | 200–250 diagram library estimate | **ASSUMED** — extrapolated from 81 worksheets |
+| `kaji.accme.my` free, no wildcard on `accme.my`; `kaji.my`/`kajiapp.com`/`getkaji.com` registered | MEASURED (dig + whois, 2026-08-08) |
+| Naming, origin and year order (§1.1) | **DECISIONS**, not measurements — Julius, 2026-08-08 |
 | Copyright position | **NOT LEGAL ADVICE.** Get a real opinion before selling anything. |
+
+---
+
+## 9. Document status
+
+**This file is canonical.** Where it disagrees with `docs/sains/BUILD_PLAN.md`, this wins —
+it separates MEASURED from ASSUMED per claim and carries real numbers, and it supersedes
+BUILD_PLAN's image sizing, bundling, UASA format and grading sections outright. BUILD_PLAN
+is retained as background: the longer reasoning, the transfer-by-area table and the
+fork-vs-share argument that led here.
+
+Two things known to be broken and deliberately not patched, because they are worth fixing
+properly rather than quietly:
+
+1. **`scripts/extract-diagram.py` writes to `src/content/diagrams/`** — the shipping content
+   path — while §3.5 says traced output must never ship in a product. Its default output
+   location contradicts its own licensing warning. §3.5 is the strongest rule in this
+   document and the only one with no enforcement behind it. The fix that matches how this
+   codebase works elsewhere (the duplicate-id guard, the prod-test guard, the `_test.sql`
+   hard stop) is **provenance as a schema field** — `provenance: 'traced' | 'original' |
+   'licensed'` on each diagram, plus a content-guard test that fails the build when a
+   `traced` asset is referenced by a shipped item. That makes §3.5 unbypassable instead of
+   remembered.
+2. **The script's docstring cites `SPIKE_FINDINGS.md §9`, which is not on disk.** Either it
+   did not come across, or the citation should point at §3.5 here.

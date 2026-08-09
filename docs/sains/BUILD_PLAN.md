@@ -1,5 +1,31 @@
 # Primary Science tuition app, built on Kira's system
 
+> ## ⚠️ BACKGROUND ONLY — `docs/KAJI_DECISIONS.md` is canonical
+>
+> Read that first. It separates MEASURED from ASSUMED per claim, carries real numbers from
+> production builds and test runs, and records the decisions Julius has actually made.
+> **Where the two disagree, KAJI_DECISIONS wins.**
+>
+> It supersedes parts of this document outright:
+>
+> | This document says | Superseded by |
+> |---|---|
+> | §3.1 images: "author diagrams as inline SVG" | **§3.1–3.2** — hand-authoring was MEASURED at 5 revisions per figure and still worse than the source. Diagrams are **traced** from the worksheet with `scripts/extract-diagram.py`, then redrawn by an illustrator for anything that ships (§3.5). |
+> | §3.1 bundling, in prose | **§3.3** — measured build numbers, per-topic chunk split, chunk-hash churn proof |
+> | §3.3 UASA "75 min, 50 marks, Section C 32" | **§6** — same but sourced from two `moe.gov.my` PDFs, with the full A/B/C split |
+> | §5 item types, auto-gradable column | **§5** — plus partial credit and adjacent-pair sequence scoring, both measured |
+> | §6 KP2027 and year ordering | **§1.1 + §6** — year order now DECIDED, and flagged as not depending on the ASSUMED KP2027 claim |
+>
+> Three findings exist only in KAJI_DECISIONS and are not in this document at all: the
+> **shared option bank** in worksheet WA0065 (needs a `Part` layer between Lesson and Item),
+> **partial credit** with pair-based sequence scoring, and two phone-screen UI findings.
+>
+> The four decision blocks that briefly lived in this file were folded into
+> KAJI_DECISIONS §1.1 on 2026-08-08 so there is one place to look.
+>
+> What this document is still good for: the longer reasoning, the transfer-by-area table in
+> §2, and the fork-vs-share argument in §7 that led to the registry refactor.
+
 Assessment written 2026-08-07, after reading `Kira Accounting Tutor` at commit `c848c29`
 (`github.com/juliusdx/kira`), the KSSR Sains DSKP for Years 1–6, and the 81 worksheets in
 `My Drive/Lessons`.
@@ -73,41 +99,6 @@ searchable for the content guard), and for genuine photographs use a runtime-cac
 route with per-topic prefetch — cache the images for the topic a learner is *about* to
 practise, not all of them. This is the single biggest new build and it should be
 prototyped before anything else, because it constrains the content schema.
-
-> **DECIDED 2026-08-08 (Julius): diagrams are REDRAWN as original SVG, using the
-> worksheets as reference, with interactive hotspots overlaid on the SVG we own.**
->
-> Julius also confirmed the same day that **the Science docs follow the accounting
-> model**, and that is what settles the sourcing question. The rule this project already
-> set for the SPM corpus is: use third-party material to CHECK coverage and terminology
-> and to MODEL the format — never to copy content into `seed_content.json`, which ships in
-> a public bundle and is headed for the app stores. Applied to pictures, that means
-> redrawing, not shipping a tidied-up scan of a school's worksheet artwork.
->
-> **The line is REFERENCE, not TRACE.** A digestive tract, a tooth cross-section, a pulley
-> — the anatomy is fact and nobody owns it. The particular drawing on that worksheet is
-> someone's artwork. Redrawing from the worksheet as a factual reference produces something
-> we own; auto-tracing the scan produces a derivative of their drawing. Identical on
-> screen, completely different footing, and only one survives an app-store review.
->
-> This also happens to be what §3.1 concluded on engineering grounds alone, which is a
-> useful convergence rather than a coincidence:
-> - **Bundle** — SVG compresses to a fraction of a scan, and ~45 of 81 worksheets need
->   artwork. Scans would make the precache problem above much worse, not better.
-> - **Hotspots are free** — overlaying coordinates on an SVG we authored, rather than
->   guessing pixel positions inside a photograph.
-> - **Theming** — an SVG inherits light/dark; a scan of white paper does not.
-> - **The content guard can read it** — SVG is text, so diagram labels stay checkable like
->   every other string in the bank.
->
-> Honest cost: redrawing ~45 diagrams is real work. It is less than it sounds because one
-> good digestive-tract diagram serves many items across digestion, nutrition and teeth, but
-> it is not free. **Photographs that cannot be redrawn** (a real leaf, a meniscus) keep
-> §3.1's runtime-cached route and must be OUR OWN photographs, not the worksheets'.
->
-> ⚠️ **Recorded late.** Julius recalled deciding this in an earlier session; it was not in
-> the docs, in git history, in memory, or in this session's kickoff handoff. It is written
-> down now. Anything decided in conversation about Kaji needs to land here the same day.
 
 ### 3.2 Trilingual is a schema change, not a translation job
 
@@ -247,29 +238,6 @@ material is, it is where your daughter is, and it has years of life left. Then 4
 (the UASA years), then 2, then 1 last or never. Version content per year level as
 independent modules, not one monolith.
 
-> **DECIDED 2026-08-08 (Julius): Year 3 first, Years 1 and 2 last.** So the order is
-> **3 → 4, 5, 6 → 2 → 1**, matching the recommendation above.
->
-> **This decision does not depend on the KP2027 claim, which is why it is safe to make
-> now.** Two of the three reasons stand on their own: all 77 Science worksheets in the
-> folder are Tahun 3, and that is the year Julius's daughter is in. KP2027 only affects
-> whether Year 1 is *last* or *never* — and either way it is years away.
->
-> **Consequence: verifying KP2027 is DE-prioritised, and Phase 0 shrinks to one task.**
-> §8 lists Phase 0 as (a) confirm KP2027 against a KPM document and (b) prototype the
-> image pipeline. With Year 1 deferred to the end, (a) gates nothing and can wait until
-> Years 1–2 are actually in view. **(b) still gates the content schema and is the real
-> Phase 0.**
->
-> **Where to start inside Year 3.** The worksheet clusters and §5's "build `sequence`
-> first" advice point at the same topic, which is a useful convergence: 消化 ·
-> Penghadaman is the largest cluster at **17 of 77 files**, and 消化过程 (ordering the
-> digestive process) is exactly the `sequence` item type — auto-gradable, no images, no
-> LLM. Then 营养素／均衡饮食 (15) and 牙齿 · Gigi (14), which together with digestion are
-> **46 of 77 files, all within the human-body theme**. Note 牙齿 and the animal-teeth
-> topic (8) are the two most artwork-dependent, so they want the image pipeline settled
-> first — another reason (b) is the true Phase 0.
-
 **UPSR may return.** The Ministry set an end-of-2026 deadline on a policy review of
 whether to reinstate UPSR and PT3 (Malay Mail, 15 Jan 2026). Kira already got this right
 by accident: `BLUEPRINT` is data and a test asserts it sums correctly. Keep the target
@@ -366,36 +334,3 @@ Science. **Kaji** is the natural sibling: *mengkaji* is to investigate or study,
 literally the inquiry verb the syllabus is built on (Inkuiri dalam Sains), and it is the
 same four-letter Malay-verb shape. Worth grabbing the domain before you are attached to
 something else.
-
-> **DECIDED 2026-08-08 (Julius).** Keep the Malay-verb names: **Kira** for accounting,
-> **Kaji** for Science. A generic parent brand ("Accme Learn", one domain with subject
-> tiles) was considered and set aside in favour of keeping the distinct names.
->
-> Two things this deliberately does *not* settle, both still open:
->
-> 1. **Whether a parent brand sits above them**, and whether that is one deploy or several.
->    Note `accme.my` is a near-empty WordPress site and `learn.accme.my` has no DNS record
->    (checked 2026-08-08), so there is no equity to inherit either way.
-> 2. ~~Which origin each app is served from~~ — **DECIDED, see below.**
-
-> **ORIGIN DECIDED 2026-08-08 (Julius): Kaji is served from `kaji.accme.my`.**
->
-> This was the decision worth making early. Anonymous auth is per device AND per *origin*
-> (the first entry in Kira's gotcha log), so changing it after launch turns every anonymous
-> learner into a new user holding nothing — Ariel would survive on her email account,
-> nobody else would. A name is a string in the manifest; an origin is everyone's data.
->
-> **Nothing needs buying.** `accme.my` is already owned, so the subdomain is a single free
-> DNS record at SiteGround (`ns1/ns2.siteground.net`) and cannot be claimed by anyone else.
-> There is no wildcard on `accme.my`, so `kaji.accme.my` resolves to nothing today —
-> verified 2026-08-08.
->
-> It is also the best option actually available, not a compromise. Checked the same day:
-> `kaji.my` is **registered** (active, Shinjiru), as are `kajiapp.com` and `getkaji.com`.
-> `kaji.com.my` showed no DNS but `.com.my` requires Malaysian business registration.
->
-> **The DNS record is deliberately NOT created yet.** Its value depends on the host, and
-> that is still open (Pages / Cloudflare Pages / Vercel each want a different target). With
-> no Kaji build to serve, the record would return a 404 and would likely be edited once
-> anyway. For the Pages pattern Kira uses it would be `CNAME kaji → juliusdx.github.io`,
-> plus a `public/CNAME` file in the Kaji repo to survive deploys.

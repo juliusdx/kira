@@ -74,6 +74,41 @@ route with per-topic prefetch — cache the images for the topic a learner is *a
 practise, not all of them. This is the single biggest new build and it should be
 prototyped before anything else, because it constrains the content schema.
 
+> **DECIDED 2026-08-08 (Julius): diagrams are REDRAWN as original SVG, using the
+> worksheets as reference, with interactive hotspots overlaid on the SVG we own.**
+>
+> Julius also confirmed the same day that **the Science docs follow the accounting
+> model**, and that is what settles the sourcing question. The rule this project already
+> set for the SPM corpus is: use third-party material to CHECK coverage and terminology
+> and to MODEL the format — never to copy content into `seed_content.json`, which ships in
+> a public bundle and is headed for the app stores. Applied to pictures, that means
+> redrawing, not shipping a tidied-up scan of a school's worksheet artwork.
+>
+> **The line is REFERENCE, not TRACE.** A digestive tract, a tooth cross-section, a pulley
+> — the anatomy is fact and nobody owns it. The particular drawing on that worksheet is
+> someone's artwork. Redrawing from the worksheet as a factual reference produces something
+> we own; auto-tracing the scan produces a derivative of their drawing. Identical on
+> screen, completely different footing, and only one survives an app-store review.
+>
+> This also happens to be what §3.1 concluded on engineering grounds alone, which is a
+> useful convergence rather than a coincidence:
+> - **Bundle** — SVG compresses to a fraction of a scan, and ~45 of 81 worksheets need
+>   artwork. Scans would make the precache problem above much worse, not better.
+> - **Hotspots are free** — overlaying coordinates on an SVG we authored, rather than
+>   guessing pixel positions inside a photograph.
+> - **Theming** — an SVG inherits light/dark; a scan of white paper does not.
+> - **The content guard can read it** — SVG is text, so diagram labels stay checkable like
+>   every other string in the bank.
+>
+> Honest cost: redrawing ~45 diagrams is real work. It is less than it sounds because one
+> good digestive-tract diagram serves many items across digestion, nutrition and teeth, but
+> it is not free. **Photographs that cannot be redrawn** (a real leaf, a meniscus) keep
+> §3.1's runtime-cached route and must be OUR OWN photographs, not the worksheets'.
+>
+> ⚠️ **Recorded late.** Julius recalled deciding this in an earlier session; it was not in
+> the docs, in git history, in memory, or in this session's kickoff handoff. It is written
+> down now. Anything decided in conversation about Kaji needs to land here the same day.
+
 ### 3.2 Trilingual is a schema change, not a translation job
 
 `Locale = 'en' | 'ms'` and `LocalizedText { en, ms }` are load-bearing. Adding `zh` touches

@@ -318,9 +318,26 @@ something else.
 > 1. **Whether a parent brand sits above them**, and whether that is one deploy or several.
 >    Note `accme.my` is a near-empty WordPress site and `learn.accme.my` has no DNS record
 >    (checked 2026-08-08), so there is no equity to inherit either way.
-> 2. **Which origin each app is served from — and this is the decision that gets more
->    expensive every week.** Anonymous auth is per device AND per *origin* (the first entry
->    in Kira's gotcha log), so moving a live app's domain later turns every anonymous
->    learner into a new user with zero progress. Ariel survives because she has an email
->    account; nobody else would. A name is a string in the manifest; an origin is
->    everyone's data. Settle Kaji's domain before it has learners, not after.
+> 2. ~~Which origin each app is served from~~ — **DECIDED, see below.**
+
+> **ORIGIN DECIDED 2026-08-08 (Julius): Kaji is served from `kaji.accme.my`.**
+>
+> This was the decision worth making early. Anonymous auth is per device AND per *origin*
+> (the first entry in Kira's gotcha log), so changing it after launch turns every anonymous
+> learner into a new user holding nothing — Ariel would survive on her email account,
+> nobody else would. A name is a string in the manifest; an origin is everyone's data.
+>
+> **Nothing needs buying.** `accme.my` is already owned, so the subdomain is a single free
+> DNS record at SiteGround (`ns1/ns2.siteground.net`) and cannot be claimed by anyone else.
+> There is no wildcard on `accme.my`, so `kaji.accme.my` resolves to nothing today —
+> verified 2026-08-08.
+>
+> It is also the best option actually available, not a compromise. Checked the same day:
+> `kaji.my` is **registered** (active, Shinjiru), as are `kajiapp.com` and `getkaji.com`.
+> `kaji.com.my` showed no DNS but `.com.my` requires Malaysian business registration.
+>
+> **The DNS record is deliberately NOT created yet.** Its value depends on the host, and
+> that is still open (Pages / Cloudflare Pages / Vercel each want a different target). With
+> no Kaji build to serve, the record would return a 404 and would likely be edited once
+> anyway. For the Pages pattern Kira uses it would be `CNAME kaji → juliusdx.github.io`,
+> plus a `public/CNAME` file in the Kaji repo to survive deploys.

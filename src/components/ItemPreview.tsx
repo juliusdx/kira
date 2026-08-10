@@ -51,6 +51,17 @@ function Option({ label, correct }: { label: string; correct: boolean }) {
   )
 }
 
+/**
+ * The exhaustiveness backstop for `Body`'s switch. Typed `never`, so a new
+ * member of the `Item` union stops compiling here; returns null rather than
+ * throwing, so an item re-authored to a type this build predates degrades to
+ * an empty panel instead of taking the teacher's report down with it.
+ */
+function unhandledType(item: never): null {
+  console.warn('[kira] ItemPreview: unhandled item type', item)
+  return null
+}
+
 function money(n: number, unit = 'RM', after = false): string {
   const v = n.toLocaleString('en-MY')
   if (!after) return `${unit} ${v}`
@@ -234,6 +245,16 @@ export function ItemPreview({ item, locale }: { item: Item; locale: Locale }) {
           </div>
         )
       }
+
+      // `Body` has no declared return type, so without this arm inference
+      // absorbs the fall-through: a newly added item type would compile
+      // cleanly and render NOTHING on the teacher's screen. `item` narrows to
+      // `never` here only while the switch above is exhaustive, so adding a
+      // type is a compile error at this line — which is the point. The
+      // runtime path still degrades rather than throwing, because a progress
+      // report must not blank out over one re-authored item.
+      default:
+        return unhandledType(item)
     }
   }
 

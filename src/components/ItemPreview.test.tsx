@@ -70,6 +70,31 @@ describe('ItemPreview', () => {
     expect(screen.getByText('Total of the debit side')).toBeTruthy()
   })
 
+  it('degrades to an empty body on a type this build does not know', () => {
+    // The real guarantee here is a COMPILE error: `Body`'s `default:` arm hands
+    // the item to `unhandledType(item: never)`, so adding a member to the
+    // `Item` union stops this file's switch compiling instead of silently
+    // rendering nothing. Verified by declaring a 9th type — tsc then reports
+    // ItemPreview alongside the two registry maps, `describeChosen` and
+    // `content.test.ts`.
+    //
+    // This test pins the other half: the RUNTIME must not throw. An item
+    // re-authored to a newer type than the deployed bundle knows reaches a
+    // teacher's report through `recentMisses`, and a progress report that
+    // white-screens is worse than one missing a panel.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const unknown = { ...item('clf-001'), type: 'not_a_real_type' } as unknown as Item
+
+    render(<ItemPreview item={unknown} locale="en" />)
+
+    // The prompt still renders — it lives outside the switch.
+    expect(screen.getByText(unknown.prompt.en)).toBeTruthy()
+    // ...and nothing from the body: no option chips, no rows.
+    expect(screen.queryByText(/✓/)).toBeNull()
+    expect(warn).toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
   it('reads in BM when the teacher is reading in BM', () => {
     render(<ItemPreview item={item('ta-008')} locale="ms" />)
     expect(screen.getByText(item('ta-008').prompt.ms)).toBeTruthy()

@@ -15,6 +15,7 @@ daily, so the logic is built and proven here and wired up in Kaji.
 | File | What |
 |---|---|
 | `parts.ts` | Shared option banks — the WA0065 problem. Pure: no React, no I/O, no storage. |
+| `sequence.ts` | Ordering questions, scored on adjacent-pair agreement. Pure. |
 
 ## Why a Part is a composite ITEM, not a layer
 
@@ -48,12 +49,26 @@ would offer a term it does not want while missing one it does, unanswerable thro
 fault. `parts.test.ts` pins this both ways, including that the cloze stays fully answerable
 after a wrong diagram placement.
 
+## Sequence scoring credits the LINK, not the slot
+
+`sequence.ts`, dispatched from `parts.ts`'s `gradeChild`. A rotated chain scores 0.8 by links
+and 0 by position — that figure from `KAJI_DECISIONS` §5 is asserted in the tests rather than
+trusted, since the whole design rests on it.
+
+It does not uniformly favour the learner, and that is the point. Swapping two adjacent steps
+breaks three links, so links give 0.4 where position gives 0.67. Links are sensitive to *local*
+order: a swap is a real misunderstanding, a rotation is not.
+
+`inPlace`, `longestRun` and `offsetOnly` are computed and never scored. A long unbroken run with
+nothing in place means "you know the order, you started in the wrong place" — a different lesson
+from a swapped pair, and one the fraction alone cannot express.
+
+One unit consequence: a sequence child reports `placed`/`of` in links, so a 6-step sequence is
+`of: 5` against a 6-label diagram's `of: 6`. `gradePart` totals are therefore *scoreable units*
+and a sequence child is slightly under-weighted. Documented rather than fudged.
+
 ## Still to come
 
-- **`sequence` scoring.** `gradeChild` scores by slot agreement, which is wrong for a
-  sequence child: `KAJI_DECISIONS` §5 scores sequencing on adjacent-pair agreement, measured
-  at 0.8 against 0 for a single displaced step. When that grader exists, dispatch to it from
-  `gradeChild` on `kind === 'sequence'` rather than widening the function.
 - **The renderer.** Kaji-specific UI, and not usefully written before Kaji's design exists.
   Two findings from §5 apply to it: a filled slot must be tappable to clear, and labels need
   auto-fit sizing because 小肠 is two full-width glyphs against fifteen half-width ones for

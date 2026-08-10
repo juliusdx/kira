@@ -372,6 +372,34 @@ later step then reads as wrong, which is demoralising *and* diagnostically false
 **MEASURED:** response `['s6','s1','s2','s3','s4','s5']` scores **0.8** under pair-scoring
 and **0** under position matching.
 
+> **BUILT 2026-08-08 — `kaji/sequence.ts`, 19 tests.** The 0.8-against-0 figure is now an
+> executable assertion rather than a claim, because every argument for link-scoring rests
+> on it. Dispatched from `parts.ts`'s `gradeChild` on `kind === 'sequence'`.
+>
+> **Link scoring is NOT uniformly kinder, and it is worth knowing which way it cuts.** Swap
+> two adjacent steps and three links break — into the pair, between it, out of it — so links
+> give 2/5 = 0.4 while position gives 4/6 = 0.67, since only the two swapped steps left
+> their slots. Links are more sensitive to LOCAL order, which is exactly the point: a swap is
+> a real misunderstanding of the sequence, a rotation is not.
+>
+> **The diagnosis is worth more than the score.** `inPlace` and `longestRun` are computed and
+> never scored, because together they name a mistake the fraction cannot: a long unbroken run
+> with *nothing* in place means "you know the order, you started in the wrong place"
+> (`offsetOnly`), which is a different conversation from "you have two steps swapped". A pair
+> score alone only says "nearly right".
+>
+> `offsetOnly` stays false while the answer is incomplete — a partial response can look
+> offset without that being a fair thing to tell a child yet.
+>
+> A half-finished answer is not punished for the gap: a link needs both ends filled to be
+> credited, so unplaced slots reduce what can be earned rather than counting against.
+>
+> ⚠️ **One unit consequence, called out rather than hidden.** A sequence child reports
+> `placed`/`of` in LINKS, so a 6-step sequence is `of: 5` where a 6-label diagram is `of: 6`.
+> `gradePart`'s totals are therefore in *scoreable units*, and a sequence child is very
+> slightly under-weighted against a same-size slot child. The alternative was fudging the pair
+> score back onto a slot count, which would report a number true of nothing.
+
 But show the child the absolute count, not the pair score — "3/5 adjacent pairs" is not a
 sentence a nine-year-old parses. `placed`/`of` is the headline; `score` is the diagnosis
 underneath and the number the scheduler demotes on.

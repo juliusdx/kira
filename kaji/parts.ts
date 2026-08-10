@@ -38,6 +38,8 @@
 // missing a right one, unanswerable through no fresh fault of the learner's.
 // For a nine-year-old that is punishment, not assessment.
 
+import { gradeSequence, validateSequence } from './sequence'
+
 /** All three languages are display labels. No language is the answer space. */
 export interface LocalizedText {
   zh: string
@@ -164,16 +166,37 @@ export interface PartGrade {
 }
 
 /**
- * Score a child by slot agreement.
+ * Score one child.
  *
- * A `sequence` child does NOT belong here: KAJI_DECISIONS §5 scores sequencing
- * on ADJACENT-PAIR agreement, because absolute-position matching punishes a
- * learner who has the whole chain right but displaced one step — measured at
- * 0.8 by pairs against 0 by position. That grader is the other open item; when
- * it lands, dispatch to it from here on `child.kind === 'sequence'` rather than
- * widening this function.
+ * A `sequence` child is dispatched to `gradeSequence`, which credits the LINK
+ * between two steps rather than the slot: absolute-position matching scores 0
+ * for a learner who has the whole chain right but started one place late, which
+ * is demoralising and diagnostically false (KAJI_DECISIONS §5, measured at 0.8
+ * by pairs against 0 by position). Everything else scores by slot agreement.
+ *
+ * ⚠️ NOTE THE UNIT CHANGE. For a sequence child, `placed`/`of` count LINKS, so a
+ * 6-step sequence reports `of: 5` while a 6-label diagram reports `of: 6`. That
+ * is deliberate — a link is genuinely what is being assessed when the task is
+ * ordering — but it means `gradePart`'s totals are in "scoreable units" rather
+ * than slots, and a sequence child is very slightly under-weighted against a
+ * same-size diagram. Called out rather than hidden; the alternative was to fudge
+ * the pair score back onto a slot count, which would report a number that is
+ * true of nothing.
  */
 function gradeChild(data: PartData, response: PartResponse, child: PartChild): ChildGrade {
+  if (child.kind === 'sequence') {
+    const correct = child.slots.map((s) => s.answer)
+    const given = child.slots.map((s) => response[s.id] ?? null)
+    const g = gradeSequence(correct, given)
+    return {
+      childId: child.id,
+      sp_code: child.sp_code,
+      score: g.score,
+      placed: g.placed,
+      of: g.of,
+    }
+  }
+
   const of = child.slots.length
   const placed = child.slots.filter((s) => slotIsCorrect(data, response, s.id)).length
   return {
@@ -242,6 +265,11 @@ export function validatePart(data: PartData): string[] {
   for (const o of data.bank)
     if (!o.label?.zh?.trim() || !o.label?.ms?.trim() || !o.label?.en?.trim())
       errors.push(`bank option "${o.key}" is not trilingual`)
+
+  for (const child of data.children)
+    if (child.kind === 'sequence')
+      for (const problem of validateSequence(child.slots.map((s) => s.answer)))
+        errors.push(`${child.id}: ${problem}`)
 
   const surplus = [...keys].filter((k) => !answers.has(k))
   if (surplus.length)

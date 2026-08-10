@@ -174,6 +174,76 @@ describe('grading', () => {
   })
 })
 
+describe('a sequence child inside a Part', () => {
+  // Bank is still exactly the union and still disjoint: 3 steps + 2 cloze terms.
+  const MIXED: PartData = {
+    bank: [
+      { key: 'chew', label: t('咀嚼', 'Mengunyah', 'Chew') },
+      { key: 'swallow', label: t('吞咽', 'Menelan', 'Swallow') },
+      { key: 'digest', label: t('消化', 'Menghadam', 'Digest') },
+      { key: 'saliva', label: t('唾液', 'Air liur', 'Saliva') },
+      { key: 'nutrients', label: t('养分', 'Nutrien', 'Nutrients') },
+    ],
+    children: [
+      {
+        id: 'order',
+        kind: 'sequence',
+        sp_code: '3.3.1',
+        slots: [
+          { id: 'q1', answer: 'chew' },
+          { id: 'q2', answer: 'swallow' },
+          { id: 'q3', answer: 'digest' },
+        ],
+      },
+      {
+        id: 'cloze',
+        kind: 'cloze',
+        sp_code: '3.3.2',
+        slots: [
+          { id: 'c1', answer: 'saliva' },
+          { id: 'c2', answer: 'nutrients' },
+        ],
+      },
+    ],
+  }
+
+  it('is graded on LINKS, so 3 steps report `of: 2` not 3', () => {
+    const g = gradePart(MIXED, { q1: 'chew', q2: 'swallow', q3: 'digest' })
+    const seq = g.byChild.find((c) => c.childId === 'order')!
+    expect([seq.placed, seq.of]).toEqual([2, 2])
+    expect(seq.score).toBe(1)
+  })
+
+  it('credits a rotated chain instead of zeroing it', () => {
+    // The whole reason for the dispatch. Position scoring would give 0 here.
+    const g = gradePart(MIXED, { q1: 'digest', q2: 'chew', q3: 'swallow' })
+    const seq = g.byChild.find((c) => c.childId === 'order')!
+    expect([seq.placed, seq.of]).toEqual([1, 2])
+    expect(seq.score).toBe(0.5)
+  })
+
+  it('mixes units in the Part total, and that is the documented trade-off', () => {
+    // 2 links + 2 cloze slots = 4 scoreable units, not 5 slots. A sequence child
+    // is very slightly under-weighted against a same-size slot child; the
+    // alternative was fudging the pair score onto a slot count.
+    const g = gradePart(MIXED, { q1: 'chew', q2: 'swallow', q3: 'digest' })
+    expect(g.of).toBe(4)
+    expect(g.placed).toBe(2)
+    expect(g.score).toBe(0.5)
+  })
+
+  it('validatePart rejects a sequence child too short to have an order', () => {
+    const data: PartData = {
+      bank: MIXED.bank,
+      children: [
+        { ...MIXED.children[0], slots: [{ id: 'q1', answer: 'chew' }] },
+        MIXED.children[1],
+      ],
+    }
+    expect(validatePart(data).join()).toMatch(/order: .*at least 2 steps/)
+  })
+})
+
 describe('the authoring guard', () => {
   it('passes the real worksheet', () => {
     expect(validatePart(WA0065)).toEqual([])

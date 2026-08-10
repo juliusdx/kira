@@ -15,9 +15,3 @@ coverage
 .cron_setup.ready.sql
 .service.local
 
-# Traced diagram references (KAJI_DECISIONS §3.5). These are derived from the
-# publisher's artwork — tracing changes the file format, not who owns the
-# drawing. Fine locally as a layout brief for an illustrator; committing them to
-# a PUBLIC repo would redistribute the illustration. scripts/check-diagrams.mjs
-# fails the build if one is ever tracked or lands in a shipping path.
-traced-refs/

@@ -682,6 +682,29 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     knowing: 14 files of outside-authored code reached production with no
     second human reviewer. To get a real review next time, push the branch and
     let Julius open the PR — then a non-author can actually approve it.
+- **2026-08-09 — the Science sibling moved out. It is `juliusdx/kaji` (PRIVATE).**
+  Kaji (*mengkaji*, to investigate) is a trilingual KSSR Sains app for primary,
+  sharing Kira's architecture. It will be served from `kaji.accme.my`.
+  **Nothing about it belongs in this repo any more** — the decision record, the
+  KSSR docs, the diagram trace pipeline and its provenance guard, and the pure
+  logic for shared option banks and sequence scoring all live there now. If a
+  future session finds itself designing Science content or item types in Kira,
+  it is in the wrong repo.
+  - What left, and why none of it was Kira's: `docs/KAJI_DECISIONS.md` +
+    `docs/sains/`, `kaji/` (2 pure modules, 40 tests), and 5 scripts —
+    `extract-diagram.py` plus the `diagram-provenance` / `diagram-scan` /
+    `check-diagrams` guard. Kira has no diagrams (exactly one `<img>` in the
+    whole app) and no item has ever shared an option pool with the next one, so
+    all of it was dead weight here. `npm test` went 354 → **300**, back to the
+    count right after the registry merge, and `check:diagrams` is gone from
+    `package.json`.
+  - **The registry refactor above WAS Phase 1 of Kaji's plan**, done before
+    anyone connected the two. That is the only overlap that ever mattered: the
+    same registry is what lets Kaji add its own item types cheaply, which is why
+    forking Kira rather than deleting from it was the wrong instinct.
+  - Kaji is **private**, so it has NO branch protection — impossible on the free
+    plan. That is a deliberate trade for keeping GitHub Pages optional, since
+    free Pages is the only thing that required a public repo.
 - **Next up (unstarted):** Capacitor wrap for the App Store / Play Store.
   Julius already holds paid Apple + Google dev accounts from the timesheet
   app, so the cost is sunk. Deliberately deferred while the app still ships

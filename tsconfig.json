@@ -22,5 +22,5 @@
 
     "types": ["vitest/globals", "@testing-library/jest-dom", "vite-plugin-pwa/client"]
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src", "kaji", "vite.config.ts"]
 }

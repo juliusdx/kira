@@ -292,11 +292,47 @@ Worksheet WA0065 carries **one** word bank of 11 terms shared between the diagra
 part (uses 6) and the cloze passage below it (uses the other 5). The sharing is the
 pedagogy, not an accident — the distractors for the diagram *are* the answers to the cloze.
 
-The current schema puts `distractors` on the individual item and cannot express this. It
-needs a **`Part`** layer between `Lesson` and `Item`: a group carrying a shared option bank
-that several child items draw from, with consumption tracked across the group. Kira has no
-equivalent, because a journal entry never shares an account pool with the next question.
-**Land this before volume authoring.**
+The current schema puts `distractors` on the individual item and cannot express this. Kira has
+no equivalent, because a journal entry never shares an account pool with the next question.
+
+> **RESOLVED 2026-08-08 — and NOT as a layer. Built in `kaji/parts.ts`, 21 tests.**
+>
+> This section proposed a `Part` layer between `Lesson` and `Item`. Reading Kira's session
+> engine changed the design, because two things there would have broken a grouping layer:
+>
+> 1. **`interleaveByType` scatters it.** `src/session/buildQueue.ts` round-robins the session
+>    across type buckets, so a Part's diagram and cloze land in different buckets with other
+>    items between them. Interleaving exists for a real reason (Spec §6, it aids
+>    discrimination), so weakening it is the wrong fix.
+> 2. **Scheduling is per item id and independent.** Two items in a group can sit in different
+>    Leitner boxes with different `dueAt`, so a learner could meet the cloze weeks after the
+>    diagram with the bank in an undefined state.
+>
+> **So a Part is a COMPOSITE ITEM TYPE, not a layer.** One id means cohesion, co-due-ness and
+> interleaving are free rather than three exceptions to write, and §2's registry is what makes
+> adding the type cheap: one union member, one entry in each map.
+>
+> The cost is that PBD reports per Standard Pembelajaran and one id could blur two. **Paid off
+> in the result rather than the key** — every child carries its own `sp_code` and `gradePart`
+> reports per child, so per-standard mastery survives.
+>
+> **DEPLETION: ON CORRECT ONLY.** A key consumed by a correct placement is gone from the other
+> children; a wrong placement returns to the bank. True depletion is faithful to paper and
+> turns one error into two — the cloze would offer a term it does not want while missing one it
+> does, unanswerable through no fresh fault. For a nine-year-old that is punishment, not
+> assessment. Pinned both ways, including that the cloze stays fully answerable after a wrong
+> diagram placement.
+>
+> **The authoring guard is the part worth keeping.** `validatePart` fails a bank that is larger
+> than the union of every child's answers: the surplus terms would be pure noise and the
+> elimination pedagogy would quietly die, and nothing else would catch it. It also pins that
+> the two answer sets are disjoint — if they overlapped, depletion would make one child
+> unanswerable.
+>
+> Lives in `kaji/`, which nothing in `src/` imports, so it is typechecked and tested here
+> without reaching Kira's bundle (verified against `dist/`). It moves wholesale when the Kaji
+> repo exists. Still open: a `sequence` child needs adjacent-pair scoring (§5) dispatched from
+> `gradeChild`, and the renderer is Kaji-specific UI.
 
 ---
 

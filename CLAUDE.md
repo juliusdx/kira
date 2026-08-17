@@ -12,7 +12,7 @@ production Supabase project. Treat schema and Edge Function changes as prod.
 
 ## Run & verify
 - Run locally: `npm run dev` (Vite; port varies)
-- **Hermetic tests (the CI gate): `npm test`** — 288 passing, no network
+- **Hermetic tests (the CI gate): `npm test`** — 301 passing, no network
 - Live-backend tests: **`KIRA_ALLOW_PROD_TESTS=1 npm run test:integration`** —
   12 passing, hits real Supabase. Without the opt-in a guard refuses and exits
   1 (`scripts/confirm-prod-tests.mjs`), naming the project it would have hit
@@ -72,10 +72,17 @@ production Supabase project. Treat schema and Edge Function changes as prod.
     `export * from './graders'`, so the ~9 modules importing helpers from it
     did not have to move.
   - Two sites still switch on type and are left deliberately: `describeChosen`
-    and `ItemPreview`'s `Body`. **Only the first fails to compile** on a new
-    type — `Body` has no declared return type, so inference absorbs the
-    fall-through and a new type renders NOTHING. If you add a type, check that
-    screen by hand or give `Body` a `default:` arm asserting on `never`.
+    and `ItemPreview`'s `Body`. **Both now fail to compile** on a new type.
+    `Body` used to be the exception — it has no declared return type, so
+    inference absorbed the fall-through and a new type rendered NOTHING while
+    the build stayed green. Closed 2026-08-10 with a `default:` arm handing the
+    item to `unhandledType(item: never)`. Verified by declaring a real 9th type:
+    tsc reports **five** errors, not the four the registry merge measured — the
+    two maps, `describeChosen`, `content.test.ts` and now this line.
+    `unhandledType` returns null rather than throwing, because the runtime case
+    is an item re-authored to a type newer than the deployed bundle reaching a
+    teacher's report, and a progress report that white-screens is worse than
+    one missing a panel. `ItemPreview.test.tsx` pins that half.
 - `src/grading/grade.ts`, `src/session/buildQueue.ts` — pure, no I/O, unit-tested
 - `src/db/data.ts` — the single data-access seam over Dexie/IndexedDB
 - `src/sync/` — Supabase client, `sync.ts` (local-first reconcile), `identity.ts`
@@ -260,6 +267,20 @@ production Supabase project. Treat schema and Edge Function changes as prod.
   Prevention: each suite now appends the ids it creates to
   `.probe-users.local` (gitignored), so the next sweep is an id lookup, not a
   footprint match.
+- **2026-08-05 — the probe backlog is CLOSED and `.probe-users.local` is EMPTY.**
+  33 anonymous accounts removed from prod by id via
+  `supabase/maintenance/cleanup_probe_users.sql` STEP 1/2: the 28 minted by the
+  accidental `test:integration` run on 08-04, plus 5 older ones (2 `note-*` from
+  07-29, 3 `insight-*` from 07-30) nobody had checked. Neither guard fired on
+  any of them, and Ariel's / Julius's / the two older Claude-probe ids were each
+  verified ABSENT from the delete list beforehand. Swept ids moved to
+  `.probe-users.swept.local`, so `.probe-users.local` now means OUTSTANDING only.
+  - **A `delete … returning` IS the read-back; a separate count is not needed.**
+    It reports the rows actually removed. That is exactly what STEP 3 got wrong —
+    it counted `profiles`/`review_state`/`attempts`, which the suite already
+    cleans itself, so it reported 0/0/0 for a cleanup that had not happened. Do
+    not turn "read back what you care about" into a reflex of always running one
+    more query; read back the thing itself.
 - **Ariel's real account is `2a54d678…`** — email, in the class, 32 attempts
   against 29 reviews. Two OTHER accounts are named "Ariel" and are Claude's
   probes, not her: `c125f40e…` (186 review rows from **4 attempts**, and a
